@@ -882,7 +882,7 @@ const PLAN = [
 const KEY = "junimo_guide_v3";
 let S = load();
 function defaults(){
-  return {done:{}, have:{}, open:{}, bought:{}, daily:{}, year:1, day:1,
+  return {done:{}, have:{}, open:{}, bought:{}, daily:{}, froom:"", year:1, day:1,
           hour:9, weather:"Egal",
           season:"Frühling", theme:null, tiller:false, quality:"normal"};
 }
@@ -944,12 +944,14 @@ function viewHome(){
   </div>
 
   <h2>Räume</h2>
+  <p class="tiny" style="margin:0 0 4px">Tipp auf einen Raum, um seine Bündel zu öffnen.</p>
   ${rooms.map(o=>`
-    <div class="card tight" data-room="${esc(o.r.room)}">
+    <div class="card tight" data-room="${esc(o.r.room)}" data-openroom="${esc(o.r.room)}" style="cursor:pointer">
       <div class="row between">
         <div class="grow"><b>${o.r.icon} ${esc(o.r.room)}</b>
           <div class="tiny rcount">${o.bd}/${o.bt} Bündel · ${o.d}/${o.t} Gegenstände</div></div>
         <div class="money rpct">${Math.round(o.d/o.t*100)}%</div>
+        <span class="arrow" style="margin-left:8px">▶</span>
       </div>
       <div class="bar" style="margin-top:8px"><i class="rbar" style="width:${o.d/o.t*100}%"></i></div>
     </div>`).join("")}
@@ -1003,7 +1005,8 @@ function chips(i){
 /* ---------- Gemeinschaftszentrum ---------- */
 function viewCC(){
   return `
-  <h2>Gemeinschaftszentrum</h2>
+  <h2>${S.froom ? esc(S.froom) : "Gemeinschaftszentrum"}</h2>
+  ${S.froom ? `<button class="btn" id="clearRoom" style="margin-bottom:6px">← Alle Räume anzeigen</button>` : ""}
   <div class="filters">
     <input type="search" id="q" placeholder="Gegenstand suchen…" value="${esc(S.q||"")}">
   </div>
@@ -1036,6 +1039,7 @@ function renderCCList(){
 
   let html = "", any = false;
   CC.forEach(r=>{
+    if(S.froom && r.room !== S.froom) return;   // nur den gewaehlten Raum
     let rooms = "";
     r.bundles.forEach(b=>{
       const items = b.items.map(i=>Object.assign({},i,{room:r.room,bundle:b.name,key:r.room+"|"+b.name+"|"+i.de}));
@@ -1822,6 +1826,20 @@ function wire(){
   if(t) t.onchange = () => { S.tiller = t.checked; save(); renderFarm(); };
   const qu = document.getElementById("qual");
   if(qu) qu.onchange = () => { S.quality = qu.value; save(); renderFarm(); };
+  document.querySelectorAll("[data-openroom]").forEach(el=>{
+    el.onclick = () => {
+      const room = el.getAttribute("data-openroom");
+      S.froom = room;
+      S.q = "";                       // Suche wuerde den Raum sonst ueberlagern
+      const r = CC.find(x=>x.room===room);
+      if(r) r.bundles.forEach(b=>{ S.open[room+"|"+b.name] = true; });
+      save();
+      page = "cc";
+      render();
+    };
+  });
+  const cr = document.getElementById("clearRoom");
+  if(cr) cr.onclick = () => { S.froom = ""; save(); render(); };
   document.querySelectorAll("[data-go]").forEach(el=>{
     el.onclick = () => { page = el.getAttribute("data-go"); render(); };
   });
@@ -1925,7 +1943,13 @@ document.getElementById("themeBtn").onclick = () => {
 };
 
 document.querySelectorAll("nav button").forEach(b=>{
-  b.onclick = () => { page = b.dataset.p; render(); };
+  b.onclick = () => {
+    // Ueber die Leiste kommt man immer zum vollstaendigen Zentrum;
+    // der Raumfilter gilt nur fuer den Weg ueber die Uebersicht.
+    if(b.dataset.p === "cc" && S.froom){ S.froom = ""; save(); }
+    page = b.dataset.p;
+    render();
+  };
 });
 
 applyTheme();
