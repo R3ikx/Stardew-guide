@@ -138,7 +138,7 @@ a{color:var(--brand2)}
   <button data-p="plan"><em>🧭</em>Plan</button>
   <button data-p="cc"><em>🏛️</em>Zentrum</button>
   <button data-p="farm"><em>🌱</em>Anbau</button>
-  <button data-p="skill"><em>⭐</em>Berufe</button>
+  <button data-p="more"><em>📖</em>Mehr</button>
 </nav>
 
 <script>
@@ -496,6 +496,123 @@ const SKILLS = [
     {n:"Akrobat (Acrobat)", d:"Halbierte Abklingzeit für Spezialangriffe.", pick:false, from:"Späher", why:"Nischenwahl."},
     {n:"Desperado", d:"Kritische Treffer sind tödlich (Sofort-Kill-Chance).", pick:false, from:"Späher",
      why:"Sehr stark mit Prismatik-Splitter-Ausrüstung im Endgame – aber unzuverlässig."}]},
+];
+
+/* ---------- Dorfbewohner: Geburtstage und Lieblingsgeschenke ----------
+   "loves" = Lieblingsgeschenke (achtfacher Wert am Geburtstag).
+   "tip" = der einfachste Weg, dieser Person eine Freude zu machen.      */
+const VILLAGERS = [
+ {n:"Abigail", s:"Herbst", d:13, where:"Gemischtwarenladen",
+  loves:["Amethyst","Kürbis","Schokoladenkuchen","Kugelfisch","Scharfer Aal","Brombeer-Cobbler"],
+  tip:"Amethyst aus der Mine (Etage 1–40) ist das einfachste Lieblingsgeschenk im ganzen Spiel."},
+ {n:"Alex", s:"Sommer", d:13, where:"Haus neben dem Salon",
+  loves:["Komplettes Frühstück","Lachsgericht"],
+  tip:"Beides muss gekocht werden – bis du eine Küche hast, nimm Universalgeschenke."},
+ {n:"Caroline", s:"Winter", d:7, where:"Gemischtwarenladen",
+  loves:["Fisch-Taco","Grüner Tee","Sommerspangle","Tropisches Curry"],
+  tip:"Sommerspangle selbst anbauen – Saat kostet 50 G bei ihrem eigenen Mann."},
+ {n:"Clint", s:"Winter", d:26, where:"Schmiede",
+  loves:["Amethyst","Aquamarin","Smaragd","Jade","Rubin","Topas","Omni-Geode","Goldbarren","Artischocken-Dip"],
+  tip:"Jeder Edelstein funktioniert. Heb beim Minen immer einen für ihn auf."},
+ {n:"Demetrius", s:"Sommer", d:19, where:"Labor im Berghaus",
+  loves:["Bohneneintopf","Eiscreme","Milchreis","Erdbeere"],
+  tip:"Erdbeeren vom Eierfest – du hast sie ohnehin im Frühling."},
+ {n:"Zwerg", s:"Sommer", d:22, where:"Mine (Zwergensprache nötig)",
+  loves:["Amethyst","Aquamarin","Smaragd","Jade","Rubin","Topas","Omni-Geode","Zitronenstein"],
+  tip:"Wie bei Clint: Edelsteine. Du musst erst alle vier Zwergenschriftrollen finden."},
+ {n:"Elliott", s:"Herbst", d:5, where:"Hütte am Strand",
+  loves:["Krabbenküchlein","Entenfeder","Hummer","Granatapfel","Tintenfischtinte","Tom-Kha-Suppe"],
+  tip:"Hummer aus dem Krebskorb im Meer – fällt beim Bündel-Sammeln sowieso an."},
+ {n:"Emily", s:"Frühling", d:27, where:"Haus neben dem Salon",
+  loves:["Amethyst","Aquamarin","Smaragd","Jade","Rubin","Topas","Stoff","Wolle","Überlebensburger"],
+  tip:"Edelsteine und Wolle. Sobald du Schafe hast, ist sie versorgt."},
+ {n:"Evelyn", s:"Winter", d:20, where:"Haus bei George",
+  loves:["Rote Bete","Schokoladenkuchen","Diamant","Feenrose","Füllung","Tulpe"],
+  tip:"Tulpe – Saat kostet 20 G. Das billigste Lieblingsgeschenk im Spiel."},
+ {n:"George", s:"Herbst", d:24, where:"Haus bei Evelyn",
+  loves:["Gebratener Pilz","Lauch"],
+  tip:"Lauch liegt im Frühling überall am Berg und im Wald herum. Kostet dich nichts."},
+ {n:"Gus", s:"Sommer", d:8, where:"Sternentropfen-Salon",
+  loves:["Diamant","Escargot","Fisch-Taco","Orange","Tropisches Curry"],
+  tip:"Orange vom Orangenbaum – oder ein Diamant aus der Mine."},
+ {n:"Haley", s:"Frühling", d:14, where:"Haus neben dem Salon",
+  loves:["Kokosnuss","Obstsalat","Rosa Kuchen","Sonnenblume"],
+  tip:"Sonnenblume im Sommer anbauen. Kokosnuss liegt in der Wüste herum."},
+ {n:"Harvey", s:"Winter", d:14, where:"Arztpraxis",
+  loves:["Kaffee","Eingelegtes Gemüse","Super-Mahlzeit","Trüffelöl","Wein"],
+  tip:"Wein aus dem Fass. Sobald deine Fässer laufen, hast du immer eines übrig."},
+ {n:"Jas", s:"Sommer", d:4, where:"Marnies Hof",
+  loves:["Feenrose","Rosa Kuchen","Pflaumenpudding"],
+  tip:"Feenrose im Herbst anbauen – die brauchst du ohnehin für guten Honig."},
+ {n:"Jodi", s:"Herbst", d:11, where:"Haus neben dem Salon",
+  loves:["Schokoladenkuchen","Diamant","Auberginen-Parmesan","Gebratener Aal","Pfannkuchen","Rhabarberkuchen","Gemüsemix"],
+  tip:"Diamant aus der Mine ab Etage 50, oder Schokoladenkuchen im Salon."},
+ {n:"Kent", s:"Frühling", d:4, where:"Jodis Haus (ab Jahr 2)",
+  loves:["Farnspitzen-Risotto","Geröstete Haselnüsse"],
+  tip:"Kommt erst im zweiten Jahr ins Dorf. Haselnüsse sammelst du im Herbst."},
+ {n:"Krobus", s:"Winter", d:1, where:"Kanalisation (Rostiger Schlüssel)",
+  loves:["Diamant","Iridiumbarren","Kürbis","Leerenei","Leeren-Mayonnaise","Wilder Meerrettich"],
+  tip:"Wilder Meerrettich aus dem Frühling – kostet nichts und er liebt es."},
+ {n:"Leah", s:"Winter", d:23, where:"Hütte im Cindersap-Wald",
+  loves:["Ziegenkäse","Mohnmuffin","Salat","Pfannengericht","Trüffel","Gemüsemix","Wein"],
+  tip:"Trüffel von deinen Schweinen, oder Ziegenkäse aus der Käsepresse."},
+ {n:"Lewis", s:"Frühling", d:7, where:"Haus südlich des Dorfplatzes",
+  loves:["Herbstsegen","Glasierte Yamswurzeln","Grüner Tee","Peperoni","Gemüsemix"],
+  tip:"Peperoni im Sommer anbauen – wächst schnell nach, du hast immer welche."},
+ {n:"Linus", s:"Winter", d:3, where:"Zelt am Berg",
+  loves:["Heidelbeertörtchen","Kaktusfrucht","Kokosnuss","Meeresgericht","Yamswurzel"],
+  tip:"Yamswurzel im Herbst. Linus freut sich über wenig – gute erste Freundschaft."},
+ {n:"Marnie", s:"Herbst", d:18, where:"Marnies Hof",
+  loves:["Diamant","Bauernmahlzeit","Rosa Kuchen","Kürbiskuchen"],
+  tip:"Diamant. Freundschaft mit ihr lohnt sich, weil du bei ihr Tiere kaufst."},
+ {n:"Maru", s:"Sommer", d:10, where:"Berghaus / Arztpraxis",
+  loves:["Batteriepack","Blumenkohl","Käse-Blumenkohl","Diamant","Goldbarren","Bergmannsleckerei","Rhabarberkuchen","Erdbeere"],
+  tip:"Blumenkohl aus dem Frühling – den baust du fürs Bündel sowieso an."},
+ {n:"Pam", s:"Frühling", d:18, where:"Wohnwagen südlich des Flusses",
+  loves:["Bier","Kaktusfrucht","Glasierte Yamswurzeln","Met","Pale Ale","Pastinake","Pastinakensuppe","Pina Colada"],
+  tip:"Pastinake für 20 G Saat. Günstiger kommst du an keine Freundschaft."},
+ {n:"Penny", s:"Herbst", d:2, where:"Pams Wohnwagen",
+  loves:["Diamant","Smaragd","Melone","Mohn","Mohnmuffin","Rote Platte","Wurzelplatte","Sandfisch","Tom-Kha-Suppe"],
+  tip:"Melone im Sommer – die baust du fürs Bündel ohnehin an."},
+ {n:"Pierre", s:"Frühling", d:26, where:"Gemischtwarenladen",
+  loves:["Gebratener Tintenfisch"],
+  tip:"Nur ein einziges Lieblingsgeschenk. Sonst gekochtes Essen, das mag er."},
+ {n:"Robin", s:"Herbst", d:21, where:"Berghaus (Tischlerei)",
+  loves:["Ziegenkäse","Pfirsich","Spaghetti","Wein"],
+  tip:"Spaghetti im Salon kaufen. Freundschaft mit ihr ist nützlich – sie baut deine Gebäude."},
+ {n:"Sam", s:"Sommer", d:17, where:"Jodis Haus",
+  loves:["Kaktusfrucht","Ahornriegel","Pizza","Tigerauge"],
+  tip:"Pizza im Salon kaufen, kostet 600 G und wirkt sofort."},
+ {n:"Sandy", s:"Herbst", d:15, where:"Oase in der Wüste",
+  loves:["Krokus","Narzisse","Duftwicke","Mango-Klebreis"],
+  tip:"Narzisse aus dem Frühling – kostenlos. Du brauchst aber den reparierten Bus."},
+ {n:"Sebastian", s:"Winter", d:10, where:"Keller im Berghaus",
+  loves:["Gefrorene Träne","Obsidian","Kürbissuppe","Sashimi","Leerenei"],
+  tip:"Gefrorene Träne aus Mine 41–79 – die brauchst du ohnehin fürs Geologen-Bündel."},
+ {n:"Shane", s:"Frühling", d:20, where:"Marnies Hof",
+  loves:["Bier","Peperoni","Paprikapopper","Pizza"],
+  tip:"Bier aus dem Fass (Weizen rein, zwei Tage warten). Billig und wirkt."},
+ {n:"Vincent", s:"Frühling", d:10, where:"Jodis Haus",
+  loves:["Preiselbeerbonbon","Ginger Ale","Traube","Rosa Kuchen","Schnecke"],
+  tip:"Traube – im Sommer im Cindersap-Wald einfach aufsammeln."},
+ {n:"Willy", s:"Sommer", d:24, where:"Angelladen am Strand",
+  loves:["Wels","Diamant","Met","Oktopus","Kürbis","Seegurke"],
+  tip:"Wels vom Angeln an Regentagen – den fängst du fürs Bündel sowieso."},
+ {n:"Hexenmeister", s:"Winter", d:17, where:"Turm im Cindersap-Wald",
+  loves:["Violetter Pilz","Sonnenessenz","Supergurke","Leerenessenz"],
+  tip:"Sonnenessenz von Geistern in der Mine ab Etage 40."},
+ {n:"Leo", s:"Sommer", d:26, where:"Ginger Island (später Baumhaus)",
+  loves:["Entenfeder","Mango","Straußenei","Poi"],
+  tip:"Triffst du erst im Endspiel auf Ginger Island."},
+];
+
+const GIFT_RULES = [
+ {n:"Zwei Geschenke pro Woche und Person", t:"Mehr zählt nicht. Die Woche beginnt am Montag – verschenkst du sonntags und montags, sind das zwei Wochen."},
+ {n:"Am Geburtstag zählt ein Geschenk achtfach", t:"Das ist der mit Abstand schnellste Weg zu Freundschaft. Ein Lieblingsgeschenk am Geburtstag bringt mehr als ein ganzer Monat Alltagsgeschenke."},
+ {n:"Universell beliebt bei fast allen", t:"Prismasplitter, Perle, Magischer Felsbonbon, Goldener Kürbis und Hasenpfote. Wenn du nichts Passendes hast, funktionieren die immer."},
+ {n:"Im Zweifel: gekochtes Essen oder Blumen", t:"Fast alle Gerichte und Blumen sind mindestens „gemocht“. Damit machst du nie etwas falsch."},
+ {n:"Niemals verschenken", t:"Müll, Unkraut, Steine, Erz, Köder und Holz senken die Freundschaft. Lieber gar nichts geben als das."},
+ {n:"Qualität zählt", t:"Ein Geschenk in Gold- oder Iridiumqualität bringt mehr Punkte als dasselbe in normaler Qualität."},
 ];
 
 /* ---------- Sparziele, in sinnvoller Reihenfolge ---------- */
@@ -1107,6 +1224,21 @@ function viewPlan(){
     </div>
   </div>`).join("")}`:""}
 
+  ${(()=>{
+    const today = VILLAGERS.filter(v=>v.s===s && v.d===day);
+    const week  = VILLAGERS.filter(v=>v.s===s && v.d>day && v.d-day<=7).sort((a,b)=>a.d-b.d);
+    if(!today.length && !week.length) return "";
+    return `<h2>🎂 Geburtstage</h2>
+      ${today.map(birthdayCard).join("")}
+      ${week.length?`<div class="card tight">
+        <b class="tiny">IN DEN NÄCHSTEN TAGEN</b>
+        ${week.map(v=>`<div class="row between" style="margin-top:8px">
+          <span class="tiny grow"><b>${esc(v.n)}</b> · ${esc(v.loves[0])}${v.loves[1]?", "+esc(v.loves[1]):""}</span>
+          <span class="chip ${v.d-day<=2?"warn":""}">${v.d-day===1?"morgen":"in "+(v.d-day)+" Tagen"}</span>
+        </div>`).join("")}
+      </div>`:""}`;
+  })()}
+
   ${soon.length ? `<h2>📆 Nächste Termine</h2>
   ${soon.slice(0,3).map(e=>`<div class="card tight">
     <div class="row between">
@@ -1128,6 +1260,91 @@ function viewPlan(){
   <div class="card">
     <p style="margin:0" class="muted">${esc(ph.after)}</p>
   </div>`;
+}
+
+/* ---------- Mehr: Sammelseite für die Nachschlagewerke ---------- */
+const MORE = [
+ {p:"gifts", i:"🎁", n:"Geschenke & Geburtstage", d:"Wer mag was, und wann hat wer Geburtstag"},
+ {p:"skill", i:"⭐", n:"Fähigkeiten & Berufe",    d:"Welchen Beruf du auf Stufe 5 und 10 wählen solltest"},
+];
+
+function viewMore(){
+  const sea = S.season, day = S.day || 1;
+  const today = VILLAGERS.filter(v=>v.s===sea && v.d===day);
+  return `
+  <h2>Nachschlagen</h2>
+  ${MORE.map(m=>`<div class="card tight" data-go="${m.p}" style="cursor:pointer">
+    <div class="row">
+      <span style="font-size:26px">${m.i}</span>
+      <div class="grow"><b>${esc(m.n)}</b><div class="tiny">${esc(m.d)}</div></div>
+      <span class="arrow">▶</span>
+    </div>
+  </div>`).join("")}
+  ${today.length?`<h2>Heute</h2>${today.map(birthdayCard).join("")}`:""}`;
+}
+
+/* ---------- Geschenke & Geburtstage ---------- */
+function birthdayCard(v){
+  return `<div class="card">
+    <div class="row between">
+      <div class="grow"><b>🎂 ${esc(v.n)} hat Geburtstag</b><div class="tiny">${esc(v.where)}</div></div>
+    </div>
+    <div style="margin-top:6px">${v.loves.slice(0,6).map(g=>`<span class="chip ok">${esc(g)}</span>`).join("")}</div>
+    <div class="note" style="margin-bottom:0">${esc(v.tip)}</div>
+  </div>`;
+}
+
+function viewGifts(){
+  return `
+  <h2>Geschenke & Geburtstage</h2>
+  <div class="filters"><input type="search" id="gq" placeholder="Person oder Geschenk suchen…" value="${esc(S.gq||"")}"></div>
+  <div class="filters">
+    <select id="gs">
+      <option>Alle Geburtstage</option>
+      ${SEASONS.map(s=>`<option ${S.gs===s?"selected":""}>${s}</option>`).join("")}
+    </select>
+    <select id="gsort">
+      <option value="date" ${S.gsort!=="name"?"selected":""}>Nach Datum</option>
+      <option value="name" ${S.gsort==="name"?"selected":""}>Nach Name</option>
+    </select>
+  </div>
+  <div id="giftlist"></div>
+
+  <h2>Grundregeln</h2>
+  <div class="card">
+    ${GIFT_RULES.map(r=>`<div style="margin:11px 0">
+      <b style="font-size:14px">${esc(r.n)}</b>
+      <div class="tiny">${esc(r.t)}</div></div>`).join("")}
+  </div>`;
+}
+
+function renderGifts(){
+  const el = document.getElementById("giftlist");
+  if(!el) return;
+  const q = (S.gq||"").toLowerCase().trim();
+  const fs = S.gs || "Alle Geburtstage";
+  const byName = S.gsort === "name";
+
+  let list = VILLAGERS.filter(v=>{
+    if(fs !== "Alle Geburtstage" && v.s !== fs) return false;
+    if(q && !(v.n+" "+v.loves.join(" ")+" "+v.where).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  list = list.slice().sort((a,b)=> byName
+    ? a.n.localeCompare(b.n,"de")
+    : (SEASONS.indexOf(a.s)-SEASONS.indexOf(b.s)) || (a.d-b.d));
+
+  if(!list.length){ el.innerHTML = `<div class="card empty">Nichts gefunden.</div>`; return; }
+
+  const isToday = v => v.s === S.season && v.d === (S.day||1);
+  el.innerHTML = list.map(v=>`<div class="card">
+    <div class="row between">
+      <div class="grow"><b>${esc(v.n)}</b><div class="tiny">${esc(v.where)}</div></div>
+      <span class="chip ${isToday(v)?"warn":""}">🎂 ${esc(v.s)} ${v.d}${isToday(v)?" · heute":""}</span>
+    </div>
+    <div style="margin-top:7px">${v.loves.map(g=>`<span class="chip ok">${esc(g)}</span>`).join("")}</div>
+    <div class="note" style="margin-bottom:0">${esc(v.tip)}</div>
+  </div>`).join("");
 }
 
 /* ---------- Berufe ---------- */
@@ -1265,9 +1482,14 @@ function bindInputs(){
   });
 }
 
+/* Unterseiten von "Mehr" lassen den Mehr-Knopf markiert. */
+const TAB_OF = {home:"home", plan:"plan", cc:"cc", farm:"farm",
+                more:"more", gifts:"more", skill:"more"};
+
 function render(keepScroll){
   const y = window.scrollY;
-  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on", b.dataset.p===page));
+  const tab = TAB_OF[page] || "home";
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on", b.dataset.p===tab));
   const app = document.getElementById("app");
   const sub = document.getElementById("sub");
 
@@ -1275,6 +1497,8 @@ function render(keepScroll){
   else if(page==="plan"){ app.innerHTML = viewPlan(); sub.textContent = "Was als Nächstes?"; }
   else if(page==="cc"){ app.innerHTML = viewCC(); sub.textContent = "Gemeinschaftszentrum"; renderCCList(); }
   else if(page==="farm"){ app.innerHTML = viewFarm(); sub.textContent = "Gewinn pro Jahreszeit"; renderFarm(); }
+  else if(page==="more"){ app.innerHTML = viewMore(); sub.textContent = "Nachschlagen"; }
+  else if(page==="gifts"){ app.innerHTML = viewGifts(); sub.textContent = "Geschenke & Geburtstage"; renderGifts(); }
   else { app.innerHTML = viewSkills(); sub.textContent = "Fähigkeiten & Berufe"; }
 
   bindInputs();
@@ -1313,6 +1537,15 @@ function wire(){
   if(t) t.onchange = () => { S.tiller = t.checked; save(); renderFarm(); };
   const qu = document.getElementById("qual");
   if(qu) qu.onchange = () => { S.quality = qu.value; save(); renderFarm(); };
+  document.querySelectorAll("[data-go]").forEach(el=>{
+    el.onclick = () => { page = el.getAttribute("data-go"); render(); };
+  });
+  const gq = document.getElementById("gq");
+  if(gq) gq.oninput = () => { S.gq = gq.value; renderGifts(); };
+  const gs = document.getElementById("gs");
+  if(gs) gs.onchange = () => { S.gs = gs.value; save(); renderGifts(); };
+  const gso = document.getElementById("gsort");
+  if(gso) gso.onchange = () => { S.gsort = gso.value; save(); renderGifts(); };
   const py = document.getElementById("pYear");
   if(py) py.onchange = () => { S.year = +py.value; save(); renderAnchored(); };
   const pdy = document.getElementById("pDay");
