@@ -498,6 +498,31 @@ const SKILLS = [
      why:"Sehr stark mit Prismatik-Splitter-Ausrüstung im Endgame – aber unzuverlässig."}]},
 ];
 
+/* ---------- Wochentage ----------
+   Jede Jahreszeit hat genau 28 Tage, also exakt vier Wochen. Damit hängt
+   der Wochentag nur am Tag im Monat: Tag 1 ist immer ein Montag.        */
+const WEEKDAYS = ["Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag"];
+const weekday = day => WEEKDAYS[(day - 1) % 7];
+
+const DAYHINTS = {
+ "Montag":[{n:"Neue Woche", t:"Der Geschenk-Zähler ist zurückgesetzt. Jeder darf wieder zwei Geschenke bekommen."}],
+ "Mittwoch":[{n:"Pierres Laden ist geschlossen", t:"Lauf nicht umsonst hin. Saatgut gibt es heute nur über die Saatmaschine oder den Vorrat."}],
+ "Freitag":[{n:"Der Reisewagen steht im Cindersap-Wald", t:"6–20 Uhr, südwestlich der Farm. Hier gibt es Rotkohl-Saat und die Süße Edelsteinbeere – sonst nirgends. Teuer, aber oft das Geld wert."}],
+ "Sonntag":[{n:"Der Reisewagen steht im Cindersap-Wald", t:"6–20 Uhr. Zweite Chance der Woche auf seltene Saat."}],
+};
+
+/* ---------- Was jeden Spieltag zu tun ist ---------- */
+const DAILY = [
+ {k:"tiere",     n:"Tiere füttern und streicheln", t:"Nur bei voller Zuneigung gibt es große Milch und große Eier – genau die brauchst du fürs Tier-Bündel."},
+ {k:"melken",    n:"Melken und scheren",           t:"Kühe und Ziegen mit dem Eimer, Schafe mit der Schere. Ziegen geben nur jeden zweiten Tag."},
+ {k:"giessen",   n:"Gießen",                        t:"Entfällt bei Regen. Dann hast du den ganzen Tag für Mine oder Angeln frei."},
+ {k:"maschinen", n:"Maschinen leeren und neu füllen", t:"Fässer, Einmachgläser, Öfen, Mayonnaise-Maschinen. Jeder Tag Leerlauf ist verschenktes Geld."},
+ {k:"koerbe",    n:"Krebskörbe leeren und beködern", t:"Füllt nebenbei das Krebskorb-Bündel, ohne dass du angeln musst."},
+ {k:"sammeln",   n:"Alles Sammelbare aufheben",     t:"Wildpflanzen sind Sammeln-XP und Bündel-Gegenstände in einem."},
+ {k:"geschenk",  n:"Geschenke verteilen",           t:"Zwei pro Person und Woche. Am Geburtstag zählt eines achtfach."},
+ {k:"abliefern", n:"Vor dem Schlafen abliefern",    t:"Ernte in die Verkaufskiste, Werkzeuge für morgen einpacken, Essen mitnehmen."},
+];
+
 /* ---------- Fische ----------
    s: leer = ganzjährig. from/to: Stunde, 26 = 2 Uhr nachts.
    w: "" = jedes Wetter. diff: Angelschwierigkeit (je höher, desto zappeliger). */
@@ -857,7 +882,7 @@ const PLAN = [
 const KEY = "junimo_guide_v3";
 let S = load();
 function defaults(){
-  return {done:{}, have:{}, open:{}, bought:{}, year:1, day:1,
+  return {done:{}, have:{}, open:{}, bought:{}, daily:{}, year:1, day:1,
           hour:9, weather:"Egal",
           season:"Frühling", theme:null, tiller:false, quality:"normal"};
 }
@@ -1184,6 +1209,22 @@ function artisanBox(sea){
 }
 
 /* ---------- Plan: was als Nächstes? ---------- */
+/* Zaehlt den Tag weiter und rollt am 28. in die naechste Jahreszeit
+   bzw. ins naechste Jahr. Die Tagesliste faengt dabei von vorn an. */
+function nextDay(){
+  let d = (S.day || 1) + 1;
+  if(d > 28){
+    d = 1;
+    const i = SEASONS.indexOf(S.season);
+    if(i === SEASONS.length - 1){ S.season = SEASONS[0]; S.year = (S.year || 1) + 1; }
+    else S.season = SEASONS[i + 1];
+  }
+  S.day = d;
+  S.daily = {};
+  save();
+}
+
+
 function phase(){
   const y = S.year || 1, s = S.season;
   if(y >= 3) return ENDGAME;
@@ -1220,13 +1261,42 @@ function viewPlan(){
   <div class="card tight">
     <div class="row between"><span class="tiny grow">Jahr</span>
       <select id="pYear" style="width:auto;min-width:90px">
-        ${[1,2,3].map(n=>`<option value="${n}" ${y===n?"selected":""}>${n===3?"3 oder später":"Jahr "+n}</option>`).join("")}
+        ${[1,2,3].map(n=>`<option value="${n}" ${(y===n||(n===3&&y>3))?"selected":""}>${n===3?"3 oder später":"Jahr "+n}</option>`).join("")}
       </select></div>
     <div class="row between" style="margin-top:9px"><span class="tiny grow">Tag im Monat</span>
       <input type="number" id="pDay" min="1" max="28" inputmode="numeric" value="${day}">
     </div>
+    <div class="row between" style="margin-top:9px">
+      <span class="tiny grow">Wochentag</span><b>${esc(weekday(day))}</b>
+    </div>
+    <button class="btn" id="dayNext" style="margin-top:10px">☀️ Nächster Tag</button>
   </div>
   ${seasonSegs(s,"season")}
+
+  ${(DAYHINTS[weekday(day)]||[]).map(h=>`<div class="card tight">
+    <b>📌 ${esc(h.n)}</b>
+    <div class="tiny" style="margin-top:4px">${esc(h.t)}</div>
+  </div>`).join("")}
+
+  <h2>✅ Heute erledigt</h2>
+  <div class="card tight">
+    <div class="row between" style="margin-bottom:8px">
+      <span class="tiny grow">Setzt sich beim nächsten Tag von selbst zurück</span>
+      <b class="money" id="dailyCount">${DAILY.filter(d=>S.daily&&S.daily[d.k]).length} von ${DAILY.length}</b>
+    </div>
+    <div class="bar"><i id="dailyBar" style="width:${DAILY.filter(d=>S.daily&&S.daily[d.k]).length/DAILY.length*100}%"></i></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden">
+    ${DAILY.map(d=>{
+      const on = !!(S.daily && S.daily[d.k]);
+      return `<div class="item ${on?"done":""}">
+        <div class="row">
+          <input type="checkbox" data-daily="${esc(d.k)}" ${on?"checked":""}>
+          <div class="grow"><div class="iname">${esc(d.n)}</div><div class="en">${esc(d.t)}</div></div>
+        </div>
+      </div>`;
+    }).join("")}
+  </div>
 
   <h2>🎯 Das ist jetzt dran</h2>
   <div class="card">
@@ -1771,11 +1841,30 @@ function wire(){
   if(gs) gs.onchange = () => { S.gs = gs.value; save(); renderGifts(); };
   const gso = document.getElementById("gsort");
   if(gso) gso.onchange = () => { S.gsort = gso.value; save(); renderGifts(); };
+  const dn = document.getElementById("dayNext");
+  if(dn) dn.onclick = () => { nextDay(); renderAnchored("#goalsTop"); window.scrollTo(0,0); };
+  document.querySelectorAll("[data-daily]").forEach(el=>{
+    el.onchange = () => {
+      const k = el.getAttribute("data-daily");
+      if(!S.daily) S.daily = {};
+      if(el.checked) S.daily[k] = true; else delete S.daily[k];
+      save();
+      const row = el.closest(".item");
+      if(row) row.classList.toggle("done", el.checked);
+      const n = DAILY.filter(d=>S.daily[d.k]).length;
+      const c = document.getElementById("dailyCount");
+      if(c) c.textContent = n + " von " + DAILY.length;
+      const bar = document.getElementById("dailyBar");
+      if(bar) bar.style.width = (n / DAILY.length * 100) + "%";
+    };
+  });
   const py = document.getElementById("pYear");
   if(py) py.onchange = () => { S.year = +py.value; save(); renderAnchored(); };
   const pdy = document.getElementById("pDay");
   if(pdy) pdy.onchange = () => {
-    S.day = Math.min(28, Math.max(1, parseInt(pdy.value,10) || 1));
+    const nd = Math.min(28, Math.max(1, parseInt(pdy.value,10) || 1));
+    if(nd !== S.day) S.daily = {};
+    S.day = nd;
     save(); renderAnchored();
   };
   // Sparziele lassen sich in beide Richtungen umschalten: Haken setzen
@@ -1820,7 +1909,7 @@ function wire(){
   const rs = document.getElementById("reset");
   if(rs) rs.onclick = () => {
     if(confirm("Wirklich den gesamten Fortschritt löschen?")){
-      S.done = {}; S.have = {}; S.open = {}; S.bought = {}; save(); render();
+      S.done = {}; S.have = {}; S.open = {}; S.bought = {}; S.daily = {}; save(); render();
     }
   };
 }
