@@ -1018,6 +1018,7 @@ function viewPlan(){
   // Nächste Sparziele
   const open = GOALS.filter(g=>!S.bought[g.id]);
   const goal = open[0], later = open.slice(1,4);
+  const bought = GOALS.filter(g=>S.bought[g.id]);
 
   // Bündel, denen nur noch wenig fehlt
   const almost = [];
@@ -1060,7 +1061,7 @@ function viewPlan(){
     <p class="tiny" style="margin-bottom:0">${esc(w.t)}</p>
   </div>`).join("") : ""}
 
-  <h2>💰 Worauf du sparen solltest</h2>
+  <h2 id="goalsTop">💰 Worauf du sparen solltest</h2>
   ${goal ? `<div class="card">
     <div class="row between">
       <div class="grow"><b>${esc(goal.n)}</b><div class="tiny">bei ${esc(goal.at)}${goal.extra?` · dazu ${esc(goal.extra)}`:""}</div></div>
@@ -1078,6 +1079,25 @@ function viewPlan(){
       <span class="tiny grow">${esc(g.n)}</span><span class="money">${fmt(g.cost)} G</span></div>`).join("")}
   </div>`:""}`
   : `<div class="card empty">Alle Sparziele abgehakt. Ab jetzt ist Gold nur noch Mittel zum Zweck. 🎉</div>`}
+
+  ${bought.length ? `<details ${S.openGoals?"open":""} id="goalsDone">
+    <summary>
+      <span class="arrow">▶</span>
+      <span class="grow"><b>Schon erledigt</b>
+        <div class="tiny">${bought.length} von ${GOALS.length} · Haken entfernen macht es rückgängig</div></span>
+      <span class="chip ok">✓ ${bought.length}</span>
+    </summary>
+    ${bought.map(g=>`<div class="item done">
+      <div class="row">
+        <input type="checkbox" data-goal="${esc(g.id)}" checked>
+        <div class="grow">
+          <div class="iname">${esc(g.n)}</div>
+          <div class="en">bei ${esc(g.at)}${g.extra?` · dazu ${esc(g.extra)}`:""}</div>
+        </div>
+        <span class="money">${fmt(g.cost)} G</span>
+      </div>
+    </div>`).join("")}
+  </details>`:""}
 
   ${almost.length ? `<h2>🧩 Fast fertige Bündel</h2>
   ${almost.slice(0,3).map(b=>`<div class="card tight">
@@ -1265,12 +1285,13 @@ function render(keepScroll){
 /* Beim Wechsel der Jahreszeit aendert sich der Inhalt unter den Knoepfen.
    Statt nach oben zu springen, bleibt die Knopfleiste an derselben Stelle
    im Bild stehen. */
-function renderAnchored(){
-  const a = document.querySelector(".segs");
+function renderAnchored(sel){
+  sel = sel || ".segs";
+  const a = document.querySelector(sel);
   const off = a ? a.getBoundingClientRect().top : null;
   render();
   if(off === null) return;
-  const a2 = document.querySelector(".segs");
+  const a2 = document.querySelector(sel);
   if(!a2) return;
   window.scrollTo(0, Math.max(0, a2.getBoundingClientRect().top - off));
 }
@@ -1299,9 +1320,18 @@ function wire(){
     S.day = Math.min(28, Math.max(1, parseInt(pdy.value,10) || 1));
     save(); renderAnchored();
   };
+  // Sparziele lassen sich in beide Richtungen umschalten: Haken setzen
+  // blendet das naechste Ziel ein, Haken entfernen holt das alte zurueck.
   document.querySelectorAll("[data-goal]").forEach(el=>{
-    el.onchange = () => { S.bought[el.getAttribute("data-goal")] = true; save(); renderAnchored(); };
+    el.onchange = () => {
+      const id = el.getAttribute("data-goal");
+      if(el.checked) S.bought[id] = true; else delete S.bought[id];
+      save();
+      renderAnchored("#goalsTop");
+    };
   });
+  const gd = document.getElementById("goalsDone");
+  if(gd) gd.ontoggle = () => { S.openGoals = gd.open; save(); };
   const rs = document.getElementById("reset");
   if(rs) rs.onclick = () => {
     if(confirm("Wirklich den gesamten Fortschritt löschen?")){
