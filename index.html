@@ -9,6 +9,12 @@
 <meta name="apple-mobile-web-app-title" content="Junimo Guide">
 <meta name="description" content="Stardew-Valley-Begleiter: Gemeinschaftszentrum, Anbauplanung und Berufe.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<!-- Symbol fuer "Zum Home-Bildschirm" auf iPhone/iPad. Fehlt die Datei
+     (z. B. wenn nur index.html allein verwendet wird), nimmt iOS einen
+     Screenshot der Seite – die App funktioniert trotzdem. -->
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Junimo Guide</title>
 <style>
 :root{
@@ -1005,12 +1011,25 @@ function render(keepScroll){
   if(keepScroll) window.scrollTo(0, y); else window.scrollTo(0,0);
 }
 
+/* Beim Wechsel der Jahreszeit aendert sich der Inhalt unter den Knoepfen.
+   Statt nach oben zu springen, bleibt die Knopfleiste an derselben Stelle
+   im Bild stehen. */
+function renderAnchored(){
+  const a = document.querySelector(".segs");
+  const off = a ? a.getBoundingClientRect().top : null;
+  render();
+  if(off === null) return;
+  const a2 = document.querySelector(".segs");
+  if(!a2) return;
+  window.scrollTo(0, Math.max(0, a2.getBoundingClientRect().top - off));
+}
+
 function wire(){
   document.querySelectorAll("[data-season]").forEach(b=>{
-    b.onclick = () => { S.season = b.dataset.season; save(); render(); };
+    b.onclick = () => { S.season = b.dataset.season; save(); renderAnchored(); };
   });
   document.querySelectorAll("[data-farm]").forEach(b=>{
-    b.onclick = () => { S.farmSeason = b.dataset.farm; save(); render(); };
+    b.onclick = () => { S.farmSeason = b.dataset.farm; save(); renderAnchored(); };
   });
   const q = document.getElementById("q");
   if(q) q.oninput = () => { S.q = q.value; renderCCList(); };
