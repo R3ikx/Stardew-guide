@@ -87,7 +87,7 @@ select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),
 .seg{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:8px 14px;font-size:14px;font-weight:600;white-space:nowrap}
 .seg.on{background:var(--brand);color:#fff;border-color:var(--brand)}
 nav{
-  position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);
+  position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(5,1fr);
   background:var(--card);border-top:1px solid var(--line);
   padding:6px 4px calc(6px + env(safe-area-inset-bottom));
 }
@@ -135,6 +135,7 @@ a{color:var(--brand2)}
 
 <nav>
   <button data-p="home" class="on"><em>🏠</em>Übersicht</button>
+  <button data-p="plan"><em>🧭</em>Plan</button>
   <button data-p="cc"><em>🏛️</em>Zentrum</button>
   <button data-p="farm"><em>🌱</em>Anbau</button>
   <button data-p="skill"><em>⭐</em>Berufe</button>
@@ -497,6 +498,141 @@ const SKILLS = [
      why:"Sehr stark mit Prismatik-Splitter-Ausrüstung im Endgame – aber unzuverlässig."}]},
 ];
 
+/* ---------- Sparziele, in sinnvoller Reihenfolge ---------- */
+const GOALS = [
+ {id:"pack1", n:"Rucksack – 24 Plätze", cost:2000, at:"Pierre",
+  why:"Das Inventar ist dein größter Bremsklotz. Kauf das vor allem anderen, sonst lässt du ständig Sachen liegen."},
+ {id:"silo", n:"Silo", cost:100, extra:"100 Stein, 10 Ton, 5 Kupferbarren", at:"Robin",
+  why:"Ohne Silo kein Heu. Bau es, bevor du Tiere kaufst – und lange vor dem ersten Winter."},
+ {id:"can_cu", n:"Kupfer-Gießkanne", cost:2000, extra:"5 Kupferbarren", at:"Clint",
+  why:"Größerer Wirkungsbereich = du schaffst mehr Felder pro Tag. Über Nacht nicht verfügbar, also an einem Regentag abgeben."},
+ {id:"coop", n:"Hühnerstall", cost:4000, extra:"300 Holz, 100 Stein", at:"Robin",
+  why:"Eier für das Tier-Bündel. Hühner sind pflegeleicht und zahlen sich schnell aus."},
+ {id:"vault1", n:"Tresorraum: 2.500 G", cost:2500, at:"Gemeinschaftszentrum",
+  why:"Erster Schritt zum reparierten Bus – und der bringt dir die Wüste mit Sternfrucht und Sandfisch."},
+ {id:"pick_cu", n:"Kupfer-Spitzhacke", cost:2000, extra:"5 Kupferbarren", at:"Clint",
+  why:"Schnelleres Graben spart Energie – und Energie ist in Jahr 1 deine knappste Ressource."},
+ {id:"tools_steel", n:"Stahl-Werkzeuge", cost:5000, extra:"je 5 Eisenbarren", at:"Clint",
+  why:"Gießkanne und Spitzhacke zuerst. Erst mit Stahl kommst du zügig tiefer in die Mine."},
+ {id:"barn", n:"Scheune", cost:6000, extra:"350 Holz, 150 Stein", at:"Robin",
+  why:"Kuh und Ziege liefern Milch für das Tier-Bündel und Käse fürs Handwerkswaren-Bündel."},
+ {id:"vault2", n:"Tresorraum: 5.000 G", cost:5000, at:"Gemeinschaftszentrum",
+  why:"Belohnung ist die Getreidemühle – Weizen zu Mehl, Rote Bete zu Zucker."},
+ {id:"pack2", n:"Rucksack – 36 Plätze", cost:10000, at:"Pierre",
+  why:"Spätestens vor deinem ersten ernsthaften Skull-Cavern-Lauf."},
+ {id:"kitchen", n:"Hausausbau: Küche", cost:10000, extra:"450 Holz", at:"Robin",
+  why:"Kochen gibt dir Buffs (Angeln, Bergbau) – und das Spiegelei fürs Koch-Bündel."},
+ {id:"stable", n:"Pferdestall", cost:10000, extra:"100 Hartholz", at:"Robin",
+  why:"Spart dir jeden einzelnen Tag Laufzeit. Rechnet sich über ein Spieljahr locker."},
+ {id:"vault3", n:"Tresorraum: 10.000 G", cost:10000, at:"Gemeinschaftszentrum",
+  why:"Bringt 5 Sprinkler – ab da gießt du nicht mehr von Hand."},
+ {id:"tools_gold", n:"Gold-Werkzeuge", cost:10000, extra:"je 5 Goldbarren", at:"Clint",
+  why:"Gießkanne zuerst, dann Spitzhacke."},
+ {id:"vault4", n:"Tresorraum: 25.000 G", cost:25000, at:"Gemeinschaftszentrum",
+  why:"3 Qualitäts-Sprinkler und das letzte Geld-Bündel – der Bus fährt."},
+ {id:"house2", n:"Hausausbau: Zimmer", cost:50000, extra:"150 Hartholz", at:"Robin",
+  why:"Voraussetzung für den Keller. Vorher brauchst du es nicht wirklich."},
+ {id:"cellar", n:"Hausausbau: Keller", cost:100000, at:"Robin",
+  why:"⭐ Das Ziel, auf das du eigentlich die ganze Zeit sparst: Fässer reifen Wein auf Iridium-Qualität – doppelter Preis, für immer."},
+];
+
+/* ---------- Feste Termine im Kalender ---------- */
+const EVENTS = [
+ {s:"Frühling", d:13, n:"Eierfest", t:"⭐ Erdbeersaat kaufen. Nimm so viel Gold mit wie du hast – das ist die beste Investition des ganzen Frühlings."},
+ {s:"Frühling", d:24, n:"Blumentanz", t:"Freundschaft. Kein Pflichttermin."},
+ {s:"Sommer", d:11, n:"Luau", t:"Etwas Gutes in den Suppentopf werfen → Freundschaft mit dem ganzen Dorf auf einen Schlag."},
+ {s:"Sommer", d:28, n:"Tanz der Mondmedusen", t:"Nur Atmosphäre."},
+ {s:"Herbst", d:16, n:"Jahrmarkt", t:"⭐ Sterntropfen für 2.000 Sternmarken – dauerhaft mehr Energie. Nimm deine besten Waren zum Ausstellen mit."},
+ {s:"Herbst", d:27, n:"Geisterstunde", t:"Goldene Pflaume im Labyrinth – dauerhaft +Energie."},
+ {s:"Winter", d:8, n:"Eisfest", t:"Angelwettbewerb, Preis ist ein Vorratsbehälter."},
+ {s:"Winter", d:15, n:"Nachtmarkt (15.–17.)", t:"⭐ Seltene Saat, Deko, U-Boot-Fischen. Drei Tage lang, nicht verschlafen."},
+ {s:"Winter", d:25, n:"Fest des Winterstern", t:"Wichtelgeschenk – ein gutes Geschenk bringt viel Freundschaft."},
+];
+
+/* ---------- Zeitfenster, die man leicht verpasst ---------- */
+const WINDOWS = [
+ {s:"Frühling", from:1, to:10, n:"Obstbäume jetzt pflanzen",
+  t:"Bäume brauchen 28 Tage. Ein Kirschbaum (3.400 G) im Frühling gepflanzt trägt noch dieses Jahr."},
+ {s:"Frühling", from:1, to:28, n:"Mine öffnet am 5. Frühling",
+  t:"Ab dann jeden Regentag in die Mine – du musst nicht gießen."},
+ {s:"Herbst", from:1, to:4, n:"Süße Edelsteinbeere säen",
+  t:"24 Tage Wachstum. Nach dem 4. Herbst wird sie nicht mehr fertig."},
+ {s:"Herbst", from:8, to:11, n:"Brombeersaison",
+  t:"Alle Büsche im Tal tragen Brombeeren – das Bündel-Item und nebenbei viel Sammeln-XP."},
+ {s:"Herbst", from:18, to:28, n:"Heuvorrat anlegen",
+  t:"⚠️ Im Winter wächst kein Gras. Mäh jetzt alles, bis das Silo voll ist, sonst hungern deine Tiere."},
+ {s:"Winter", from:1, to:28, n:"Winter-Erdhügel umgraben",
+  t:"Die kleinen Hügel mit der Hacke: Winterwurzel und Schneejams fürs Bündel."},
+];
+
+/* ---------- Was man dauerhaft nicht schleifen lassen darf ---------- */
+const HABITS = [
+ {n:"Jeden Tag alles aufheben, was am Boden liegt", t:"Sammeln-XP kommt fast nur daher – und die Bündel-Sammelgegenstände sind sonst schnell weg."},
+ {n:"Tiere täglich streicheln", t:"Nur bei voller Zuneigung gibt es große Milch und große Eier. Genau die brauchst du fürs Tier-Bündel."},
+ {n:"Fässer und Einmachgläser nie leer stehen lassen", t:"Jeder Tag, an dem eine Maschine leer steht, ist verschenktes Geld. Verarbeiten schlägt Rohverkauf immer."},
+ {n:"Jedes neue Mineral und Artefakt ins Museum", t:"Gratis-Belohnungen, und die Sammlung läuft nebenbei mit."},
+ {n:"Zwei Geschenke pro Woche an die Leute, die dir wichtig sind", t:"Mehr zählt nicht. Geburtstage geben den achtfachen Wert."},
+ {n:"Regen- und Gewittertage umwidmen", t:"Nicht gießen müssen heißt: ganzer Tag für Mine oder Angeln frei."},
+ {n:"Vor dem Schlafen abliefern", t:"Alles in die Verkaufskiste, Werkzeuge für morgen einpacken, Essen mitnehmen."},
+ {n:"Krebskörbe aufstellen und leeren", t:"Fünf Stück am Strand laufen nebenbei mit und füllen das Krebskorb-Bündel von allein."},
+];
+
+/* ---------- Phasen: was jetzt dran ist und was danach kommt ---------- */
+const PHASES = [
+ {y:1, s:"Frühling", head:"Fuß fassen",
+  now:["Farm freiräumen – Holz und Stein brauchst du für die Bündel und zum Bauen.",
+       "Pastinaken säen, dann durchgehend nachsäen. Kartoffeln und Grünkohl bringen ab Tag 10 mehr.",
+       "Jeden Tag angeln üben. Angeln ist in Jahr 1 die schnellste Geldquelle.",
+       "Ab dem 5. Frühling in die Mine – Kupfer und Eisen für Werkzeuge und das Schmied-Bündel."],
+  after:"Im Sommer wird aus Sparen Investieren: Heidelbeeren als Grundstock, dann die ersten Fässer."},
+ {y:1, s:"Sommer", head:"Die erste Geldmaschine",
+  now:["Heidelbeeren großflächig anbauen – drei Beeren pro Ernte, alle vier Tage.",
+       "Mais früh säen, er wächst bis Herbstende durch.",
+       "Fässer und Einmachgläser bauen, sobald du Kupfer und Eichenharz hast.",
+       "Tresorraum-Bündel (2.500 G) freischalten → Bus → Wüste."],
+  after:"Der Herbst ist die ertragreichste Jahreszeit des Jahres – Kürbis und Preiselbeere. Dafür jetzt Felder vorbereiten."},
+ {y:1, s:"Herbst", head:"Die große Ernte",
+  now:["Kürbis und Preiselbeere sind die Geldbringer. Kürbis zusätzlich mit Qualitätsdünger für das Qualitätsbündel.",
+       "Vorratskammer abschließen – die Belohnung ist das Gewächshaus.",
+       "Heuvorrat fürs Silo anlegen, bevor der Winter kommt.",
+       "Fässer durchlaufen lassen: Wein reift auch über den Winter."],
+  after:"Im Winter ruht die Farm. Dann zählen Mine, Angeln und das Gewächshaus."},
+ {y:1, s:"Winter", head:"Aufräumen und vorbereiten",
+  now:["Skull Cavern in der Wüste: Iridium und Prismasplitter.",
+       "Die Winterfische abhaken – Stör und Tigerforelle gibt es nur jetzt.",
+       "Gewächshaus füllen. Erdbeeren, bis du an Uralte Früchte kommst.",
+       "Freundschaften pflegen: jetzt hast du Zeit dafür."],
+  after:"Jahr 2 beginnt mit vollem Werkzeugkasten. Ab hier zählt nur noch: alles verarbeiten, nichts roh verkaufen."},
+ {y:2, s:"Frühling", head:"Skalieren",
+  now:["Sprinkler bauen, bis du nicht mehr von Hand gießt.",
+       "Uralte Saat suchen (Artefakte, Saatmaschine) – Uralte Früchte sind das Endgame.",
+       "Reste des Gemeinschaftszentrums abarbeiten, vor allem die saisonalen Fische.",
+       "Erdbeeren am Eierfest nachkaufen, diesmal mit richtig Geld."],
+  after:"Ziel dieses Jahres: Keller ausbauen und Wein in Fässern reifen lassen."},
+ {y:2, s:"Sommer", head:"Auf Wein umstellen",
+  now:["Sternfrucht in der Wüste kaufen und zu Wein verarbeiten – der beste Gewinn pro Feld im Spiel.",
+       "Hopfen für Pale Ale: täglich erntbar, 300 G pro Fass.",
+       "Auf den Kellerausbau sparen (100.000 G)."],
+  after:"Im Herbst kommt der Jahrmarkt mit dem Sterntropfen – und die letzte große Ernte vor dem Winter."},
+ {y:2, s:"Herbst", head:"Ernten und veredeln",
+  now:["Preiselbeeren und Kürbis, alles was nicht ins Bündel muss, ins Fass oder Einmachglas.",
+       "Jahrmarkt am 16.: Sterntropfen holen.",
+       "Gewächshaus komplett auf Uralte Frucht umstellen."],
+  after:"Danach läuft die Farm weitgehend von allein. Übrig bleiben Ginger Island und die Perfektion."},
+ {y:2, s:"Winter", head:"Ausbauen",
+  now:["Keller fertigstellen und alle Fässer mit Wein füllen.",
+       "Museum und Fischsammlung vervollständigen.",
+       "Skull Cavern tief laufen: Iridium für die letzten Werkzeugstufen."],
+  after:"Ab Jahr 3 geht es um Ginger Island, Perfektion und die letzten Sammlungen."},
+];
+
+const ENDGAME = {head:"Endspiel",
+ now:["Gewächshaus und Felder voll Uralte Frucht, alles zu Wein, alles in den Keller.",
+      "Ginger Island freischalten (Willys Boot, 5 Hartholz + 200 Rubine) – neue Pflanzen und Walnüsse.",
+      "Museum, Fischsammlung und Kochbuch vervollständigen.",
+      "Letzte Werkzeugstufe auf Iridium bringen."],
+ after:"Was bleibt, ist die Perfektionswertung – Sammlungen, Freundschaften, Walnüsse."};
+
 /* ---------- Jahr-1-Fahrplan ---------- */
 const PLAN = [
  {s:"Frühling", items:[
@@ -538,7 +674,8 @@ const PLAN = [
 const KEY = "junimo_guide_v3";
 let S = load();
 function load(){
-  const def = {done:{}, have:{}, open:{}, season:"Frühling", theme:null, tiller:false, quality:"normal"};
+  const def = {done:{}, have:{}, open:{}, bought:{}, year:1, day:1,
+               season:"Frühling", theme:null, tiller:false, quality:"normal"};
   try{
     const r = localStorage.getItem(KEY);
     if(r) return Object.assign(def, JSON.parse(r) || {});
@@ -860,6 +997,119 @@ function artisanBox(sea){
   </div>`;
 }
 
+/* ---------- Plan: was als Nächstes? ---------- */
+function phase(){
+  const y = S.year || 1, s = S.season;
+  if(y >= 3) return ENDGAME;
+  return PHASES.find(p=>p.y===y && p.s===s) || ENDGAME;
+}
+
+function viewPlan(){
+  const y = S.year || 1, s = S.season, day = S.day || 1;
+  const ph = phase();
+
+  // Termine, die noch kommen – innerhalb der nächsten 10 Tage zuerst
+  const soon = EVENTS.filter(e=>e.s===s && e.d >= day).sort((a,b)=>a.d-b.d);
+  const win  = WINDOWS.filter(w=>w.s===s && day <= w.to);
+
+  // Gegenstände, die es nur in dieser Jahreszeit gibt und noch offen sind
+  const urgent = ALL.filter(i=>!isDone(i) && i.s && i.s.length && i.s.includes(s) && i.s.length <= 2);
+
+  // Nächste Sparziele
+  const open = GOALS.filter(g=>!S.bought[g.id]);
+  const goal = open[0], later = open.slice(1,4);
+
+  // Bündel, denen nur noch wenig fehlt
+  const almost = [];
+  CC.forEach(r=>r.bundles.forEach(b=>{
+    const items = b.items.map(i=>({key:r.room+"|"+b.name+"|"+i.de, q:i.q}));
+    const d = items.filter(isDone).length;
+    if(d > 0 && d < b.need) almost.push({room:r.room, name:b.name, d, need:b.need, reward:b.reward});
+  }));
+  almost.sort((a,b)=>(a.need-a.d)-(b.need-b.d));
+
+  return `
+  <h2>Wo stehst du gerade?</h2>
+  <div class="card tight">
+    <div class="row between"><span class="tiny grow">Jahr</span>
+      <select id="pYear" style="width:auto;min-width:90px">
+        ${[1,2,3].map(n=>`<option value="${n}" ${y===n?"selected":""}>${n===3?"3 oder später":"Jahr "+n}</option>`).join("")}
+      </select></div>
+    <div class="row between" style="margin-top:9px"><span class="tiny grow">Tag im Monat</span>
+      <input type="number" id="pDay" min="1" max="28" inputmode="numeric" value="${day}">
+    </div>
+  </div>
+  ${seasonSegs(s,"season")}
+
+  <h2>🎯 Das ist jetzt dran</h2>
+  <div class="card">
+    <b>${esc(ph.head)} · ${y>=3?"Jahr 3+":"Jahr "+y} ${y>=3?"":esc(s)}</b>
+    <ul>${ph.now.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+  </div>
+
+  ${urgent.length ? `<div class="card">
+    <b>⏳ Nur noch in dieser Jahreszeit zu holen</b>
+    <p class="tiny">${urgent.length} Gegenstände aus dem Gemeinschaftszentrum. Danach sind sie ein ganzes Spieljahr lang weg.</p>
+    <ul>${urgent.slice(0,8).map(i=>`<li><b>${esc(i.de)}</b> – ${esc(i.where)}${i.time?` <span class="tiny">(${esc(i.time)})</span>`:""}</li>`).join("")}</ul>
+    ${urgent.length>8?`<p class="tiny">… und ${urgent.length-8} weitere. Die vollständige Liste steht im Reiter „Zentrum".</p>`:""}
+  </div>`:""}
+
+  ${win.length ? win.map(w=>`<div class="card">
+    <div class="row between"><b>📅 ${esc(w.n)}</b>
+      <span class="chip ${day>=w.from&&day<=w.to?"warn":""}">${day>=w.from&&day<=w.to?"läuft jetzt":"ab Tag "+w.from}</span></div>
+    <p class="tiny" style="margin-bottom:0">${esc(w.t)}</p>
+  </div>`).join("") : ""}
+
+  <h2>💰 Worauf du sparen solltest</h2>
+  ${goal ? `<div class="card">
+    <div class="row between">
+      <div class="grow"><b>${esc(goal.n)}</b><div class="tiny">bei ${esc(goal.at)}${goal.extra?` · dazu ${esc(goal.extra)}`:""}</div></div>
+      <div class="money">${fmt(goal.cost)} G</div>
+    </div>
+    <div class="note" style="margin-bottom:0">${esc(goal.why)}</div>
+    <div class="row" style="margin-top:10px">
+      <input type="checkbox" data-goal="${esc(goal.id)}">
+      <span class="tiny grow">Habe ich – nächstes Ziel anzeigen</span>
+    </div>
+  </div>
+  ${later.length?`<div class="card tight">
+    <b class="tiny">DANACH IN DIESER REIHENFOLGE</b>
+    ${later.map(g=>`<div class="row between" style="margin-top:8px">
+      <span class="tiny grow">${esc(g.n)}</span><span class="money">${fmt(g.cost)} G</span></div>`).join("")}
+  </div>`:""}`
+  : `<div class="card empty">Alle Sparziele abgehakt. Ab jetzt ist Gold nur noch Mittel zum Zweck. 🎉</div>`}
+
+  ${almost.length ? `<h2>🧩 Fast fertige Bündel</h2>
+  ${almost.slice(0,3).map(b=>`<div class="card tight">
+    <div class="row between">
+      <div class="grow"><b>${esc(b.name)}</b><div class="tiny">${esc(b.room)} · noch ${b.need-b.d} von ${b.need}</div></div>
+      <span class="chip">🎁 ${esc(b.reward)}</span>
+    </div>
+  </div>`).join("")}`:""}
+
+  ${soon.length ? `<h2>📆 Nächste Termine</h2>
+  ${soon.slice(0,3).map(e=>`<div class="card tight">
+    <div class="row between">
+      <div class="grow"><b>${esc(e.n)}</b><div class="tiny">${esc(s)}, Tag ${e.d}</div></div>
+      <span class="chip ${e.d-day<=3?"warn":""}">${e.d===day?"heute":e.d-day===1?"morgen":"in "+(e.d-day)+" Tagen"}</span>
+    </div>
+    ${e.t?`<p class="tiny" style="margin:6px 0 0">${esc(e.t)}</p>`:""}
+  </div>`).join("")}`:""}
+
+  <h2>⚠️ Nicht vernachlässigen</h2>
+  <div class="card">
+    <p class="tiny" style="margin-top:0">Das hier sind die Dinge, die man schleifen lässt und später bereut.</p>
+    ${HABITS.map(h=>`<div style="margin:11px 0">
+      <b style="font-size:14px">${esc(h.n)}</b>
+      <div class="tiny">${esc(h.t)}</div></div>`).join("")}
+  </div>
+
+  <h2>➡️ Was danach kommt</h2>
+  <div class="card">
+    <p style="margin:0" class="muted">${esc(ph.after)}</p>
+  </div>`;
+}
+
 /* ---------- Berufe ---------- */
 function viewSkills(){
   return `
@@ -1002,6 +1252,7 @@ function render(keepScroll){
   const sub = document.getElementById("sub");
 
   if(page==="home"){ app.innerHTML = viewHome(); sub.textContent = "Übersicht & Fahrplan"; }
+  else if(page==="plan"){ app.innerHTML = viewPlan(); sub.textContent = "Was als Nächstes?"; }
   else if(page==="cc"){ app.innerHTML = viewCC(); sub.textContent = "Gemeinschaftszentrum"; renderCCList(); }
   else if(page==="farm"){ app.innerHTML = viewFarm(); sub.textContent = "Gewinn pro Jahreszeit"; renderFarm(); }
   else { app.innerHTML = viewSkills(); sub.textContent = "Fähigkeiten & Berufe"; }
@@ -1041,10 +1292,20 @@ function wire(){
   if(t) t.onchange = () => { S.tiller = t.checked; save(); renderFarm(); };
   const qu = document.getElementById("qual");
   if(qu) qu.onchange = () => { S.quality = qu.value; save(); renderFarm(); };
+  const py = document.getElementById("pYear");
+  if(py) py.onchange = () => { S.year = +py.value; save(); renderAnchored(); };
+  const pdy = document.getElementById("pDay");
+  if(pdy) pdy.onchange = () => {
+    S.day = Math.min(28, Math.max(1, parseInt(pdy.value,10) || 1));
+    save(); renderAnchored();
+  };
+  document.querySelectorAll("[data-goal]").forEach(el=>{
+    el.onchange = () => { S.bought[el.getAttribute("data-goal")] = true; save(); renderAnchored(); };
+  });
   const rs = document.getElementById("reset");
   if(rs) rs.onclick = () => {
     if(confirm("Wirklich den gesamten Fortschritt löschen?")){
-      S.done = {}; S.have = {}; S.open = {}; save(); render();
+      S.done = {}; S.have = {}; S.open = {}; S.bought = {}; save(); render();
     }
   };
 }

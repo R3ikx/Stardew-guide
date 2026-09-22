@@ -32,6 +32,15 @@ jeweils mit Begründung und einer klar markierten Empfehlung:
 | Angeln | Fischer | Angler |
 | Kampf | Kämpfer | Rohling |
 
+**🧭 Plan** – der „Was mache ich als Nächstes?"-Berater. Du gibst Jahr,
+Jahreszeit und Tag an, und die App sagt dir: was jetzt ansteht, welche
+Bündel-Gegenstände nur noch in dieser Jahreszeit zu holen sind, welche
+Zeitfenster gerade laufen (Brombeersaison, Heuvorrat vor dem Winter),
+welche Feste anstehen und in wie vielen Tagen. Dazu eine Sparziel-Leiter
+vom Rucksack für 2.000 G bis zum Keller für 100.000 G: immer nur das
+nächste Ziel mit Begründung, abhaken und das nächste erscheint. Und eine
+Liste der Dinge, die man schleifen lässt und später bereut.
+
 **🏠 Übersicht** – Fortschrittsbalken gesamt und pro Raum, ein Jahr-1-Fahrplan pro
 Jahreszeit und eine Liste „nur in dieser Jahreszeit verfügbar und noch offen",
 damit nichts durchrutscht (Kugelfisch, Nautilusschale, Brombeersaison …).
