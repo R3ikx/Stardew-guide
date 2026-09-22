@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#2d5a3d">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Junimo Guide">
+<meta name="description" content="Stardew-Valley-Begleiter: Gemeinschaftszentrum, Anbauplanung und Berufe.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
+<title>Junimo Guide</title>
+<style>
+:root{
+  --bg:#f4ecd8; --card:#fffdf6; --ink:#33291c; --muted:#7d7263;
+  --line:#e0d3b6; --brand:#2d5a3d; --brand2:#4a8259; --gold:#a8791c;
+  --chip:#ece0c6; --chipink:#5c4f3a; --red:#a13b34; --redbg:#f7dcd8;
+  --blue:#2f5f86; --bluebg:#dbe8f3;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1712; --card:#232019; --ink:#ece3d2; --muted:#9c9282;
+    --line:#3a342a; --brand:#4a8259; --brand2:#5c9a6c; --gold:#d3a54a;
+    --chip:#332d22; --chipink:#cdc2aa; --red:#e8877c; --redbg:#3d2521;
+    --blue:#8cb6da; --bluebg:#1f2d3a;
+  }
+  :root:not([data-theme="light"]) .chip.ok{background:#22331f;color:#8fc79b}
+}
+:root[data-theme="dark"]{
+  --bg:#1a1712; --card:#232019; --ink:#ece3d2; --muted:#9c9282;
+  --line:#3a342a; --brand:#4a8259; --brand2:#5c9a6c; --gold:#d3a54a;
+  --chip:#332d22; --chipink:#cdc2aa; --red:#e8877c; --redbg:#3d2521;
+  --blue:#8cb6da; --bluebg:#1f2d3a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{overflow-x:hidden}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:16px;line-height:1.45;
+}
+header{
+  background:var(--brand);color:#fff;position:sticky;top:0;z-index:20;
+  padding:calc(10px + env(safe-area-inset-top)) 16px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,.18);
+}
+.hrow{display:flex;align-items:center;gap:10px;max-width:760px;margin:0 auto}
+h1{margin:0;font-size:19px;font-weight:800;letter-spacing:.2px;flex:1}
+h1 span{opacity:.75;font-weight:500;font-size:12px;display:block}
+.iconbtn{background:rgba(255,255,255,.16);border:0;color:#fff;width:38px;height:38px;border-radius:12px;font-size:17px}
+.wrap{max-width:760px;margin:0 auto;padding:14px 16px calc(96px + env(safe-area-inset-bottom))}
+h2{font-size:15px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin:22px 0 8px}
+h2:first-child{margin-top:4px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+.card.tight{padding:11px 13px}
+.row{display:flex;align-items:center;gap:11px}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.muted{color:var(--muted);font-size:13.5px}
+.tiny{font-size:12px;color:var(--muted)}
+b,strong{font-weight:700}
+.bar{height:10px;background:var(--line);border-radius:20px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand2);border-radius:20px;transition:width .3s}
+.big{font-size:27px;font-weight:800;color:var(--brand2);line-height:1}
+.chip{display:inline-block;background:var(--chip);color:var(--chipink);border-radius:9px;padding:3px 8px;font-size:11.5px;font-weight:600;margin:4px 4px 0 0;white-space:nowrap}
+.chip.rain{background:var(--bluebg);color:var(--blue)}
+.chip.warn{background:var(--redbg);color:var(--red)}
+.chip.ok{background:#d9ead9;color:#2d5a3d}
+:root[data-theme="dark"] .chip.ok{background:#22331f;color:#8fc79b}
+input[type=checkbox]{width:26px;height:26px;flex:0 0 26px;accent-color:var(--brand2);margin:0}
+input[type=search],select,input[type=number]{
+  font-size:16px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;
+  background:var(--card);color:var(--ink);width:100%;-webkit-appearance:none;appearance:none;
+}
+input[type=number]{width:74px;text-align:center;padding:7px}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:36px}
+.filters{display:flex;gap:8px;margin:10px 0}
+.filters>*{flex:1;min-width:0}
+.segs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.segs::-webkit-scrollbar{display:none}
+.seg{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:20px;padding:8px 14px;font-size:14px;font-weight:600;white-space:nowrap}
+.seg.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;display:grid;grid-template-columns:repeat(4,1fr);
+  background:var(--card);border-top:1px solid var(--line);
+  padding:6px 4px calc(6px + env(safe-area-inset-bottom));
+}
+nav button{border:0;background:none;color:var(--muted);padding:5px 2px;font-size:10.5px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button em{font-style:normal;font-size:19px;line-height:1}
+nav button.on{color:var(--brand2)}
+details{border:1px solid var(--line);border-radius:16px;background:var(--card);margin:10px 0;overflow:hidden}
+details>summary{list-style:none;cursor:pointer;padding:13px 14px;display:flex;align-items:center;gap:10px}
+details>summary::-webkit-details-marker{display:none}
+details[open]>summary{border-bottom:1px solid var(--line)}
+.arrow{color:var(--muted);font-size:13px;transition:transform .2s}
+details[open] .arrow{transform:rotate(90deg)}
+.item{padding:11px 14px;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:0}
+.item.done{opacity:.45}
+.item.done .iname{text-decoration:line-through}
+.iname{font-weight:650}
+.en{font-weight:400;color:var(--muted);font-size:12.5px}
+.reward{background:var(--chip);color:var(--chipink);padding:9px 14px;font-size:12.5px;border-bottom:1px solid var(--line)}
+.money{font-weight:800;color:var(--gold);white-space:nowrap}
+.rank{width:26px;height:26px;flex:0 0 26px;border-radius:9px;background:var(--chip);color:var(--chipink);display:grid;place-items:center;font-size:12.5px;font-weight:800}
+.rank.g1{background:var(--gold);color:#fff}
+.note{border-left:3px solid var(--brand2);padding-left:11px;margin:9px 0;font-size:13.5px;color:var(--muted)}
+.pro{border:1px solid var(--line);border-radius:13px;padding:11px;margin:8px 0;background:var(--bg)}
+.pro.pick{border-color:var(--brand2);border-width:2px;background:var(--card)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+@media (max-width:400px){.grid2{grid-template-columns:1fr}}
+ul{margin:7px 0;padding-left:20px}
+li{margin:4px 0;font-size:14px}
+.empty{text-align:center;color:var(--muted);padding:26px 10px;font-size:14px}
+a{color:var(--brand2)}
+.btn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:11px;font-size:14px;font-weight:600;width:100%}
+.btn.danger{color:var(--red);border-color:var(--red)}
+</style>
+</head>
+<body>
+<header>
+  <div class="hrow">
+    <h1>🌿 Junimo Guide<span id="sub">Stardew Valley Begleiter</span></h1>
+    <button class="iconbtn" id="themeBtn" aria-label="Design wechseln">🌗</button>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<nav>
+  <button data-p="home" class="on"><em>🏠</em>Übersicht</button>
+  <button data-p="cc"><em>🏛️</em>Zentrum</button>
+  <button data-p="farm"><em>🌱</em>Anbau</button>
+  <button data-p="skill"><em>⭐</em>Berufe</button>
+</nav>
+
+<script>
+"use strict";
+/* ============================================================
+   DATEN
+   Quelle: Stardew Valley 1.6, Standard-Bündel (kein "Remixed").
+   Preise = Verkaufspreis normale Qualität, ohne Berufe.
+============================================================ */
+
+const SEASONS = ["Frühling","Sommer","Herbst","Winter"];
+
+/* ---------- Gemeinschaftszentrum ---------- */
+const CC = [
+ {room:"Handwerksraum", icon:"🌿", roomReward:"Brücke zur Mine/Steinbruch wird repariert",
+  bundles:[
+   {name:"Frühlings-Sammeln", need:4, reward:"30× Frühlingssaat", items:[
+     {de:"Wilder Meerrettich", en:"Wild Horseradish", q:1, s:["Frühling"], where:"Überall im Tal sammeln (Cindersap-Wald, Berg)"},
+     {de:"Narzisse", en:"Daffodil", q:1, s:["Frühling"], where:"Busfahrplatz, Stadt, Wald – am Boden"},
+     {de:"Lauch", en:"Leek", q:1, s:["Frühling"], where:"Berg & Wald – am Boden"},
+     {de:"Löwenzahn", en:"Dandelion", q:1, s:["Frühling"], where:"Überall im Tal sammeln"},
+   ]},
+   {name:"Sommer-Sammeln", need:3, reward:"30× Sommersaat", items:[
+     {de:"Traube", en:"Grape", q:1, s:["Sommer"], where:"Cindersap-Wald sammeln (nicht anbauen nötig)"},
+     {de:"Gewürzbeere", en:"Spice Berry", q:1, s:["Sommer"], where:"Wald & Berg – am Boden"},
+     {de:"Duftwicke", en:"Sweet Pea", q:1, s:["Sommer"], where:"Wald, Berg, Busfahrplatz"},
+   ]},
+   {name:"Herbst-Sammeln", need:4, reward:"30× Herbstsaat", items:[
+     {de:"Gemeiner Pilz", en:"Common Mushroom", q:1, s:["Herbst"], where:"Geheimer Wald & Cindersap-Wald (auch Frühling im Geheimen Wald)"},
+     {de:"Wildpflaume", en:"Wild Plum", q:1, s:["Herbst"], where:"Berg & Busfahrplatz"},
+     {de:"Haselnuss", en:"Hazelnut", q:1, s:["Herbst"], where:"Berg & Wald"},
+     {de:"Brombeere", en:"Blackberry", q:1, s:["Herbst"], where:"Brombeersaison: 8.–11. Herbst, Büsche überall"},
+   ]},
+   {name:"Winter-Sammeln", need:4, reward:"30× Wintersaat", items:[
+     {de:"Winterwurzel", en:"Winter Root", q:1, s:["Winter"], where:"Winter-Erdhügel umgraben (Hacke) oder Mine 1–39"},
+     {de:"Kristallfrucht", en:"Crystal Fruit", q:1, s:["Winter"], where:"Überall im Tal sammeln"},
+     {de:"Schneejams", en:"Snow Yam", q:1, s:["Winter"], where:"Winter-Erdhügel umgraben (Hacke)"},
+     {de:"Krokus", en:"Crocus", q:1, s:["Winter"], where:"Überall im Tal sammeln"},
+   ]},
+   {name:"Bau", need:4, reward:"Kohlenmeiler (Charcoal Kiln)", items:[
+     {de:"Holz", en:"Wood", q:99, s:[], where:"Bäume fällen, Äste aufsammeln"},
+     {de:"Holz (2. Stapel)", en:"Wood", q:99, s:[], where:"Bäume fällen, Äste aufsammeln"},
+     {de:"Stein", en:"Stone", q:99, s:[], where:"Steine auf der Farm & in der Mine"},
+     {de:"Hartholz", en:"Hardwood", q:10, s:[], where:"Große Stümpfe (Geheimer Wald: 6 pro Tag) oder Mahagonibäume"},
+   ]},
+   {name:"Exotisches Sammeln", need:5, reward:"5× Herbstsegen (Autumn's Bounty)", items:[
+     {de:"Kokosnuss", en:"Coconut", q:1, s:[], where:"Calico-Wüste, am Boden (Bus nötig)"},
+     {de:"Kaktusfrucht", en:"Cactus Fruit", q:1, s:[], where:"Calico-Wüste, am Boden"},
+     {de:"Höhlenmöhre", en:"Cave Carrot", q:1, s:[], where:"Mine: braune Erdhügel umgraben (Etage 1–39)"},
+     {de:"Roter Pilz", en:"Red Mushroom", q:1, s:[], where:"Mine 81–119, Geheimer Wald (Sommer/Herbst), Pilzhöhle"},
+     {de:"Violetter Pilz", en:"Purple Mushroom", q:1, s:[], where:"Mine ab Etage 81, Pilzhöhle, Skull Cavern"},
+     {de:"Ahornsirup", en:"Maple Syrup", q:1, s:[], where:"Zapfhahn an Ahornbaum (9 Tage)"},
+     {de:"Eichenharz", en:"Oak Resin", q:1, s:[], where:"Zapfhahn an Eiche (7–8 Tage)"},
+     {de:"Kiefernharz", en:"Pine Tar", q:1, s:[], where:"Zapfhahn an Kiefer (5–6 Tage)"},
+     {de:"Morchel", en:"Morel", q:1, s:["Frühling"], where:"Geheimer Wald (Frühling) oder Pilzhöhle"},
+   ]},
+  ]},
+
+ {room:"Vorratskammer", icon:"🥬", roomReward:"Gewächshaus wird repariert (ganzjährig anbauen!)",
+  bundles:[
+   {name:"Frühlings-Feldfrüchte", need:4, reward:"20× Wachstumsdünger", items:[
+     {de:"Pastinake", en:"Parsnip", q:1, s:["Frühling"], where:"Anbauen (Saat 20 G bei Pierre)"},
+     {de:"Grüne Bohne", en:"Green Bean", q:1, s:["Frühling"], where:"Anbauen (Saat 60 G) – braucht Rankgitter"},
+     {de:"Blumenkohl", en:"Cauliflower", q:1, s:["Frühling"], where:"Anbauen (Saat 80 G, 12 Tage)"},
+     {de:"Kartoffel", en:"Potato", q:1, s:["Frühling"], where:"Anbauen (Saat 50 G)"},
+   ]},
+   {name:"Sommer-Feldfrüchte", need:4, reward:"Qualitäts-Sprinkler", items:[
+     {de:"Tomate", en:"Tomato", q:1, s:["Sommer"], where:"Anbauen (Saat 50 G, 11 Tage)"},
+     {de:"Peperoni", en:"Hot Pepper", q:1, s:["Sommer"], where:"Anbauen (Saat 40 G, 5 Tage)"},
+     {de:"Heidelbeere", en:"Blueberry", q:1, s:["Sommer"], where:"Anbauen (Saat 80 G, 13 Tage)"},
+     {de:"Melone", en:"Melon", q:1, s:["Sommer"], where:"Anbauen (Saat 80 G, 12 Tage)"},
+   ]},
+   {name:"Herbst-Feldfrüchte", need:4, reward:"Bienenhaus", items:[
+     {de:"Mais", en:"Corn", q:1, s:["Sommer","Herbst"], where:"Anbauen (Saat 150 G) – wächst Sommer UND Herbst durch"},
+     {de:"Aubergine", en:"Eggplant", q:1, s:["Herbst"], where:"Anbauen (Saat 20 G, 5 Tage)"},
+     {de:"Kürbis", en:"Pumpkin", q:1, s:["Herbst"], where:"Anbauen (Saat 100 G, 13 Tage)"},
+     {de:"Yamswurzel", en:"Yam", q:1, s:["Herbst"], where:"Anbauen (Saat 60 G) oder Mine 41–79"},
+   ]},
+   {name:"Qualitäts-Feldfrüchte", need:3, reward:"Einmachglas (Preserves Jar)", items:[
+     {de:"Pastinake – Gold", en:"Gold Parsnip", q:5, s:["Frühling"], where:"Mit Qualitätsdünger anbauen (vor dem Säen ausbringen!)"},
+     {de:"Melone – Gold", en:"Gold Melon", q:5, s:["Sommer"], where:"Mit Qualitätsdünger anbauen"},
+     {de:"Kürbis – Gold", en:"Gold Pumpkin", q:5, s:["Herbst"], where:"Mit Qualitätsdünger anbauen"},
+     {de:"Mais – Gold", en:"Gold Corn", q:5, s:["Sommer","Herbst"], where:"Mit Qualitätsdünger anbauen"},
+   ]},
+   {name:"Tier", need:5, reward:"Käsepresse", items:[
+     {de:"Große Milch", en:"Large Milk", q:1, s:[], where:"Kuh mit voller Herzanzeige (täglich streicheln!)"},
+     {de:"Großes braunes Ei", en:"Large Brown Egg", q:1, s:[], where:"Braunes Huhn, hohe Zuneigung"},
+     {de:"Großes weißes Ei", en:"Large White Egg", q:1, s:[], where:"Weißes Huhn, hohe Zuneigung"},
+     {de:"Große Ziegenmilch", en:"Large Goat Milk", q:1, s:[], where:"Ziege (Stall Stufe 2), hohe Zuneigung"},
+     {de:"Wolle", en:"Wool", q:1, s:[], where:"Schaf scheren oder Kaninchen"},
+     {de:"Entenei", en:"Duck Egg", q:1, s:[], where:"Ente (Stall Stufe 2)"},
+   ]},
+   {name:"Handwerkswaren", need:6, reward:"Fass (Keg)", items:[
+     {de:"Trüffelöl", en:"Truffle Oil", q:1, s:[], where:"Trüffel (Schwein) in die Ölpresse"},
+     {de:"Stoff", en:"Cloth", q:1, s:[], where:"Wolle in den Webstuhl oder Soße-Grube"},
+     {de:"Ziegenkäse", en:"Goat Cheese", q:1, s:[], where:"Ziegenmilch in die Käsepresse"},
+     {de:"Käse", en:"Cheese", q:1, s:[], where:"Milch in die Käsepresse"},
+     {de:"Honig", en:"Honey", q:1, s:[], where:"Bienenhaus (nicht im Winter)"},
+     {de:"Gelee", en:"Jelly", q:1, s:[], where:"Obst ins Einmachglas"},
+     {de:"Apfel", en:"Apple", q:1, s:["Herbst"], where:"Apfelbaum (Setzling 4.000 G, 28 Tage Wachstum)"},
+     {de:"Aprikose", en:"Apricot", q:1, s:["Frühling"], where:"Aprikosenbaum (Setzling 2.000 G)"},
+     {de:"Orange", en:"Orange", q:1, s:["Sommer"], where:"Orangenbaum (Setzling 4.000 G)"},
+     {de:"Pfirsich", en:"Peach", q:1, s:["Sommer"], where:"Pfirsichbaum (Setzling 6.000 G)"},
+     {de:"Granatapfel", en:"Pomegranate", q:1, s:["Herbst"], where:"Granatapfelbaum (Setzling 6.000 G)"},
+     {de:"Kirsche", en:"Cherry", q:1, s:["Frühling"], where:"Kirschbaum (Setzling 3.400 G)"},
+   ]},
+  ]},
+
+ {room:"Fischbecken", icon:"🐟", roomReward:"Glasbrücke zum Ostteil des Strandes",
+  bundles:[
+   {name:"Flussfische", need:4, reward:"30× Köder", items:[
+     {de:"Sonnenbarsch", en:"Sunfish", q:1, s:["Frühling","Sommer"], where:"Fluss (Stadt / Farm)", time:"6–19 Uhr", weather:"Sonne o. Wind"},
+     {de:"Wels", en:"Catfish", q:1, s:["Frühling","Herbst"], where:"Fluss & Geheimer Wald", time:"6–24 Uhr", weather:"Regen"},
+     {de:"Maifisch", en:"Shad", q:1, s:["Frühling","Sommer","Herbst"], where:"Fluss", time:"9–2 Uhr", weather:"Regen"},
+     {de:"Tigerforelle", en:"Tiger Trout", q:1, s:["Herbst","Winter"], where:"Fluss", time:"6–19 Uhr"},
+   ]},
+   {name:"Seefische", need:4, reward:"Angeputzter Kreisel (Dressed Spinner)", items:[
+     {de:"Forellenbarsch", en:"Largemouth Bass", q:1, s:[], where:"Bergsee", time:"6–19 Uhr"},
+     {de:"Karpfen", en:"Carp", q:1, s:["Frühling","Sommer","Herbst"], where:"Bergsee, Geheimer Wald, Kanalisation (ganzjährig)"},
+     {de:"Kaulkopf", en:"Bullhead", q:1, s:[], where:"Bergsee", time:"jederzeit"},
+     {de:"Stör", en:"Sturgeon", q:1, s:["Sommer","Winter"], where:"Bergsee", time:"6–19 Uhr"},
+   ]},
+   {name:"Meeresfische", need:4, reward:"5× Warp-Totem: Strand", items:[
+     {de:"Sardine", en:"Sardine", q:1, s:["Frühling","Herbst","Winter"], where:"Meer / Strand", time:"6–19 Uhr"},
+     {de:"Thunfisch", en:"Tuna", q:1, s:["Sommer","Winter"], where:"Meer / Strand", time:"6–19 Uhr"},
+     {de:"Roter Schnapper", en:"Red Snapper", q:1, s:["Sommer","Herbst"], where:"Meer / Strand", time:"6–19 Uhr", weather:"Regen"},
+     {de:"Tilapia", en:"Tilapia", q:1, s:["Sommer","Herbst"], where:"Meer / Strand", time:"6–14 Uhr"},
+   ]},
+   {name:"Nachtangeln", need:3, reward:"Kleiner Leuchtring", items:[
+     {de:"Zander", en:"Walleye", q:1, s:["Herbst"], where:"Fluss, Bergsee, Waldteich", time:"12–2 Uhr", weather:"Regen"},
+     {de:"Brachse", en:"Bream", q:1, s:[], where:"Fluss", time:"18–2 Uhr"},
+     {de:"Aal", en:"Eel", q:1, s:["Frühling","Herbst"], where:"Meer / Strand", time:"16–2 Uhr", weather:"Regen"},
+   ]},
+   {name:"Krebskorb", need:5, reward:"3× Krebskorb", items:[
+     {de:"Hummer", en:"Lobster", q:1, s:[], where:"Krebskorb im Meer"},
+     {de:"Flusskrebs", en:"Crayfish", q:1, s:[], where:"Krebskorb in Süßwasser"},
+     {de:"Krabbe", en:"Crab", q:1, s:[], where:"Krebskorb im Meer (oder Krabben-Gegner in der Mine)"},
+     {de:"Herzmuschel", en:"Cockle", q:1, s:[], where:"Krebskorb im Meer – oder am Strand sammeln"},
+     {de:"Miesmuschel", en:"Mussel", q:1, s:[], where:"Krebskorb im Meer – oder Ostteil des Strandes"},
+     {de:"Garnele", en:"Shrimp", q:1, s:[], where:"Krebskorb im Meer"},
+     {de:"Schnecke", en:"Snail", q:1, s:[], where:"Krebskorb in Süßwasser"},
+     {de:"Strandschnecke", en:"Periwinkle", q:1, s:[], where:"Krebskorb in Süßwasser"},
+     {de:"Auster", en:"Oyster", q:1, s:[], where:"Krebskorb im Meer – oder Ostteil des Strandes sammeln"},
+     {de:"Venusmuschel", en:"Clam", q:1, s:[], where:"Krebskorb im Meer – oder am Strand sammeln"},
+   ]},
+   {name:"Spezialfische", need:4, reward:"5× Meeresgericht (Dish O' The Sea)", items:[
+     {de:"Kugelfisch", en:"Pufferfish", q:1, s:["Sommer"], where:"Meer / Strand", time:"12–16 Uhr", weather:"nur Sonne"},
+     {de:"Geisterfisch", en:"Ghostfish", q:1, s:[], where:"Mine Etage 20 & 60 (Wasser) – oder Beute von Geistern", time:"jederzeit"},
+     {de:"Sandfisch", en:"Sandfish", q:1, s:[], where:"Calico-Wüste (Bus nötig)", time:"6–20 Uhr"},
+     {de:"Waldspringer", en:"Woodskip", q:1, s:[], where:"Geheimer Wald (Teiche)", time:"jederzeit"},
+   ]},
+  ]},
+
+ {room:"Heizungsraum", icon:"⛏️", roomReward:"Minenkarren werden repariert (Schnellreise)",
+  bundles:[
+   {name:"Schmied", need:3, reward:"Schmelzofen (Furnace)", items:[
+     {de:"Kupferbarren", en:"Copper Bar", q:1, s:[], where:"5× Kupfererz + 1 Kohle im Ofen (Mine 1–39)"},
+     {de:"Eisenbarren", en:"Iron Bar", q:1, s:[], where:"5× Eisenerz + 1 Kohle im Ofen (Mine 41–79)"},
+     {de:"Goldbarren", en:"Gold Bar", q:1, s:[], where:"5× Golderz + 1 Kohle im Ofen (Mine 81–119)"},
+   ]},
+   {name:"Geologe", need:4, reward:"5× Omni-Geode", items:[
+     {de:"Quarz", en:"Quartz", q:1, s:[], where:"Mine, häufig in allen Etagen"},
+     {de:"Erdkristall", en:"Earth Crystal", q:1, s:[], where:"Mine 1–39 (auch aus Geoden)"},
+     {de:"Gefrorene Träne", en:"Frozen Tear", q:1, s:[], where:"Mine 41–79"},
+     {de:"Feuerquarz", en:"Fire Quartz", q:1, s:[], where:"Mine 81–119"},
+   ]},
+   {name:"Abenteurer", need:2, reward:"Kleiner Magnetring", items:[
+     {de:"Schleim", en:"Slime", q:99, s:[], where:"Schleime in der Mine (oder Schleim-Inkubator)"},
+     {de:"Fledermausflügel", en:"Bat Wing", q:10, s:[], where:"Fledermäuse ab Mine Etage 40"},
+     {de:"Sonnenessenz", en:"Solar Essence", q:1, s:[], where:"Geister, Metallköpfe, Schattenbrutlinge"},
+     {de:"Leerenessenz", en:"Void Essence", q:1, s:[], where:"Schattenbrutlinge, Serpents (Skull Cavern)"},
+   ]},
+  ]},
+
+ {room:"Anschlagtafel", icon:"📌", roomReward:"Freundschaft mit allen Dorfbewohnern steigt",
+  bundles:[
+   {name:"Koch", need:6, reward:"3× Rosa Kuchen", items:[
+     {de:"Ahornsirup", en:"Maple Syrup", q:1, s:[], where:"Zapfhahn an Ahornbaum"},
+     {de:"Farnspitze", en:"Fiddlehead Fern", q:1, s:["Sommer"], where:"Geheimer Wald im Sommer – oder Skull Cavern"},
+     {de:"Trüffel", en:"Truffle", q:1, s:[], where:"Schwein (nur draußen, nicht im Winter)"},
+     {de:"Mohn", en:"Poppy", q:1, s:["Sommer"], where:"Anbauen (Saat 100 G)"},
+     {de:"Maki-Rolle", en:"Maki Roll", q:1, s:[], where:"Kochen (Reis+Fisch+Seetang) oder Salon kaufen"},
+     {de:"Spiegelei", en:"Fried Egg", q:1, s:[], where:"Ei in der Küche braten (Haus Stufe 2)"},
+   ]},
+   {name:"Färber", need:6, reward:"Saatmaschine (Seed Maker)", items:[
+     {de:"Roter Pilz", en:"Red Mushroom", q:1, s:[], where:"Mine 81–119, Geheimer Wald, Pilzhöhle"},
+     {de:"Seeigel", en:"Sea Urchin", q:1, s:[], where:"Ostteil des Strandes (nach Fischbecken-Brücke)"},
+     {de:"Sonnenblume", en:"Sunflower", q:1, s:["Sommer","Herbst"], where:"Anbauen (Saat 200 G) oder Reisewagen"},
+     {de:"Entenfeder", en:"Duck Feather", q:1, s:[], where:"Ente mit hoher Zuneigung"},
+     {de:"Aquamarin", en:"Aquamarine", q:1, s:[], where:"Mine 41–79, Geoden"},
+     {de:"Rotkohl", en:"Red Cabbage", q:1, s:["Sommer"], where:"Saat erst ab Jahr 2 bei Pierre – oder Reisewagen (Fr/So)"},
+   ]},
+   {name:"Feldforschung", need:4, reward:"Recyclingmaschine", items:[
+     {de:"Violetter Pilz", en:"Purple Mushroom", q:1, s:[], where:"Mine ab Etage 81, Pilzhöhle"},
+     {de:"Nautilusschale", en:"Nautilus Shell", q:1, s:["Winter"], where:"Strand im Winter sammeln"},
+     {de:"Döbel", en:"Chub", q:1, s:[], where:"Bergsee & Waldfluss, jederzeit"},
+     {de:"Gefrorene Geode", en:"Frozen Geode", q:1, s:[], where:"Mine 41–79"},
+   ]},
+   {name:"Futter", need:3, reward:"Heizung (Stall-Heater)", items:[
+     {de:"Weizen", en:"Wheat", q:10, s:["Sommer","Herbst"], where:"Anbauen (Saat 10 G, 4 Tage) – billig & schnell"},
+     {de:"Heu", en:"Hay", q:10, s:[], where:"Gras mit Sense mähen (Silo nötig) oder bei Marnie 50 G"},
+     {de:"Apfel", en:"Apple", q:3, s:["Herbst"], where:"Apfelbaum – im Frühling Jahr 1 pflanzen!"},
+   ]},
+   {name:"Verzauberer", need:4, reward:"5× Goldbarren", items:[
+     {de:"Eichenharz", en:"Oak Resin", q:1, s:[], where:"Zapfhahn an Eiche"},
+     {de:"Wein", en:"Wine", q:1, s:[], where:"Obst ins Fass (Keg) – Reward aus Handwerkswaren-Bündel"},
+     {de:"Hasenpfote", en:"Rabbit's Foot", q:1, s:[], where:"Kaninchen mit voller Zuneigung – oder Reisewagen"},
+     {de:"Granatapfel", en:"Pomegranate", q:1, s:["Herbst"], where:"Granatapfelbaum (6.000 G) – früh pflanzen!"},
+   ]},
+  ]},
+
+ {room:"Tresorraum", icon:"💰", roomReward:"Bus wird repariert → Calico-Wüste",
+  bundles:[
+   {name:"Geld-Bündel", need:4, reward:"je nach Betrag: Sprinkler, Getreidemühle u. a.", items:[
+     {de:"2.500 G", en:"2,500g", q:1, s:[], where:"Gold einwerfen → Belohnung: 3× Qualitätsdünger"},
+     {de:"5.000 G", en:"5,000g", q:1, s:[], where:"Gold einwerfen → Belohnung: Getreidemühle (Mühle)"},
+     {de:"10.000 G", en:"10,000g", q:1, s:[], where:"Gold einwerfen → Belohnung: Lichtmast-Rezept + 5× Sprinkler"},
+     {de:"25.000 G", en:"25,000g", q:1, s:[], where:"Gold einwerfen → Belohnung: 3× Qualitäts-Sprinkler"},
+   ]},
+  ]},
+
+ {room:"Fehlendes Bündel", icon:"🎬", roomReward:"Kino (nach Abschluss des Zentrums, im verlassenen JojaMart)",
+  bundles:[
+   {name:"Fehlendes Bündel", need:6, reward:"Kino wird gebaut", items:[
+     {de:"Wein", en:"Wine", q:1, s:[], where:"Obst ins Fass"},
+     {de:"Dinosauriermayonnaise", en:"Dinosaur Mayonnaise", q:1, s:[], where:"Dino-Ei ausbrüten → Ei in die Mayo-Maschine"},
+     {de:"Prismasplitter", en:"Prismatic Shard", q:1, s:[], where:"Skull Cavern (tiefe Etagen), Mystische Steine"},
+     {de:"Uralte Frucht", en:"Ancient Fruit", q:1, s:[], where:"Uralte Saat aus Artefakt → anbauen (28 Tage)"},
+     {de:"Leerenlachs", en:"Void Salmon", q:1, s:[], where:"Sumpf (Hexenhütte), jederzeit"},
+     {de:"Kaviar", en:"Caviar", q:1, s:[], where:"Störrogen aus Fischteich → Einmachglas"},
+   ]},
+  ]},
+];
+
+/* ---------- Feldfrüchte ---------- */
+/* seed = günstigster Saatpreis, sell = Verkauf normale Qualität,
+   days = Wachstumstage, regrow = 0 wenn einmalig, yield = Ernte pro Pflanze */
+const CROPS = [
+ // Frühling
+ {s:"Frühling", de:"Kartoffel", en:"Potato", seed:50, sell:80, days:6, regrow:0, yield:1, src:"Pierre", note:"20 % Chance auf eine Extra-Kartoffel – real noch besser als hier gerechnet."},
+ {s:"Frühling", de:"Blumenkohl", en:"Cauliflower", seed:80, sell:175, days:12, regrow:0, yield:1, src:"Pierre", note:"Bündel-Item. Nur 2 Ernten pro Saison – nicht spammen."},
+ {s:"Frühling", de:"Grünkohl", en:"Kale", seed:70, sell:110, days:6, regrow:0, yield:1, src:"Pierre", note:"Mit Sense ernten. Solide Allzweck-Pflanze."},
+ {s:"Frühling", de:"Erdbeere", en:"Strawberry", seed:100, sell:120, days:8, regrow:4, yield:1, src:"Eierfest (13. Frühling)", note:"⭐ Beste Frühlingspflanze – aber nur am Eierfest kaufbar. Nimm so viel Geld wie möglich mit!"},
+ {s:"Frühling", de:"Rhabarber", en:"Rhubarb", seed:100, sell:220, days:13, regrow:0, yield:1, src:"Oase (Wüste)", note:"Braucht den reparierten Bus (Tresorraum)."},
+ {s:"Frühling", de:"Pastinake", en:"Parsnip", seed:20, sell:35, days:4, regrow:0, yield:1, src:"Pierre", note:"Bündel-Item. Billig, gut für den Start."},
+ {s:"Frühling", de:"Grüne Bohne", en:"Green Bean", seed:60, sell:40, days:10, regrow:3, yield:1, src:"Pierre", note:"Bündel-Item."},
+ {s:"Frühling", de:"Knoblauch", en:"Garlic", seed:40, sell:60, days:4, regrow:0, yield:1, src:"Pierre (ab Jahr 2)", note:"Schnell und günstig."},
+ {s:"Frühling", de:"Tulpe", en:"Tulip", seed:20, sell:30, days:6, regrow:0, yield:1, src:"Pierre", note:"Blume – gut als Geschenk."},
+ {s:"Frühling", de:"Blauer Jazz", en:"Blue Jazz", seed:30, sell:50, days:7, regrow:0, yield:1, src:"Pierre", note:"Blume."},
+ // Sommer
+ {s:"Sommer", de:"Sternfrucht", en:"Starfruit", seed:400, sell:750, days:13, regrow:0, yield:1, src:"Oase (Wüste)", note:"⭐ Gewinnkönig. Als Wein ~2.250 G pro Stück. Braucht den Bus."},
+ {s:"Sommer", de:"Heidelbeere", en:"Blueberry", seed:80, sell:50, days:13, regrow:4, yield:3, src:"Pierre", note:"⭐ Bester Dauerertrag ohne Wüste – 3 Beeren je Ernte. Bündel-Item."},
+ {s:"Sommer", de:"Melone", en:"Melon", seed:80, sell:250, days:12, regrow:0, yield:1, src:"Pierre", note:"Bündel-Item + Gold-Melonen für Qualitätsbündel."},
+ {s:"Sommer", de:"Hopfen", en:"Hops", seed:60, sell:25, days:11, regrow:1, yield:1, src:"Pierre", note:"⭐ Roh mies, im Fass aber Gold wert: Pale Ale = 300 G, täglich erntbar."},
+ {s:"Sommer", de:"Peperoni", en:"Hot Pepper", seed:40, sell:40, days:5, regrow:3, yield:1, src:"Pierre", note:"Bündel-Item, sehr früh erntereif."},
+ {s:"Sommer", de:"Radieschen", en:"Radish", seed:40, sell:90, days:6, regrow:0, yield:1, src:"Pierre", note:"Gutes Verhältnis Saat/Ertrag."},
+ {s:"Sommer", de:"Tomate", en:"Tomato", seed:50, sell:60, days:11, regrow:4, yield:1, src:"Pierre", note:"Bündel-Item."},
+ {s:"Sommer", de:"Rotkohl", en:"Red Cabbage", seed:100, sell:260, days:9, regrow:0, yield:1, src:"Pierre (ab Jahr 2)", note:"Bündel-Item (Färber). In Jahr 1 nur über den Reisewagen."},
+ {s:"Sommer", de:"Mohn", en:"Poppy", seed:100, sell:140, days:7, regrow:0, yield:1, src:"Pierre", note:"Bündel-Item (Koch)."},
+ {s:"Sommer", de:"Weizen", en:"Wheat", seed:10, sell:25, days:4, regrow:0, yield:1, src:"Pierre", note:"Bündel-Item (Futter). Lohnt vor allem als Bier im Fass (200 G)."},
+ {s:"Sommer", de:"Mais", en:"Corn", seed:150, sell:50, days:14, regrow:4, yield:1, span:56, src:"Pierre", note:"⭐ Überlebt den Jahreszeitenwechsel – einmal im Sommer säen, bis Herbstende ernten. Deshalb hier über Sommer + Herbst (56 Tage) gerechnet."},
+ {s:"Sommer", de:"Sommerspangle", en:"Summer Spangle", seed:50, sell:90, days:8, regrow:0, yield:1, src:"Pierre", note:"Blume."},
+ {s:"Sommer", de:"Sonnenblume", en:"Sunflower", seed:200, sell:80, days:8, regrow:0, yield:1, seedOnce:true, src:"Pierre", note:"Bündel-Item (Färber). Beim Ernten fallen Sonnenblumenkerne ab – du kaufst die Saat also nur einmal. Als reiner Geldbringer trotzdem schwach."},
+ // Herbst
+ {s:"Herbst", de:"Süße Edelsteinbeere", en:"Sweet Gem Berry", seed:1000, sell:3000, days:24, regrow:0, yield:1, src:"Reisewagen (Fr/So)", note:"⭐ Teuerste Einzelpflanze. Am 1. Herbst säen, sonst wird sie nicht fertig."},
+ {s:"Herbst", de:"Kürbis", en:"Pumpkin", seed:100, sell:320, days:13, regrow:0, yield:1, src:"Pierre", note:"⭐ Bündel-Item + Gold-Kürbisse für Qualitätsbündel."},
+ {s:"Herbst", de:"Preiselbeere", en:"Cranberries", seed:240, sell:75, days:7, regrow:5, yield:2, src:"Pierre", note:"⭐ Bester Dauerertrag im Herbst – 2 Beeren je Ernte."},
+ {s:"Herbst", de:"Artischocke", en:"Artichoke", seed:30, sell:160, days:8, regrow:0, yield:1, src:"Pierre (ab Jahr 2)", note:"Sehr günstige Saat, hoher Ertrag."},
+ {s:"Herbst", de:"Amarant", en:"Amaranth", seed:70, sell:150, days:7, regrow:0, yield:1, src:"Pierre", note:"Mit Sense ernten."},
+ {s:"Herbst", de:"Rote Bete", en:"Beet", seed:20, sell:100, days:6, regrow:0, yield:1, src:"Oase (Wüste)", note:"Spottbillige Saat – sehr profitabel, sobald der Bus fährt."},
+ {s:"Herbst", de:"Yamswurzel", en:"Yam", seed:60, sell:160, days:10, regrow:0, yield:1, src:"Pierre", note:"Bündel-Item."},
+ {s:"Herbst", de:"Traube", en:"Grape", seed:60, sell:80, days:10, regrow:3, yield:1, src:"Pierre", note:"Braucht Rankgitter. Als Wein 240 G."},
+ {s:"Herbst", de:"Aubergine", en:"Eggplant", seed:20, sell:60, days:5, regrow:5, yield:1, src:"Pierre", note:"Bündel-Item, extrem billige Saat."},
+ {s:"Herbst", de:"Pak Choi", en:"Bok Choy", seed:50, sell:80, days:4, regrow:0, yield:1, src:"Pierre", note:"Schnellster Herbst-Cash-Crop."},
+ {s:"Herbst", de:"Feenrose", en:"Fairy Rose", seed:200, sell:290, days:12, regrow:0, yield:1, src:"Pierre", note:"Blume. Neben Bienenhäusern → Feenrosen-Honig (680 G)."},
+ {s:"Herbst", de:"Sonnenblume", en:"Sunflower", seed:200, sell:80, days:8, regrow:0, yield:1, seedOnce:true, src:"Pierre", note:"Bündel-Item (Färber). Liefert beim Ernten neue Kerne – Saat nur einmal kaufen."},
+ // Ganzjährig / Gewächshaus
+ {s:"Gewächshaus", de:"Uralte Frucht", en:"Ancient Fruit", seed:0, sell:550, days:28, regrow:7, yield:1, src:"Uralte Saat (Artefakt / Saatmaschine)", note:"⭐⭐ Das Endgame. Als Wein 1.650 G, alle 7 Tage, für immer. Gewächshaus komplett damit füllen."},
+ {s:"Gewächshaus", de:"Kaffeebohne", en:"Coffee Bean", seed:0, sell:15, days:10, regrow:2, yield:4, src:"Reisewagen / Staubgeister", note:"5 Bohnen im Fass = Kaffee. Wächst Frühling & Sommer, im Gewächshaus dauerhaft."},
+ {s:"Gewächshaus", de:"Erdbeere (Gewächshaus)", en:"Strawberry", seed:100, sell:120, days:8, regrow:4, yield:1, src:"Eierfest", note:"Solide Gewächshaus-Füllung, bis du Uralte Früchte hast."},
+];
+
+/* ---------- Berufe ---------- */
+const SKILLS = [
+ {name:"Landwirtschaft", icon:"🌾", xp:"XP für Ernten (je wertvoller, desto mehr) und Tierprodukte.",
+  lv5:[
+    {n:"Ackerbauer (Tiller)", d:"Feldfrüchte und Blumen sind 10 % mehr wert.", pick:true,
+     why:"Pflicht, wenn du über Anbau Geld machst – und nur über diesen Zweig kommst du an Kunsthandwerker."},
+    {n:"Viehzüchter (Rancher)", d:"Tierprodukte sind 20 % mehr wert.", pick:false,
+     why:"Nur sinnvoll, wenn deine Farm fast reine Tierhaltung ist. Rohe Tierprodukte bringen trotzdem weniger als verarbeitete."}],
+  lv10:[
+    {n:"Kunsthandwerker (Artisan)", d:"Handwerkswaren sind 40 % mehr wert (Wein, Käse, Öl, Honig, Marmelade).", pick:true, from:"Ackerbauer",
+     why:"⭐ Der stärkste Beruf im ganzen Spiel. Sternfrucht-Wein springt von 2.250 auf 3.150 G. Wenn du nur eine Sache richtig machst, dann das."},
+    {n:"Agronom (Agriculturist)", d:"Alle Pflanzen wachsen 10 % schneller.", pick:false, from:"Ackerbauer",
+     why:"Nett, aber Geschwindigkeit ersetzt keinen Preisaufschlag. Nur interessant, wenn du gar nicht verarbeitest."},
+    {n:"Hühnermeister (Coopmaster)", d:"Stalltiere freunden sich schneller an, Inkubation halb so lang.", pick:false, from:"Viehzüchter", why:"Komfort, kein Geld."},
+    {n:"Schäfer (Shepherd)", d:"Scheunentiere freunden sich schneller an, Schafe geben öfter Wolle.", pick:false, from:"Viehzüchter", why:"Komfort, kein Geld."}]},
+
+ {name:"Bergbau", icon:"⛏️", xp:"XP für zerschlagene Erzadern und Steine.",
+  lv5:[
+    {n:"Bergmann (Miner)", d:"+1 Erz pro Ader.", pick:true,
+     why:"Wirkt auf jede einzelne Ader, den ganzen Rest des Spiels. Du brauchst Unmengen Erz für Werkzeuge, Fässer und Sprinkler."},
+    {n:"Geologe (Geologist)", d:"Doppelte Chance auf Edelsteine in Adern.", pick:false,
+     why:"Edelsteine sind hübsch, aber Erz ist der echte Engpass."}],
+  lv10:[
+    {n:"Schmied (Blacksmith)", d:"Metallbarren sind 50 % mehr wert.", pick:true, from:"Bergmann",
+     why:"⭐ Die beste Wahl, wenn du Erz auch verkaufst. Mit Prospektor kommst du dagegen schneller an Kohle – beides vertretbar."},
+    {n:"Prospektor (Prospector)", d:"Doppelte Chance auf Kohle.", pick:false, from:"Bergmann",
+     why:"Starke Alternative: Kohle ist Dauer-Engpass für Öfen und Fässer."},
+    {n:"Ausgräber (Excavator)", d:"Doppelte Chance auf Geoden.", pick:false, from:"Geologe", why:"Nur für Museums-Vervollständiger."},
+    {n:"Gemmologe (Gemologist)", d:"Edelsteine sind 30 % mehr wert.", pick:false, from:"Geologe", why:"Schwach im Vergleich zu Erz/Kohle."}]},
+
+ {name:"Sammeln", icon:"🍄", xp:"XP für aufgesammelte Wildpflanzen und gefällte Bäume.",
+  lv5:[
+    {n:"Sammler (Gatherer)", d:"Chance auf doppelte Ausbeute beim Sammeln.", pick:true,
+     why:"Einziger Weg zu Botaniker – und verdoppelt nebenbei Trüffel von deinen Schweinen."},
+    {n:"Förster (Forester)", d:"Holz ist 50 % mehr wert.", pick:false,
+     why:"Holz verkaufst du praktisch nie – du verbaust es."}],
+  lv10:[
+    {n:"Botaniker (Botanist)", d:"Gesammelte Gegenstände haben immer Iridium-Qualität.", pick:true, from:"Sammler",
+     why:"⭐ Iridium-Trüffel = 1.250 G statt 625 G, in Kombination mit Kunsthandwerker-Trüffelöl gewaltig. Wirkt auch auf alle Wildpflanzen."},
+    {n:"Fährtenleser (Tracker)", d:"Zeigt die Position von Sammelgut auf der Karte.", pick:false, from:"Sammler",
+     why:"Reine Komfortfunktion."},
+    {n:"Holzfäller (Lumberjack)", d:"Alle Bäume lassen Hartholz fallen.", pick:false, from:"Förster",
+     why:"Praktisch für Bauprojekte, aber Hartholz bekommst du auch über Stümpfe im Geheimen Wald."},
+    {n:"Zapfer (Tapper)", d:"Sirup ist 25 % mehr wert.", pick:false, from:"Förster", why:"Nischenwahl."}]},
+
+ {name:"Angeln", icon:"🎣", xp:"XP für gefangene Fische, Schatztruhen und Krebskörbe.",
+  lv5:[
+    {n:"Fischer (Fisher)", d:"Fische sind 25 % mehr wert.", pick:true,
+     why:"Angeln ist in Jahr 1 die schnellste Geldquelle – der Aufschlag zahlt sich sofort aus."},
+    {n:"Fallensteller (Trapper)", d:"Krebskörbe brauchen weniger Material zum Bauen.", pick:false,
+     why:"Nur sinnvoll, wenn du auf Mariner (kein Müll im Korb) gehst."}],
+  lv10:[
+    {n:"Angler (Angler)", d:"Fische sind 50 % mehr wert.", pick:true, from:"Fischer",
+     why:"⭐ Zusammen mit Fischteichen und Räucherofen eine stabile Dauereinnahme."},
+    {n:"Pirat (Pirate)", d:"Doppelte Chance auf Schatztruhen beim Angeln.", pick:false, from:"Fischer",
+     why:"Für Ring- und Artefaktjagd, nicht für Gold."},
+    {n:"Seemann (Mariner)", d:"Krebskörbe fangen nie Müll.", pick:false, from:"Fallensteller",
+     why:"Sehr entspannt bei vielen Krebskörben – aber weniger Gold als Angler."},
+    {n:"Ködermeister (Luremaster)", d:"Krebskörbe brauchen keinen Köder.", pick:false, from:"Fallensteller",
+     why:"Spart Arbeit, bringt kein Geld."}]},
+
+ {name:"Kampf", icon:"⚔️", xp:"XP für besiegte Monster.",
+  lv5:[
+    {n:"Kämpfer (Fighter)", d:"+10 % Schaden, +15 maximale Lebenspunkte.", pick:true,
+     why:"Schaden und HP helfen in jeder Situation, besonders in der Skull Cavern."},
+    {n:"Späher (Scout)", d:"+50 % kritische Trefferchance.", pick:false,
+     why:"Erst mit passenden Ringen und Desperado wirklich stark – nichts für den ersten Durchgang."}],
+  lv10:[
+    {n:"Rohling (Brute)", d:"+15 % Schaden.", pick:true, from:"Kämpfer",
+     why:"⭐ Schneller töten heißt weniger Treffer einstecken. Standardwahl."},
+    {n:"Verteidiger (Defender)", d:"+25 maximale Lebenspunkte.", pick:false, from:"Kämpfer",
+     why:"Wähle das, wenn du in der Skull Cavern ständig stirbst."},
+    {n:"Akrobat (Acrobat)", d:"Halbierte Abklingzeit für Spezialangriffe.", pick:false, from:"Späher", why:"Nischenwahl."},
+    {n:"Desperado", d:"Kritische Treffer sind tödlich (Sofort-Kill-Chance).", pick:false, from:"Späher",
+     why:"Sehr stark mit Prismatik-Splitter-Ausrüstung im Endgame – aber unzuverlässig."}]},
+];
+
+/* ---------- Jahr-1-Fahrplan ---------- */
+const PLAN = [
+ {s:"Frühling", items:[
+  "Tag 1–4: Pastinaken säen, Farm freiräumen (Holz & Stein sind Bündel-Pflicht).",
+  "Jeden Tag alles Sammelbare aufheben – die vier Frühlings-Sammelgegenstände sind schnell zusammen.",
+  "Tag 13 ist das Eierfest: Nimm so viel Gold wie möglich mit und kaufe Erdbeersaat (100 G). Direkt danach säen.",
+  "Kirsch-/Aprikosenbaum-Setzling früh pflanzen – Bäume brauchen 28 Tage.",
+  "Regentage = Angeltage. Wels (Fluss) und Aal (Meer) gibt es nur bei Regen.",
+  "Mine bis Etage 40 schaffen (Kupfer/Eisen für Werkzeuge und den Schmied-Bündel).",
+ ]},
+ {s:"Sommer", items:[
+  "Heidelbeeren sind der Grundstock – sie tragen ab Tag 13 alle 4 Tage.",
+  "Mais am Anfang des Sommers säen: er überlebt in den Herbst hinein.",
+  "Kugelfisch (12–16 Uhr, nur Sonne) und Roter Schnapper (nur Regen) nicht verpassen.",
+  "Farnspitze nur im Sommer im Geheimen Wald.",
+  "Ziel: Tresorraum-Bündel (2.500 G) freischalten → Bus → Wüste → Sternfrucht & Sandfisch.",
+  "Spätestens jetzt: Fässer und Einmachgläser bauen. Verarbeiten schlägt Rohverkauf immer.",
+ ]},
+ {s:"Herbst", items:[
+  "Am 1. Herbst: Süße Edelsteinbeere säen (Reisewagen), falls du eine hast – 24 Tage Wachstum.",
+  "Kürbis + Preiselbeere sind die Geldbringer. Kürbis auch für das Qualitätsbündel (Qualitätsdünger!).",
+  "Brombeersaison 8.–11. Herbst: Büsche im ganzen Tal abernten.",
+  "Zander gibt es nur im Herbst bei Regen, 12–2 Uhr.",
+  "Vor Winterbeginn: alle mehrjährigen Kulturen abernten, Gewächshaus anstreben.",
+ ]},
+ {s:"Winter", items:[
+  "Draußen wächst nichts – Winter ist Mine-, Angel- und Aufräumzeit.",
+  "Nautilusschale nur im Winter am Strand. Stör und Tigerforelle nur jetzt.",
+  "Winter-Erdhügel mit der Hacke umgraben: Winterwurzel & Schneejams.",
+  "Nachtmarkt 15.–17. Winter am Strand: seltene Saat, Deko, U-Boot-Fischen.",
+  "Skull Cavern (Wüste) ist jetzt das lohnendste Ziel – Iridium und Prismasplitter.",
+  "Gewächshaus mit Uralten Früchten oder Erdbeeren füllen.",
+ ]},
+];
+
+/* ============================================================
+   STATE
+============================================================ */
+const KEY = "junimo_guide_v3";
+let S = load();
+function load(){
+  try{ const r = localStorage.getItem(KEY); if(r) return JSON.parse(r); }catch(e){}
+  return {done:{}, have:{}, season:"Frühling", theme:null, tiller:false, quality:"normal"};
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+
+let page = "home";
+
+/* alle Items flach, mit Referenz auf Raum + Bündel */
+const ALL = [];
+CC.forEach(r => r.bundles.forEach(b => b.items.forEach(i => {
+  ALL.push(Object.assign({}, i, {room:r.room, bundle:b.name, key:r.room+"|"+b.name+"|"+i.de}));
+})));
+
+const isDone = it => !!S.done[it.key] || (S.have[it.key]||0) >= it.q;
+const bundleDone = (room,b) => b.items.filter(i=>isDone(Object.assign({},i,{key:room+"|"+b.name+"|"+i.de, q:i.q}))) .length >= b.need;
+const esc = s => String(s).replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => Math.round(n).toLocaleString("de-DE");
+
+/* ============================================================
+   ANSICHTEN
+============================================================ */
+function seasonSegs(active, attr, list){
+  return `<div class="segs">${(list||SEASONS).map(s=>
+    `<button class="seg ${s===active?"on":""}" data-${attr}="${s}">${s}</button>`).join("")}</div>`;
+}
+
+/* ---------- Übersicht ---------- */
+function viewHome(){
+  const total = ALL.length, done = ALL.filter(isDone).length;
+  const pct = Math.round(done/total*100);
+
+  const rooms = CC.map(r=>{
+    const its = r.bundles.flatMap(b=>b.items.map(i=>({key:r.room+"|"+b.name+"|"+i.de, q:i.q})));
+    const d = its.filter(isDone).length;
+    const bd = r.bundles.filter(b=>bundleDone(r.room,b)).length;
+    return {r, d, t:its.length, bd, bt:r.bundles.length};
+  });
+
+  // Was ist NUR in der gewählten Jahreszeit verfügbar und noch offen?
+  const sea = S.season;
+  const urgent = ALL.filter(i => !isDone(i) && i.s && i.s.length && i.s.includes(sea) && i.s.length <= 2);
+  const plan = PLAN.find(p=>p.s===sea);
+
+  return `
+  <h2>Gesamtfortschritt</h2>
+  <div class="card">
+    <div class="row between" style="margin-bottom:9px">
+      <div><b style="font-size:17px">${done} / ${total}</b><div class="tiny">Gegenstände eingesammelt</div></div>
+      <div class="big">${pct}%</div>
+    </div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+  </div>
+
+  <h2>Räume</h2>
+  ${rooms.map(o=>`
+    <div class="card tight">
+      <div class="row between">
+        <div class="grow"><b>${o.r.icon} ${esc(o.r.room)}</b>
+          <div class="tiny">${o.bd}/${o.bt} Bündel · ${o.d}/${o.t} Gegenstände</div></div>
+        <div class="money">${Math.round(o.d/o.t*100)}%</div>
+      </div>
+      <div class="bar" style="margin-top:8px"><i style="width:${o.d/o.t*100}%"></i></div>
+    </div>`).join("")}
+
+  <h2>Aktuelle Jahreszeit</h2>
+  ${seasonSegs(sea,"season")}
+  <div class="card">
+    <b>📋 Fahrplan ${esc(sea)}</b>
+    <ul>${plan.items.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>
+  </div>
+
+  <h2>Nur im ${esc(sea)} verfügbar – noch offen</h2>
+  ${urgent.length ? urgent.map(itemCard).join("")
+    : `<div class="card empty">Nichts Dringendes für diese Jahreszeit. 🎉</div>`}
+
+  <h2>Daten</h2>
+  <div class="card">
+    <p class="tiny" style="margin-top:0">Dein Fortschritt wird nur lokal auf diesem iPhone gespeichert.</p>
+    <button class="btn danger" id="reset">Fortschritt zurücksetzen</button>
+  </div>`;
+}
+
+function itemCard(i){
+  const have = S.have[i.key]||0, missing = Math.max(0, i.q - have), d = isDone(i);
+  return `<div class="card tight ${d?"done":""}" style="${d?"opacity:.5":""}">
+    <div class="row">
+      <input type="checkbox" data-done="${esc(i.key)}" ${d?"checked":""}>
+      <div class="grow">
+        <div class="iname">${esc(i.de)}${i.q>1?` <span class="money">×${i.q}</span>`:""}</div>
+        <div class="tiny">${esc(i.en)} · ${esc(i.room)} › ${esc(i.bundle)}</div>
+      </div>
+    </div>
+    <div class="tiny" style="margin-top:7px">📍 ${esc(i.where)}</div>
+    <div>${chips(i)}</div>
+    ${i.q>1 && !d ? `<div class="row between" style="margin-top:8px">
+      <span class="tiny">Noch <b>${missing}</b> von ${i.q}</span>
+      <input type="number" min="0" inputmode="numeric" data-have="${esc(i.key)}" value="${have}">
+    </div>`:""}
+  </div>`;
+}
+
+function chips(i){
+  let out = "";
+  if(i.s && i.s.length) out += i.s.map(s=>`<span class="chip">${s}</span>`).join("");
+  else out += `<span class="chip ok">ganzjährig</span>`;
+  if(i.time) out += `<span class="chip">🕒 ${esc(i.time)}</span>`;
+  if(i.weather) out += `<span class="chip ${/Regen/.test(i.weather)?"rain":"warn"}">${/Regen/.test(i.weather)?"🌧":"☀️"} ${esc(i.weather)}</span>`;
+  return out;
+}
+
+/* ---------- Gemeinschaftszentrum ---------- */
+function viewCC(){
+  return `
+  <h2>Gemeinschaftszentrum</h2>
+  <div class="filters">
+    <input type="search" id="q" placeholder="Gegenstand suchen…" value="${esc(S.q||"")}">
+  </div>
+  <div class="filters">
+    <select id="fseason">
+      <option>Alle Jahreszeiten</option>
+      ${SEASONS.map(s=>`<option ${S.fs===s?"selected":""}>${s}</option>`).join("")}
+    </select>
+    <select id="fopen">
+      <option value="all" ${S.fo==="all"?"selected":""}>Alle anzeigen</option>
+      <option value="open" ${S.fo==="open"?"selected":""}>Nur offene</option>
+    </select>
+  </div>
+  <div id="cclist"></div>`;
+}
+
+function renderCCList(){
+  const q = (S.q||"").toLowerCase().trim();
+  const fs = S.fs || "Alle Jahreszeiten";
+  const fo = S.fo || "all";
+  const el = document.getElementById("cclist");
+  if(!el) return;
+
+  const match = i => {
+    if(q && !(i.de+" "+i.en+" "+i.where).toLowerCase().includes(q)) return false;
+    if(fs !== "Alle Jahreszeiten" && i.s && i.s.length && !i.s.includes(fs)) return false;
+    if(fo === "open" && isDone(i)) return false;
+    return true;
+  };
+
+  let html = "", any = false;
+  CC.forEach(r=>{
+    let rooms = "";
+    r.bundles.forEach(b=>{
+      const items = b.items.map(i=>Object.assign({},i,{room:r.room,bundle:b.name,key:r.room+"|"+b.name+"|"+i.de}));
+      const shown = items.filter(match);
+      if(!shown.length) return;
+      const d = items.filter(isDone).length;
+      const ok = d >= b.need;
+      rooms += `<details ${q?"open":""}>
+        <summary>
+          <span class="arrow">▶</span>
+          <span class="grow"><b>${esc(b.name)}</b>
+            <div class="tiny">${d}/${b.need} gesammelt${b.need < items.length?` (aus ${items.length} möglichen)`:""}</div></span>
+          <span class="chip ${ok?"ok":""}">${ok?"✓ fertig":d+"/"+b.need}</span>
+        </summary>
+        <div class="reward">🎁 Belohnung: ${esc(b.reward)}</div>
+        ${shown.map(rowItem).join("")}
+      </details>`;
+    });
+    if(rooms){
+      any = true;
+      html += `<h2>${r.icon} ${esc(r.room)}</h2>
+        <div class="note">🏆 ${esc(r.roomReward)}</div>${rooms}`;
+    }
+  });
+  el.innerHTML = any ? html : `<div class="card empty">Nichts gefunden.</div>`;
+  bindInputs();
+}
+
+function rowItem(i){
+  const have = S.have[i.key]||0, d = isDone(i);
+  return `<div class="item ${d?"done":""}">
+    <div class="row">
+      <input type="checkbox" data-done="${esc(i.key)}" ${d?"checked":""}>
+      <div class="grow">
+        <div class="iname">${esc(i.de)}${i.q>1?` <span class="money">×${i.q}</span>`:""}</div>
+        <div class="en">${esc(i.en)}</div>
+      </div>
+      ${i.q>1?`<input type="number" min="0" inputmode="numeric" data-have="${esc(i.key)}" value="${have}">`:""}
+    </div>
+    <div class="tiny" style="margin-top:5px">📍 ${esc(i.where)}</div>
+    <div>${chips(i)}</div>
+  </div>`;
+}
+
+/* ---------- Anbau / Gewinn ---------- */
+const QUAL = {normal:1, silber:1.25, gold:1.5, iridium:2};
+
+/* Gewächshaus wird über ein ganzes Jahr (4 Jahreszeiten) gerechnet,
+   sonst sähe die Uralte Frucht mit ihren 28 Wachstumstagen künstlich schlecht aus. */
+function cropMath(c){
+  const DAYS = c.span || (c.s === "Gewächshaus" ? 112 : 28);
+  const mult = QUAL[S.quality] * (S.tiller ? 1.1 : 1);
+  const price = Math.floor(c.sell * mult);
+  let harvests, seedCost;
+  if(c.regrow > 0){
+    if(c.days > DAYS) return null;
+    harvests = 1 + Math.floor((DAYS - c.days) / c.regrow);
+    seedCost = c.seed;                       // einmal kaufen
+  } else {
+    harvests = Math.floor(DAYS / c.days);
+    if(!harvests) return null;
+    // seedOnce: die Pflanze liefert beim Ernten neue Saat (z. B. Sonnenblume)
+    seedCost = c.seedOnce ? c.seed : c.seed * harvests;
+  }
+  const gross = harvests * c.yield * price;
+  const profit = gross - seedCost;
+  return {harvests, price, profit, perDay: profit / DAYS, days: DAYS};
+}
+
+function viewFarm(){
+  const sea = S.farmSeason || "Frühling";
+  const tabs = ["Frühling","Sommer","Herbst","Winter","Gewächshaus"];
+  return `
+  <h2>Anbauplanung</h2>
+  <div class="segs">${tabs.map(s=>
+    `<button class="seg ${s===sea?"on":""}" data-farm="${s}">${s}</button>`).join("")}</div>
+
+  <div class="card tight">
+    <div class="row between">
+      <span class="tiny grow">Beruf <b>Ackerbauer</b> (+10 %)</span>
+      <input type="checkbox" id="tiller" ${S.tiller?"checked":""}>
+    </div>
+    <div class="row between" style="margin-top:9px">
+      <span class="tiny grow">Erntequalität</span>
+      <select id="qual" style="width:auto;min-width:130px">
+        ${Object.keys(QUAL).map(k=>`<option value="${k}" ${S.quality===k?"selected":""}>${k[0].toUpperCase()+k.slice(1)}</option>`).join("")}
+      </select>
+    </div>
+  </div>
+
+  <div id="farmlist"></div>`;
+}
+
+function renderFarm(){
+  const el = document.getElementById("farmlist");
+  if(!el) return;
+  const sea = S.farmSeason || "Frühling";
+
+  if(sea === "Winter"){
+    el.innerHTML = `
+    <div class="card">
+      <b>❄️ Im Winter wächst draußen nichts.</b>
+      <p class="muted">Ausnahme: Wintersaat (aus dem Sammeln-Bündel) liefert Wildpflanzen – kein echter Gewinn. So holst du im Winter trotzdem Geld raus:</p>
+      <ul>
+        <li><b>Gewächshaus</b> (Belohnung der Vorratskammer) – hier laufen alle Pflanzen ganzjährig weiter.</li>
+        <li><b>Skull Cavern</b> in der Wüste: Iridium, Prismasplitter, Edelsteine.</li>
+        <li><b>Angeln</b>: Stör und Tigerforelle gibt es nur jetzt, ebenso die Nautilusschale am Strand.</li>
+        <li><b>Fässer und Einmachgläser</b> mit der Herbsternte durchlaufen lassen – Wein reift auch im Winter.</li>
+        <li><b>Nachtmarkt</b> 15.–17. Winter am Strand.</li>
+        <li><b>Tiere</b> produzieren im Stall weiter – aber Schweine geben draußen keine Trüffel.</li>
+      </ul>
+    </div>
+    ${renderCropCards(CROPS.filter(c=>c.s==="Gewächshaus"), "Fürs Gewächshaus")}`;
+    return;
+  }
+
+  const list = CROPS.filter(c=>c.s===sea);
+  const intro = sea === "Gewächshaus"
+    ? `<div class="note">Gerechnet über ein volles Jahr (112 Tage), weil im Gewächshaus keine Jahreszeit dazwischenfunkt. Sortiert nach Gewinn pro Tag und Feld.</div>`
+    : `<div class="note">Gerechnet über eine Saison (28 Tage), am 1. Tag gesät, Nachkauf der Saat eingerechnet. Sortiert nach Gewinn pro Tag und Feld.</div>`;
+  el.innerHTML = intro + renderCropCards(list) + artisanBox(sea);
+}
+
+function renderCropCards(list, title){
+  const rows = list.map(c=>({c, m:cropMath(c)})).filter(o=>o.m).sort((a,b)=>b.m.perDay - a.m.perDay);
+  return (title?`<h2>${esc(title)}</h2>`:"") + rows.map((o,idx)=>{
+    const c = o.c, m = o.m;
+    return `<div class="card">
+      <div class="row between">
+        <div class="row grow" style="gap:9px">
+          <span class="rank ${idx===0?"g1":""}">${idx+1}</span>
+          <div class="grow"><b>${esc(c.de)}</b><div class="en">${esc(c.en)}</div></div>
+        </div>
+        <div style="text-align:right">
+          <div class="money">${fmt(m.perDay)} G</div>
+          <div class="tiny">pro Tag/Feld</div>
+        </div>
+      </div>
+      <div style="margin-top:7px">
+        <span class="chip">🌱 ${c.seed?fmt(c.seed)+" G Saat":"Saat: besonders"}</span>
+        <span class="chip">⏱ ${c.days} Tage</span>
+        ${c.regrow?`<span class="chip ok">↻ alle ${c.regrow} Tage</span>`:`<span class="chip">einmalige Ernte</span>`}
+        ${c.yield>1?`<span class="chip ok">×${c.yield} pro Ernte</span>`:""}
+        <span class="chip">💰 ${fmt(m.price)} G Stück</span>
+      </div>
+      <div class="tiny" style="margin-top:7px">
+        ${m.harvests} Ernte${m.harvests>1?"n":""} in ${m.days} Tagen · <b>${fmt(m.profit)} G</b> Reingewinn je Feld · Saat bei: ${esc(c.src)}
+      </div>
+      ${c.note?`<div class="note" style="margin-bottom:0">${esc(c.note)}</div>`:""}
+    </div>`;
+  }).join("");
+}
+
+function artisanBox(sea){
+  const tips = {
+    "Frühling":"Kartoffeln und Grünkohl roh verkaufen, Erdbeeren lieber ins Einmachglas (Erdbeermarmelade 290 G statt 120 G).",
+    "Sommer":"Hopfen gehört ins Fass: Pale Ale 300 G, alle 2 Tage. Heidelbeeren ins Einmachglas (150 G statt 50 G). Sternfrucht ins Fass: Wein 2.250 G.",
+    "Herbst":"Kürbis ins Fass? Nein – Kürbis ist kein Obst. Preiselbeeren ins Einmachglas (200 G), Trauben ins Fass (Wein 240 G).",
+    "Gewächshaus":"Uralte Frucht ins Fass: Wein 1.650 G (mit Kunsthandwerker 2.310 G). Das ist die profitabelste Dauerschleife im Spiel."
+  };
+  return `<div class="card">
+    <b>🍷 Verarbeiten statt roh verkaufen</b>
+    <ul>
+      <li><b>Fass (Keg):</b> Obst → Wein = <b>3× Grundpreis</b>. Gemüse → Saft = 2,25×. Hopfen → Pale Ale = 300 G.</li>
+      <li><b>Einmachglas:</b> Obst → Gelee, Gemüse → Pickles = <b>2× Grundpreis + 50 G</b>. Schneller als das Fass, aber bei teuren Früchten schlechter.</li>
+      <li><b>Faustregel:</b> billige Früchte → Einmachglas, teure Früchte → Fass. Mit dem Beruf <b>Kunsthandwerker</b> kommen nochmal +40 % obendrauf.</li>
+    </ul>
+    <div class="note" style="margin-bottom:0">${esc(tips[sea] || tips["Frühling"])}</div>
+  </div>`;
+}
+
+/* ---------- Berufe ---------- */
+function viewSkills(){
+  return `
+  <h2>Berufe – die empfohlene Route</h2>
+  <div class="card">
+    <p style="margin-top:0" class="muted">Auf <b>Stufe 5</b> und <b>Stufe 10</b> jeder Fähigkeit wählst du einen Beruf. Die Wahl auf Stufe 10 hängt davon ab, was du auf Stufe 5 genommen hast.</p>
+    <div class="note">Die grün umrandeten Karten sind die Empfehlung für einen normalen, geldorientierten Durchgang. Du kannst Berufe später gegen <b>10.000 G</b> an der <b>Statue der Ungewissheit</b> in der Kanalisation umwählen – du brauchst also keine Angst vor einer Fehlentscheidung zu haben.</div>
+    <b>Kurzfassung:</b>
+    <ul>
+      <li>Landwirtschaft: <b>Ackerbauer → Kunsthandwerker</b></li>
+      <li>Bergbau: <b>Bergmann → Schmied</b></li>
+      <li>Sammeln: <b>Sammler → Botaniker</b></li>
+      <li>Angeln: <b>Fischer → Angler</b></li>
+      <li>Kampf: <b>Kämpfer → Rohling</b></li>
+    </ul>
+  </div>
+  ${SKILLS.map(sk=>`
+    <h2>${sk.icon} ${esc(sk.name)}</h2>
+    <div class="card">
+      <div class="tiny" style="margin-bottom:10px">📈 ${esc(sk.xp)}</div>
+      <b class="tiny" style="color:var(--brand2)">STUFE 5</b>
+      ${sk.lv5.map(p=>proCard(p)).join("")}
+      <b class="tiny" style="color:var(--brand2)">STUFE 10</b>
+      ${sk.lv10.map(p=>proCard(p)).join("")}
+    </div>`).join("")}
+
+  <h2>Reihenfolge beim Hochleveln</h2>
+  <div class="card">
+    <ul>
+      <li><b>Angeln</b> zuerst: bringt in Jahr 1 mit Abstand das meiste Geld und levelt beim Nebenbei-Angeln an Regentagen.</li>
+      <li><b>Landwirtschaft</b> parallel: jede Ernte gibt XP – teure Pflanzen geben mehr.</li>
+      <li><b>Bergbau</b> an Regentagen und im Winter, wenn die Felder leer sind.</li>
+      <li><b>Sammeln</b> kommt fast von allein – hebe wirklich jeden Tag alles auf, was am Boden liegt.</li>
+      <li><b>Kampf</b> steigt beim Minen nebenbei. Iss vorher etwas, Ausdauer ist der Engpass.</li>
+      <li>Mit Essen (z. B. <b>Gebratener Aal</b> für Angeln) bekommst du temporär +Level – hilft bei schweren Fischen.</li>
+    </ul>
+  </div>`;
+}
+
+function proCard(p){
+  return `<div class="pro ${p.pick?"pick":""}">
+    <div class="row between">
+      <b>${esc(p.n)}</b>
+      ${p.pick?`<span class="chip ok">Empfehlung</span>`:""}
+    </div>
+    <div class="tiny" style="margin-top:3px">${esc(p.d)}</div>
+    ${p.from?`<div class="tiny" style="margin-top:3px">↳ setzt <b>${esc(p.from)}</b> voraus</div>`:""}
+    <div class="note" style="margin-bottom:0">${esc(p.why)}</div>
+  </div>`;
+}
+
+/* ============================================================
+   RENDER & EVENTS
+============================================================ */
+function bindInputs(){
+  document.querySelectorAll("[data-done]").forEach(el=>{
+    el.onchange = () => {
+      const k = el.getAttribute("data-done");
+      if(el.checked) S.done[k] = true; else { delete S.done[k]; delete S.have[k]; }
+      save(); render(true);
+    };
+  });
+  document.querySelectorAll("[data-have]").forEach(el=>{
+    el.onchange = () => {
+      const k = el.getAttribute("data-have");
+      S.have[k] = Math.max(0, parseInt(el.value,10) || 0);
+      save(); render(true);
+    };
+  });
+}
+
+function render(keepScroll){
+  const y = window.scrollY;
+  document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("on", b.dataset.p===page));
+  const app = document.getElementById("app");
+  const sub = document.getElementById("sub");
+
+  if(page==="home"){ app.innerHTML = viewHome(); sub.textContent = "Übersicht & Fahrplan"; }
+  else if(page==="cc"){ app.innerHTML = viewCC(); sub.textContent = "Gemeinschaftszentrum"; renderCCList(); }
+  else if(page==="farm"){ app.innerHTML = viewFarm(); sub.textContent = "Gewinn pro Jahreszeit"; renderFarm(); }
+  else { app.innerHTML = viewSkills(); sub.textContent = "Fähigkeiten & Berufe"; }
+
+  bindInputs();
+  wire();
+  if(keepScroll) window.scrollTo(0, y); else window.scrollTo(0,0);
+}
+
+function wire(){
+  document.querySelectorAll("[data-season]").forEach(b=>{
+    b.onclick = () => { S.season = b.dataset.season; save(); render(); };
+  });
+  document.querySelectorAll("[data-farm]").forEach(b=>{
+    b.onclick = () => { S.farmSeason = b.dataset.farm; save(); render(); };
+  });
+  const q = document.getElementById("q");
+  if(q) q.oninput = () => { S.q = q.value; renderCCList(); };
+  const fs = document.getElementById("fseason");
+  if(fs) fs.onchange = () => { S.fs = fs.value; save(); renderCCList(); };
+  const fo = document.getElementById("fopen");
+  if(fo) fo.onchange = () => { S.fo = fo.value; save(); renderCCList(); };
+  const t = document.getElementById("tiller");
+  if(t) t.onchange = () => { S.tiller = t.checked; save(); renderFarm(); };
+  const qu = document.getElementById("qual");
+  if(qu) qu.onchange = () => { S.quality = qu.value; save(); renderFarm(); };
+  const rs = document.getElementById("reset");
+  if(rs) rs.onclick = () => {
+    if(confirm("Wirklich den gesamten Fortschritt löschen?")){
+      S.done = {}; S.have = {}; save(); render();
+    }
+  };
+}
+
+/* Theme */
+function applyTheme(){
+  if(S.theme) document.documentElement.setAttribute("data-theme", S.theme);
+  else document.documentElement.removeAttribute("data-theme");
+}
+document.getElementById("themeBtn").onclick = () => {
+  S.theme = S.theme === "dark" ? "light" : S.theme === "light" ? null : "dark";
+  save(); applyTheme();
+};
+
+document.querySelectorAll("nav button").forEach(b=>{
+  b.onclick = () => { page = b.dataset.p; render(); };
+});
+
+applyTheme();
+render();
+</script>
+</body>
+</html>
