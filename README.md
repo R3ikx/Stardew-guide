@@ -41,6 +41,22 @@ vom Rucksack für 2.000 G bis zum Keller für 100.000 G: immer nur das
 nächste Ziel mit Begründung, abhaken und das nächste erscheint. Und eine
 Liste der Dinge, die man schleifen lässt und später bereut.
 
+**🎣 Fisch-Finder** – 47 Fische mit Jahreszeit, Uhrzeitfenster, Wetter,
+Fundort und Angelschwierigkeit. Jahreszeit, Wetter und Uhrzeit einstellen
+(Schieberegler von 6 Uhr bis 2 Uhr nachts), die Liste filtert live. Fische,
+die noch in einem Bündel fehlen, sind markiert. Legendäre Fische stehen
+separat mit der nötigen Angelstufe.
+
+**🎁 Geschenke & Geburtstage** – alle 34 Dorfbewohner mit Geburtstag,
+Aufenthaltsort, Lieblingsgeschenken und je einem Tipp, wie man am
+günstigsten an eines davon kommt. Die Suche greift auch auf Geschenke zu –
+über „Amethyst“ findest du alle, die ihn mögen. Dazu die Grundregeln zum
+Schenken. Der Plan-Reiter erinnert an anstehende Geburtstage.
+
+**📲 Fortschritt übertragen** – der Stand liegt pro Gerät getrennt im
+Browser. Über einen Code lässt er sich aufs iPad oder ein neues iPhone
+mitnehmen.
+
 **🏠 Übersicht** – Fortschrittsbalken gesamt und pro Raum, ein Jahr-1-Fahrplan pro
 Jahreszeit und eine Liste „nur in dieser Jahreszeit verfügbar und noch offen",
 damit nichts durchrutscht (Kugelfisch, Nautilusschale, Brombeersaison …).

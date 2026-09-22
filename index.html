@@ -856,15 +856,17 @@ const PLAN = [
 ============================================================ */
 const KEY = "junimo_guide_v3";
 let S = load();
+function defaults(){
+  return {done:{}, have:{}, open:{}, bought:{}, year:1, day:1,
+          hour:9, weather:"Egal",
+          season:"Frühling", theme:null, tiller:false, quality:"normal"};
+}
 function load(){
-  const def = {done:{}, have:{}, open:{}, bought:{}, year:1, day:1,
-               hour:9, weather:"Egal",
-               season:"Frühling", theme:null, tiller:false, quality:"normal"};
   try{
     const r = localStorage.getItem(KEY);
-    if(r) return Object.assign(def, JSON.parse(r) || {});
+    if(r) return Object.assign(defaults(), JSON.parse(r) || {});
   }catch(e){}
-  return def;
+  return defaults();
 }
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
 
@@ -1334,6 +1336,7 @@ const MORE = [
  {p:"fish",  i:"🎣", n:"Fisch-Finder",            d:"Was beißt bei diesem Wetter und zu dieser Uhrzeit"},
  {p:"gifts", i:"🎁", n:"Geschenke & Geburtstage", d:"Wer mag was, und wann hat wer Geburtstag"},
  {p:"skill", i:"⭐", n:"Fähigkeiten & Berufe",    d:"Welchen Beruf du auf Stufe 5 und 10 wählen solltest"},
+ {p:"data",  i:"📲", n:"Fortschritt übertragen",  d:"Stand aufs iPad oder ein neues iPhone mitnehmen"},
 ];
 
 function viewMore(){
@@ -1510,6 +1513,53 @@ function renderFish(){
         </div>`).join("") : "");
 }
 
+/* ---------- Daten übertragen ----------
+   Der Stand liegt im localStorage und damit pro Gerät getrennt.
+   Als Code lässt er sich per Nachricht aufs andere Gerät schicken.  */
+function exportCode(){
+  // Base64 über UTF-8, damit Umlaute im Code nicht kaputtgehen
+  return btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+}
+function importCode(code){
+  const obj = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+  if(!obj || typeof obj !== "object" || !("done" in obj)) throw new Error("kein Junimo-Code");
+  return obj;
+}
+
+function viewData(){
+  const done = ALL.filter(isDone).length;
+  const goals = GOALS.filter(g=>S.bought[g.id]).length;
+  return `
+  <h2>Fortschritt übertragen</h2>
+  <div class="card">
+    <p style="margin-top:0" class="muted">Dein Stand wird auf jedem Gerät getrennt gespeichert. Mit diesem Code holst du ihn aufs iPad oder ein neues iPhone.</p>
+    <div class="note">Aktuell gespeichert: <b>${done}</b> von ${ALL.length} Gegenständen, <b>${goals}</b> von ${GOALS.length} Sparzielen, Jahr ${S.year||1} · ${esc(S.season)} · Tag ${S.day||1}.</div>
+  </div>
+
+  <h2>1. Auf diesem Gerät: Code holen</h2>
+  <div class="card">
+    <textarea id="expOut" readonly rows="4" style="width:100%;font-size:12px;font-family:ui-monospace,monospace;
+      padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--ink);resize:vertical">${esc(exportCode())}</textarea>
+    <button class="btn" id="copyBtn" style="margin-top:9px">📋 Code kopieren</button>
+    <p class="tiny" style="margin-bottom:0">Schick ihn dir selbst per Nachricht oder Notiz.</p>
+  </div>
+
+  <h2>2. Auf dem anderen Gerät: Code einsetzen</h2>
+  <div class="card">
+    <textarea id="impIn" rows="4" placeholder="Code hier einfügen…" style="width:100%;font-size:12px;font-family:ui-monospace,monospace;
+      padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);resize:vertical"></textarea>
+    <button class="btn" id="impBtn" style="margin-top:9px">📥 Diesen Stand übernehmen</button>
+    <div id="impMsg" class="tiny" style="margin-top:8px"></div>
+    <div class="note" style="margin-bottom:0">Das überschreibt den Stand auf dem Gerät, auf dem du gerade bist. Vorher lieber dessen eigenen Code sichern.</div>
+  </div>
+
+  <h2>Zurücksetzen</h2>
+  <div class="card">
+    <p class="tiny" style="margin-top:0">Löscht Häkchen, Sparziele und Einstellungen auf diesem Gerät.</p>
+    <button class="btn danger" id="reset">Fortschritt zurücksetzen</button>
+  </div>`;
+}
+
 /* ---------- Berufe ---------- */
 function viewSkills(){
   return `
@@ -1647,7 +1697,7 @@ function bindInputs(){
 
 /* Unterseiten von "Mehr" lassen den Mehr-Knopf markiert. */
 const TAB_OF = {home:"home", plan:"plan", cc:"cc", farm:"farm",
-                more:"more", gifts:"more", fish:"more", skill:"more"};
+                more:"more", gifts:"more", fish:"more", skill:"more", data:"more"};
 
 function render(keepScroll){
   const y = window.scrollY;
@@ -1663,6 +1713,7 @@ function render(keepScroll){
   else if(page==="more"){ app.innerHTML = viewMore(); sub.textContent = "Nachschlagen"; }
   else if(page==="gifts"){ app.innerHTML = viewGifts(); sub.textContent = "Geschenke & Geburtstage"; renderGifts(); }
   else if(page==="fish"){ app.innerHTML = viewFish(); sub.textContent = "Was beißt gerade?"; renderFish(); }
+  else if(page==="data"){ app.innerHTML = viewData(); sub.textContent = "Fortschritt übertragen"; }
   else { app.innerHTML = viewSkills(); sub.textContent = "Fähigkeiten & Berufe"; }
 
   bindInputs();
@@ -1739,6 +1790,33 @@ function wire(){
   });
   const gd = document.getElementById("goalsDone");
   if(gd) gd.ontoggle = () => { S.openGoals = gd.open; save(); };
+  const cb = document.getElementById("copyBtn");
+  if(cb) cb.onclick = async () => {
+    const ta = document.getElementById("expOut");
+    try{
+      await navigator.clipboard.writeText(ta.value);
+    }catch(e){
+      // Ältere Safari-Versionen: markieren, damit der Nutzer selbst kopieren kann
+      ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
+      try{ document.execCommand("copy"); }catch(e2){}
+    }
+    cb.textContent = "✓ Kopiert";
+    setTimeout(()=>{ cb.textContent = "📋 Code kopieren"; }, 1800);
+  };
+  const ib = document.getElementById("impBtn");
+  if(ib) ib.onclick = () => {
+    const msg = document.getElementById("impMsg");
+    const val = (document.getElementById("impIn").value || "").trim();
+    if(!val){ msg.textContent = "Bitte erst einen Code einfügen."; return; }
+    let obj;
+    try{ obj = importCode(val); }
+    catch(e){ msg.innerHTML = '<b style="color:var(--red)">Das ist kein gültiger Junimo-Code.</b>'; return; }
+    if(!confirm("Der Stand auf diesem Gerät wird überschrieben. Fortfahren?")) return;
+    S = Object.assign(defaults(), obj);
+    save();
+    msg.innerHTML = '<b style="color:var(--brand2)">✓ Übernommen.</b>';
+    setTimeout(()=>{ page = "home"; render(); }, 600);
+  };
   const rs = document.getElementById("reset");
   if(rs) rs.onclick = () => {
     if(confirm("Wirklich den gesamten Fortschritt löschen?")){
