@@ -498,6 +498,72 @@ const SKILLS = [
      why:"Sehr stark mit Prismatik-Splitter-Ausrüstung im Endgame – aber unzuverlässig."}]},
 ];
 
+/* ---------- Fische ----------
+   s: leer = ganzjährig. from/to: Stunde, 26 = 2 Uhr nachts.
+   w: "" = jedes Wetter. diff: Angelschwierigkeit (je höher, desto zappeliger). */
+const FISH = [
+ // Fluss
+ {de:"Sonnenbarsch", en:"Sunfish", s:["Frühling","Sommer"], from:6, to:19, w:"Sonne", loc:"Fluss (Stadt & Farm)", diff:30},
+ {de:"Wels", en:"Catfish", s:["Frühling","Herbst"], from:6, to:24, w:"Regen", loc:"Fluss & Geheimer Wald", diff:75},
+ {de:"Maifisch", en:"Shad", s:["Frühling","Sommer","Herbst"], from:9, to:26, w:"Regen", loc:"Fluss", diff:45},
+ {de:"Tigerforelle", en:"Tiger Trout", s:["Herbst","Winter"], from:6, to:19, w:"", loc:"Fluss", diff:60},
+ {de:"Lachs", en:"Salmon", s:["Herbst"], from:6, to:19, w:"", loc:"Fluss", diff:50},
+ {de:"Regenbogenforelle", en:"Rainbow Trout", s:["Sommer"], from:6, to:19, w:"Sonne", loc:"Fluss & Bergsee", diff:45},
+ {de:"Brachse", en:"Bream", s:[], from:18, to:26, w:"", loc:"Fluss", diff:35},
+ {de:"Barsch", en:"Perch", s:["Winter"], from:6, to:26, w:"", loc:"Fluss & Bergsee", diff:35},
+ {de:"Hecht", en:"Pike", s:["Sommer","Winter"], from:6, to:26, w:"", loc:"Fluss & Waldteich", diff:60},
+ {de:"Döbel", en:"Chub", s:[], from:6, to:26, w:"", loc:"Waldfluss & Bergsee", diff:35},
+ {de:"Plötze", en:"Roach", s:[], from:6, to:26, w:"", loc:"Waldteich & Kanalisation", diff:35},
+ // Bergsee
+ {de:"Forellenbarsch", en:"Largemouth Bass", s:[], from:6, to:19, w:"", loc:"Bergsee", diff:50},
+ {de:"Karpfen", en:"Carp", s:["Frühling","Sommer","Herbst"], from:6, to:26, w:"", loc:"Bergsee & Wald (Kanalisation ganzjährig)", diff:15},
+ {de:"Kaulkopf", en:"Bullhead", s:[], from:6, to:26, w:"", loc:"Bergsee", diff:46},
+ {de:"Stör", en:"Sturgeon", s:["Sommer","Winter"], from:6, to:19, w:"", loc:"Bergsee", diff:78},
+ {de:"Saibling", en:"Char", s:["Frühling","Winter"], from:6, to:26, w:"", loc:"Bergsee & Waldteich", diff:120},
+ {de:"Zander", en:"Walleye", s:["Herbst"], from:12, to:26, w:"Regen", loc:"Fluss, Bergsee, Waldteich", diff:45},
+ // Meer
+ {de:"Sardine", en:"Sardine", s:["Frühling","Herbst","Winter"], from:6, to:19, w:"", loc:"Meer / Strand", diff:30},
+ {de:"Sardelle", en:"Anchovy", s:["Frühling","Herbst"], from:6, to:26, w:"", loc:"Meer / Strand", diff:30},
+ {de:"Hering", en:"Herring", s:["Frühling","Winter"], from:6, to:26, w:"", loc:"Meer / Strand", diff:25},
+ {de:"Thunfisch", en:"Tuna", s:["Sommer","Winter"], from:6, to:19, w:"", loc:"Meer / Strand", diff:70},
+ {de:"Roter Schnapper", en:"Red Snapper", s:["Sommer","Herbst"], from:6, to:19, w:"Regen", loc:"Meer / Strand", diff:40},
+ {de:"Tilapia", en:"Tilapia", s:["Sommer","Herbst"], from:6, to:14, w:"", loc:"Meer / Strand", diff:50},
+ {de:"Rotbarbe", en:"Red Mullet", s:["Sommer","Winter"], from:6, to:19, w:"", loc:"Meer / Strand", diff:55},
+ {de:"Seegurke", en:"Sea Cucumber", s:["Herbst","Winter"], from:6, to:19, w:"", loc:"Meer / Strand", diff:40},
+ {de:"Supergurke", en:"Super Cucumber", s:["Sommer","Herbst"], from:18, to:26, w:"", loc:"Meer / Strand", diff:80},
+ {de:"Flunder", en:"Flounder", s:["Frühling","Sommer"], from:6, to:20, w:"", loc:"Meer / Strand", diff:50},
+ {de:"Heilbutt", en:"Halibut", s:["Frühling","Sommer","Winter"], from:6, to:11, from2:19, to2:26, w:"", loc:"Meer / Strand", diff:50},
+ {de:"Weißer Thun", en:"Albacore", s:["Herbst","Winter"], from:6, to:11, from2:18, to2:26, w:"", loc:"Meer / Strand", diff:60},
+ {de:"Aal", en:"Eel", s:["Frühling","Herbst"], from:16, to:26, w:"Regen", loc:"Meer / Strand", diff:70},
+ {de:"Oktopus", en:"Octopus", s:["Sommer"], from:6, to:13, w:"", loc:"Meer / Strand", diff:95},
+ {de:"Tintenfisch", en:"Squid", s:["Winter"], from:18, to:26, w:"", loc:"Meer / Strand", diff:75},
+ {de:"Kugelfisch", en:"Pufferfish", s:["Sommer"], from:12, to:16, w:"Sonne", loc:"Meer / Strand", diff:80},
+ // Besondere Orte
+ {de:"Geisterfisch", en:"Ghostfish", s:[], from:6, to:26, w:"", loc:"Mine, Etage 20 & 60", diff:50},
+ {de:"Steinfisch", en:"Stonefish", s:[], from:6, to:26, w:"", loc:"Mine, Etage 20", diff:65},
+ {de:"Eisbarsch", en:"Ice Pip", s:[], from:6, to:26, w:"", loc:"Mine, Etage 60", diff:85},
+ {de:"Lavaaal", en:"Lava Eel", s:[], from:6, to:26, w:"", loc:"Mine, Etage 100", diff:90},
+ {de:"Sandfisch", en:"Sandfish", s:[], from:6, to:20, w:"", loc:"Calico-Wüste (Bus nötig)", diff:65},
+ {de:"Skorpionkarpfen", en:"Scorpion Carp", s:[], from:6, to:20, w:"", loc:"Calico-Wüste (Bus nötig)", diff:90},
+ {de:"Waldspringer", en:"Woodskip", s:[], from:6, to:26, w:"", loc:"Geheimer Wald (Teiche)", diff:50},
+ {de:"Leerenlachs", en:"Void Salmon", s:[], from:6, to:26, w:"", loc:"Sumpf bei der Hexenhütte", diff:80},
+ {de:"Schleimjack", en:"Slimejack", s:[], from:6, to:26, w:"", loc:"Mutierte Käferhöhle", diff:55},
+ // Legendäre
+ {de:"Angler", en:"Angler", s:["Herbst"], from:6, to:26, w:"", loc:"Stadt, Brücke nördlich beim Herrenhaus", diff:85, leg:"Angeln Stufe 3"},
+ {de:"Purpurfisch", en:"Crimsonfish", s:["Sommer"], from:6, to:26, w:"", loc:"Ostteil des Strandes (Glasbrücke nötig)", diff:95, leg:"Angeln Stufe 5"},
+ {de:"Gletscherfisch", en:"Glacierfish", s:["Winter"], from:6, to:26, w:"", loc:"Waldteich, Pfeilspitzen-Insel", diff:100, leg:"Angeln Stufe 6"},
+ {de:"Der Legendäre", en:"Legend", s:["Frühling"], from:6, to:26, w:"Regen", loc:"Bergsee", diff:110, leg:"Angeln Stufe 10"},
+ {de:"Mutierter Karpfen", en:"Mutant Carp", s:[], from:6, to:26, w:"", loc:"Kanalisation (Rostiger Schlüssel)", diff:80, leg:"legendär"},
+];
+
+const FISH_TIPS = [
+ {n:"Regentage sind Angeltage", t:"Bei Regen beißen andere Fische – Wels, Aal, Maifisch und Roter Schnapper gibt es nur dann. Und du musst nicht gießen."},
+ {n:"Essen gibt dir Level", t:"Gebratener Aal oder Seetangsuppe vor dem Angeln: +Angelstufe für den ganzen Tag. Hilft genau bei den schweren Fischen."},
+ {n:"Köder und Kreisel lohnen sich", t:"Köder lässt schneller anbeißen, der Kreisel macht die Leiste größer. Beides zusammen halbiert gefühlt die Schwierigkeit."},
+ {n:"Truhen immer mitnehmen", t:"Die Schatztruhe beim Angeln bringt Ringe, Artefakte und Geld. Zieh sie mit, auch wenn es knapp wird."},
+ {n:"Die Schwierigkeit sagt, wie stark er zappelt", t:"Unter 50 ist entspannt, über 80 brauchst du eine gute Rute und am besten einen Buff."},
+];
+
 /* ---------- Dorfbewohner: Geburtstage und Lieblingsgeschenke ----------
    "loves" = Lieblingsgeschenke (achtfacher Wert am Geburtstag).
    "tip" = der einfachste Weg, dieser Person eine Freude zu machen.      */
@@ -792,6 +858,7 @@ const KEY = "junimo_guide_v3";
 let S = load();
 function load(){
   const def = {done:{}, have:{}, open:{}, bought:{}, year:1, day:1,
+               hour:9, weather:"Egal",
                season:"Frühling", theme:null, tiller:false, quality:"normal"};
   try{
     const r = localStorage.getItem(KEY);
@@ -1264,6 +1331,7 @@ function viewPlan(){
 
 /* ---------- Mehr: Sammelseite für die Nachschlagewerke ---------- */
 const MORE = [
+ {p:"fish",  i:"🎣", n:"Fisch-Finder",            d:"Was beißt bei diesem Wetter und zu dieser Uhrzeit"},
  {p:"gifts", i:"🎁", n:"Geschenke & Geburtstage", d:"Wer mag was, und wann hat wer Geburtstag"},
  {p:"skill", i:"⭐", n:"Fähigkeiten & Berufe",    d:"Welchen Beruf du auf Stufe 5 und 10 wählen solltest"},
 ];
@@ -1345,6 +1413,101 @@ function renderGifts(){
     <div style="margin-top:7px">${v.loves.map(g=>`<span class="chip ok">${esc(g)}</span>`).join("")}</div>
     <div class="note" style="margin-bottom:0">${esc(v.tip)}</div>
   </div>`).join("");
+}
+
+/* ---------- Fisch-Finder ---------- */
+const hLabel = x => (x > 24 ? x - 24 : x) + " Uhr";
+function fishTime(f){
+  if(f.from === 6 && f.to === 26 && !f.from2) return "jederzeit";
+  let s = hLabel(f.from) + "–" + hLabel(f.to);
+  if(f.from2 != null) s += " & " + hLabel(f.from2) + "–" + hLabel(f.to2);
+  return s;
+}
+function fishBites(f, hour){
+  const inside = (h,a,b) => h >= a && h <= b;
+  return inside(hour, f.from, f.to) || (f.from2 != null && inside(hour, f.from2, f.to2));
+}
+
+function viewFish(){
+  const hour = S.hour == null ? 9 : S.hour;
+  return `
+  <h2>Fisch-Finder</h2>
+  <p class="muted" style="margin-top:0">Stell ein, wann und bei welchem Wetter du angeln gehst – die Liste zeigt, was gerade beißt.</p>
+  ${seasonSegs(S.season,"season")}
+  <div class="card tight">
+    <div class="row between">
+      <span class="tiny grow">Wetter</span>
+      <select id="fw" style="width:auto;min-width:130px">
+        ${["Egal","Sonnig","Regen"].map(w=>`<option ${S.weather===w?"selected":""}>${w}</option>`).join("")}
+      </select>
+    </div>
+    <div class="row between" style="margin-top:11px">
+      <span class="tiny grow">Uhrzeit</span>
+      <b class="money" id="hourOut">${hLabel(hour)}</b>
+    </div>
+    <input type="range" id="fh" min="6" max="26" step="1" value="${hour}"
+           style="width:100%;margin-top:6px;accent-color:var(--brand2)">
+    <div class="row between"><span class="tiny">6 Uhr</span><span class="tiny">2 Uhr nachts</span></div>
+  </div>
+  <div id="fishlist"></div>
+
+  <h2>Angel-Tipps</h2>
+  <div class="card">
+    ${FISH_TIPS.map(t=>`<div style="margin:11px 0">
+      <b style="font-size:14px">${esc(t.n)}</b>
+      <div class="tiny">${esc(t.t)}</div></div>`).join("")}
+  </div>`;
+}
+
+function renderFish(){
+  const el = document.getElementById("fishlist");
+  if(!el) return;
+  const hour = S.hour == null ? 9 : S.hour;
+  const weather = S.weather || "Egal";
+  const sea = S.season;
+
+  // Welche Fische fehlen noch im Gemeinschaftszentrum?
+  const missing = new Set(ALL.filter(i=>!isDone(i)).map(i=>i.de));
+
+  const hit = FISH.filter(f=>{
+    if(f.s.length && !f.s.includes(sea)) return false;
+    if(!fishBites(f, hour)) return false;
+    if(weather === "Sonnig" && f.w === "Regen") return false;
+    if(weather === "Regen" && f.w === "Sonne") return false;
+    return true;
+  }).sort((a,b)=>a.diff-b.diff);
+
+  const normal = hit.filter(f=>!f.leg), legend = hit.filter(f=>f.leg);
+
+  const card = f => `<div class="card tight">
+    <div class="row between">
+      <div class="grow"><b>${esc(f.de)}</b><div class="en">${esc(f.en)}</div></div>
+      <span class="chip ${f.diff>=80?"warn":f.diff<=45?"ok":""}">${f.diff}</span>
+    </div>
+    <div class="tiny" style="margin-top:5px">📍 ${esc(f.loc)}</div>
+    <div>
+      <span class="chip">🕒 ${esc(fishTime(f))}</span>
+      ${f.w?`<span class="chip ${f.w==="Regen"?"rain":"warn"}">${f.w==="Regen"?"🌧 nur Regen":"☀️ nur Sonne"}</span>`:""}
+      ${f.s.length?f.s.map(x=>`<span class="chip">${x}</span>`).join(""):`<span class="chip ok">ganzjährig</span>`}
+      ${missing.has(f.de)?`<span class="chip warn">🏛️ fehlt im Bündel</span>`:""}
+    </div>
+  </div>`;
+
+  el.innerHTML =
+    (normal.length
+      ? `<h2>${normal.length} Fische beißen gerade</h2>` + normal.map(card).join("")
+      : `<div class="card empty">Bei dieser Kombination beißt nichts. Probier eine andere Uhrzeit oder ein anderes Wetter.</div>`)
+    + (legend.length ? `<h2>Legendär – nur einmal pro Spielstand</h2>` + legend.map(f=>`
+        <div class="card tight">
+          <div class="row between">
+            <div class="grow"><b>🏆 ${esc(f.de)}</b><div class="en">${esc(f.en)}</div></div>
+            <span class="chip warn">${f.diff}</span>
+          </div>
+          <div class="tiny" style="margin-top:5px">📍 ${esc(f.loc)}</div>
+          <div><span class="chip">🕒 ${esc(fishTime(f))}</span>
+            ${f.w?`<span class="chip rain">🌧 nur Regen</span>`:""}
+            <span class="chip">${esc(f.leg)}</span></div>
+        </div>`).join("") : "");
 }
 
 /* ---------- Berufe ---------- */
@@ -1484,7 +1647,7 @@ function bindInputs(){
 
 /* Unterseiten von "Mehr" lassen den Mehr-Knopf markiert. */
 const TAB_OF = {home:"home", plan:"plan", cc:"cc", farm:"farm",
-                more:"more", gifts:"more", skill:"more"};
+                more:"more", gifts:"more", fish:"more", skill:"more"};
 
 function render(keepScroll){
   const y = window.scrollY;
@@ -1499,6 +1662,7 @@ function render(keepScroll){
   else if(page==="farm"){ app.innerHTML = viewFarm(); sub.textContent = "Gewinn pro Jahreszeit"; renderFarm(); }
   else if(page==="more"){ app.innerHTML = viewMore(); sub.textContent = "Nachschlagen"; }
   else if(page==="gifts"){ app.innerHTML = viewGifts(); sub.textContent = "Geschenke & Geburtstage"; renderGifts(); }
+  else if(page==="fish"){ app.innerHTML = viewFish(); sub.textContent = "Was beißt gerade?"; renderFish(); }
   else { app.innerHTML = viewSkills(); sub.textContent = "Fähigkeiten & Berufe"; }
 
   bindInputs();
@@ -1540,6 +1704,16 @@ function wire(){
   document.querySelectorAll("[data-go]").forEach(el=>{
     el.onclick = () => { page = el.getAttribute("data-go"); render(); };
   });
+  const fw = document.getElementById("fw");
+  if(fw) fw.onchange = () => { S.weather = fw.value; save(); renderFish(); };
+  const fh = document.getElementById("fh");
+  if(fh) fh.oninput = () => {
+    S.hour = +fh.value;
+    const out = document.getElementById("hourOut");
+    if(out) out.textContent = hLabel(S.hour);
+    renderFish();
+  };
+  if(fh) fh.onchange = () => save();
   const gq = document.getElementById("gq");
   if(gq) gq.oninput = () => { S.gq = gq.value; renderGifts(); };
   const gs = document.getElementById("gs");
