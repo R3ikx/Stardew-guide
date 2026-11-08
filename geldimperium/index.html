@@ -342,10 +342,12 @@ function render(){
 function paint(){
   S.b.forEach((b,i)=>{
     const c = cards[i];
-    const fast = BIZ[i].t < 0.5 || (b.mgr && BIZ[i].t < 2);
-    c.fill.style.width = b.lvl<1 ? "0" : (fast ? "100%" : (b.run||b.mgr ? 100*b.prog : 0)+"%");
+    const fast = BIZ[i].t < 0.5;   // zu schnell für einen sichtbaren Balken
+    const active = b.run || b.mgr;
+    c.fill.style.width = b.lvl<1 ? "0" : (fast ? "100%" : (active ? 100*b.prog : 0)+"%");
     c.txt.textContent = b.lvl<1 ? "" : fast ? fmt(incomeOf(i)/BIZ[i].t)+"/s"
-                       : b.run||b.mgr ? fmt(incomeOf(i)) : "Antippen";
+                       : active ? fmt(incomeOf(i))+" · "+fmtT(Math.max(0,(1-b.prog)*BIZ[i].t))
+                       : "Antippen";
   });
 }
 
