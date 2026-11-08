@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#14181f">
+<title>Geldimperium</title>
+<style>
+:root{
+  --bg:#14181f; --panel:#1f2530; --panel2:#2a3240; --text:#f2f5f9; --mute:#8d99ab;
+  --green:#3ddc84; --green2:#1f9d57; --gold:#ffc83d; --gem:#4cc9ff; --blue:#3b82f6; --red:#ff5d5d;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.3 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif}
+body{padding:env(safe-area-inset-top) 0 calc(90px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+
+/* Kopfzeile */
+.top{position:sticky;top:0;z-index:10;background:linear-gradient(#14181f 80%,#14181f00);padding:10px 12px 14px}
+.row{display:flex;align-items:center;gap:8px}
+.lvl{position:relative;display:flex;align-items:center;flex:1;min-width:0}
+.hex{width:42px;height:42px;background:var(--gold);color:#4a3000;font-weight:800;font-size:20px;display:grid;place-items:center;
+  clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);z-index:1;flex:none}
+.xp{flex:1;height:22px;margin-left:-10px;background:#0d1015;border-radius:0 12px 12px 0;overflow:hidden;position:relative;border:2px solid #3a2f10}
+.xp i{position:absolute;inset:0 auto 0 0;background:linear-gradient(#ffd966,#e0a020);width:0}
+.xp span{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:700;text-shadow:0 1px 2px #000}
+.cur{display:flex;gap:6px;margin-top:8px}
+.chip{flex:1;background:var(--panel);border-radius:12px;padding:6px 8px;display:flex;align-items:center;gap:6px;font-weight:700;min-width:0}
+.chip b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chip.cash{flex:2;color:var(--green)}
+.chip.gold{color:var(--gold)} .chip.gem{color:var(--gem)}
+
+/* Tresor-Szene */
+.vault{margin:4px 12px 12px;height:150px;border-radius:18px;position:relative;overflow:hidden;
+  background:linear-gradient(#27406b,#1b2c4a 60%,#243247 60%);}
+.vault::before{content:"";position:absolute;left:0;right:0;bottom:0;height:40%;
+  background:repeating-conic-gradient(#d9e2f0 0 25%,#bcc8da 0 50%) 0 0/28px 28px;opacity:.9;transform:perspective(200px) rotateX(35deg);transform-origin:bottom}
+.door{position:absolute;right:14px;top:16px;width:92px;height:92px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#c9d3e3,#7c8aa3 70%);border:8px solid var(--gold);box-shadow:0 4px 0 #8a6a10,inset 0 0 0 6px #5b6880}
+.door::after{content:"";position:absolute;inset:30%;border-radius:50%;background:var(--gold);box-shadow:0 0 0 5px #8a6a10}
+.stacks{position:absolute;left:10px;bottom:10px;right:120px;display:flex;flex-wrap:wrap-reverse;gap:3px;align-content:flex-start;max-height:120px;overflow:hidden}
+.st{width:20px;height:14px;background:linear-gradient(#58f09a,#1f9d57);border-radius:3px;border-bottom:3px solid #146b3a;box-shadow:0 1px 0 #0b3d21;position:relative}
+.st::after{content:"$";position:absolute;inset:0;display:grid;place-items:center;font-size:9px;font-weight:800;color:#0d5a30}
+.vt{position:absolute;left:12px;top:8px;font-size:12px;color:#9fb4d8;font-weight:700;letter-spacing:.06em}
+.vps{position:absolute;right:14px;bottom:10px;font-size:13px;font-weight:800;color:var(--green);background:#0d1015aa;padding:3px 8px;border-radius:10px}
+.boostbar{position:absolute;left:0;top:0;height:4px;background:var(--gem);width:0}
+
+/* Kaufmodus */
+.modes{display:flex;gap:6px;margin:0 12px 10px}
+.modes button{flex:1;background:var(--panel);padding:8px 0;border-radius:10px;font-weight:700;color:var(--mute)}
+.modes button.on{background:var(--blue);color:#fff}
+
+/* Geschäfte */
+.list{padding:0 12px;display:flex;flex-direction:column;gap:10px}
+.biz{background:var(--panel);border-radius:16px;padding:10px;display:grid;grid-template-columns:56px 1fr;gap:10px;position:relative}
+.biz.locked{opacity:.45;filter:grayscale(.8)}
+.ico{width:56px;height:56px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;font-size:30px;position:relative}
+.ico small{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:var(--gold);color:#4a3000;font-weight:800;font-size:11px;padding:0 6px;border-radius:8px}
+.bm{min-width:0}
+.bt{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
+.bt b{font-size:16px}
+.bt span{font-size:12px;color:var(--mute);white-space:nowrap}
+.bar{height:20px;background:#0d1015;border-radius:10px;margin:6px 0;overflow:hidden;position:relative;cursor:pointer}
+.bar i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(var(--green),var(--green2))}
+.bar span{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800;text-shadow:0 1px 2px #000a}
+.ms{height:4px;background:#0d1015;border-radius:2px;overflow:hidden;margin-bottom:6px}
+.ms i{display:block;height:100%;background:var(--gold)}
+.acts{display:flex;gap:6px}
+.buy{flex:1;background:var(--blue);border-radius:10px;padding:7px 8px;font-weight:800;display:flex;justify-content:space-between;gap:6px;align-items:center}
+.buy small{font-weight:600;opacity:.85}
+.buy:disabled{background:#3a4354;color:#7c879a}
+.mgr{background:var(--gold);color:#3a2800;border-radius:10px;padding:7px 10px;font-weight:800;white-space:nowrap}
+.mgr:disabled{background:#3a4354;color:#7c879a}
+.mgr.has{background:var(--green2);color:#fff}
+
+/* Neustart */
+.card{margin:14px 12px 0;background:var(--panel);border-radius:16px;padding:14px}
+.card h3{margin:0 0 6px;font-size:17px}
+.card p{margin:4px 0 10px;color:var(--mute);font-size:14px}
+.big{width:100%;padding:12px;border-radius:12px;font-weight:800;background:var(--gold);color:#3a2800}
+.big:disabled{background:#3a4354;color:#7c879a}
+.big.gem{background:var(--gem);color:#02283a}
+
+/* Koffer + Toast */
+.case{position:fixed;z-index:20;font-size:44px;background:none;animation:bob 1s ease-in-out infinite;filter:drop-shadow(0 4px 6px #000a)}
+@keyframes bob{50%{transform:translateY(-8px) rotate(6deg)}}
+.pop{position:fixed;z-index:30;pointer-events:none;font-weight:800;color:var(--green);text-shadow:0 2px 3px #000;animation:up 1s ease-out forwards}
+@keyframes up{to{transform:translateY(-50px);opacity:0}}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#000d;padding:10px 16px;border-radius:14px;z-index:40;font-weight:700;max-width:90%;text-align:center}
+.foot{text-align:center;color:var(--mute);font-size:12px;margin:18px 12px}
+.foot a{color:var(--mute)}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="row">
+    <div class="lvl"><div class="hex" id="lvl">1</div><div class="xp"><i id="xpf"></i><span id="xpt"></span></div></div>
+  </div>
+  <div class="cur">
+    <div class="chip cash">💵 <b id="cash">0</b></div>
+    <div class="chip gold">🪙 <b id="gold">0</b></div>
+    <div class="chip gem">💎 <b id="gems">0</b></div>
+  </div>
+</div>
+
+<div class="vault">
+  <div class="boostbar" id="boostbar"></div>
+  <div class="vt">TRESORRAUM</div>
+  <div class="stacks" id="stacks"></div>
+  <div class="door"></div>
+  <div class="vps" id="vps">0 / Sek.</div>
+</div>
+
+<div class="modes" id="modes">
+  <button data-m="1" class="on">x1</button>
+  <button data-m="10">x10</button>
+  <button data-m="100">x100</button>
+  <button data-m="0">Max</button>
+</div>
+
+<div class="list" id="list"></div>
+
+<div class="card">
+  <h3>⚡ Boost</h3>
+  <p>Doppeltes Einkommen für 3 Minuten.</p>
+  <button class="big gem" id="boostBtn">Starten – 5 💎</button>
+</div>
+
+<div class="card">
+  <h3>🔁 Neustart</h3>
+  <p id="prText"></p>
+  <button class="big" id="prBtn">Neustart</button>
+</div>
+
+<div class="foot">Geldimperium · Fortschritt wird automatisch gespeichert<br><a href="#" id="reset">Spielstand löschen</a></div>
+
+<script>
+"use strict";
+const BIZ = [
+  {n:"Limonadenstand", i:"🍋", c:4,         k:1.07, inc:1,        t:1,    m:1e3},
+  {n:"Markt",          i:"🛒", c:60,        k:1.15, inc:60,       t:3,    m:15e3},
+  {n:"Bäckerei",       i:"🥐", c:720,       k:1.14, inc:540,      t:6,    m:1e5},
+  {n:"Autohaus",       i:"🚗", c:8640,      k:1.13, inc:4320,     t:12,   m:5e5},
+  {n:"Tech-Büro",      i:"💻", c:103680,    k:1.12, inc:51840,    t:24,   m:1.2e6},
+  {n:"Bank",           i:"🏦", c:1244160,   k:1.11, inc:622080,   t:96,   m:1e7},
+  {n:"Casino",         i:"🎰", c:14929920,  k:1.10, inc:7464960,  t:384,  m:1.1e8},
+  {n:"Raumfahrt",      i:"🚀", c:179159040, k:1.09, inc:89579520, t:1536, m:1.3e9},
+];
+const MILES = [25,50,100,200,300,400,500,600,700,800,900,1000];
+const GOLD_BONUS = 0.05;       // +5 % Einkommen pro Gold
+const PRESTIGE_DIV = 1e7;      // Gold = floor(sqrt(Gesamt / PRESTIGE_DIV))
+const BOOST_COST = 5, BOOST_MS = 180000;
+const KEY = "geldimperium.v1";
+
+const fresh = () => ({
+  cash:10, gems:5, gold:0, level:1, xp:0, run:0, resets:0, boostUntil:0, last:Date.now(),
+  b:BIZ.map(()=>({lvl:0, mgr:false, prog:0, run:false})),
+});
+let S = fresh(), mode = 1;
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw){
+      const d = JSON.parse(raw);
+      if(d && Array.isArray(d.b) && d.b.length===BIZ.length) S = Object.assign(fresh(), d);
+    }
+  }catch(e){}
+}
+let saveT = 0;
+function save(force){
+  const now = Date.now();
+  if(!force && now-saveT < 3000) return;
+  saveT = now; S.last = now;
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
+}
+
+/* ---------- Hilfsfunktionen ---------- */
+const SUF = ["","K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];
+function fmt(n){
+  if(!isFinite(n)) return "∞";
+  if(n < 1000) return n < 10 && n%1 ? n.toFixed(2) : Math.floor(n).toString();
+  const i = Math.floor(Math.log10(n)/3);
+  if(i >= SUF.length) return n.toExponential(2).replace("+","");
+  const v = n/Math.pow(1000,i);
+  return v.toFixed(v<10?2:v<100?1:0)+SUF[i];
+}
+function fmtT(s){
+  if(s < 60) return (s<10 && s%1 ? s.toFixed(1) : Math.round(s))+" s";
+  if(s < 3600) return Math.floor(s/60)+" min "+Math.round(s%60)+" s";
+  return Math.floor(s/3600)+" h "+Math.round((s%3600)/60)+" min";
+}
+const $ = id => document.getElementById(id);
+
+/* ---------- Spielregeln ---------- */
+const boosted = () => Date.now() < S.boostUntil;
+const globalMult = () => (1 + GOLD_BONUS*S.gold) * (boosted()?2:1);
+const mileCount = l => MILES.filter(m => l >= m).length;
+const incomeOf = (i, lvl=S.b[i].lvl) => BIZ[i].inc * lvl * Math.pow(2, mileCount(lvl)) * globalMult();
+const costOf = (i, n) => {           // Kosten für n Käufe ab aktuellem Level
+  const B = BIZ[i], l = S.b[i].lvl;
+  return B.c*Math.pow(B.k,l)*(Math.pow(B.k,n)-1)/(B.k-1);
+};
+function maxAffordable(i){
+  const B = BIZ[i], l = S.b[i].lvl, first = B.c*Math.pow(B.k,l);
+  if(S.cash < first) return 0;
+  return Math.floor(Math.log(S.cash*(B.k-1)/first+1)/Math.log(B.k));
+}
+function buyCount(i){
+  const mx = maxAffordable(i);
+  return mode===0 ? Math.max(1,mx) : mode;
+}
+const xpNeed = () => 8 + S.level*3;
+const ips = () => S.b.reduce((a,b,i)=> a + (b.lvl && (b.mgr) ? incomeOf(i)/BIZ[i].t : 0), 0);
+const prestigeGold = () => Math.floor(Math.sqrt(S.run/PRESTIGE_DIV));
+
+function earn(x){ S.cash += x; S.run += x; }
+function addXp(n){
+  S.xp += n;
+  while(S.xp >= xpNeed()){
+    S.xp -= xpNeed(); S.level++; S.gems += 3;
+    toast("⭐ Stufe "+S.level+"! +3 💎");
+  }
+}
+
+function buy(i){
+  const n = buyCount(i);
+  if(n < 1) return;
+  const c = costOf(i,n);
+  if(S.cash < c) return;
+  S.cash -= c;
+  const b = S.b[i], before = mileCount(b.lvl);
+  b.lvl += n;
+  if(mileCount(b.lvl) > before) toast("🎉 "+BIZ[i].n+": Einkommen x2!");
+  addXp(n);
+  save(true); render();
+}
+function hire(i){
+  const b = S.b[i];
+  if(b.mgr || b.lvl<1 || S.cash < BIZ[i].m) return;
+  S.cash -= BIZ[i].m; b.mgr = true; b.run = true;
+  save(true); render();
+}
+function tap(i, ev){
+  const b = S.b[i];
+  if(b.lvl<1 || b.run) return;
+  b.run = true;
+}
+
+/* ---------- Zeitschritt ---------- */
+function advance(dt, offline){
+  let total = 0;
+  S.b.forEach((b,i)=>{
+    if(b.lvl<1) return;
+    if(!b.run && !b.mgr) return;
+    if(offline && !b.mgr) return;
+    const T = BIZ[i].t;
+    b.prog += dt/T;
+    if(b.prog >= 1){
+      const times = b.mgr ? Math.floor(b.prog) : 1;
+      total += incomeOf(i)*times;
+      if(b.mgr){ b.prog -= times; } else { b.prog = 0; b.run = false; }
+    }
+  });
+  if(total>0) earn(total);
+  return total;
+}
+
+/* ---------- Oberfläche ---------- */
+const listEl = $("list"), cards = [];
+BIZ.forEach((B,i)=>{
+  const el = document.createElement("div");
+  el.className = "biz";
+  el.innerHTML = `
+    <div class="ico">${B.i}<small>0</small></div>
+    <div class="bm">
+      <div class="bt"><b>${B.n}</b><span class="rate"></span></div>
+      <div class="bar"><i></i><span></span></div>
+      <div class="ms"><i></i></div>
+      <div class="acts">
+        <button class="buy"><span class="bl"></span><small class="bc"></small></button>
+        <button class="mgr">👔</button>
+      </div>
+    </div>`;
+  listEl.appendChild(el);
+  const q = s => el.querySelector(s);
+  const c = {el, lvl:q(".ico small"), rate:q(".rate"), fill:q(".bar i"), txt:q(".bar span"),
+             ms:q(".ms i"), buy:q(".buy"), bl:q(".bl"), bc:q(".bc"), mgr:q(".mgr")};
+  q(".bar").addEventListener("click", ev=>tap(i,ev));
+  q(".ico").addEventListener("click", ev=>tap(i,ev));
+  c.buy.addEventListener("click", ()=>buy(i));
+  c.mgr.addEventListener("click", ()=>hire(i));
+  cards.push(c);
+});
+
+let lastStacks = -1;
+function render(){
+  $("lvl").textContent = S.level;
+  $("xpf").style.width = (100*S.xp/xpNeed())+"%";
+  $("xpt").textContent = S.xp+"/"+xpNeed();
+  $("cash").textContent = fmt(S.cash);
+  $("gold").textContent = fmt(S.gold);
+  $("gems").textContent = fmt(S.gems);
+  $("vps").textContent = fmt(ips())+" / Sek.";
+  const ns = Math.min(40, Math.floor(Math.log10(S.cash+1)*4));
+  if(ns !== lastStacks){
+    lastStacks = ns;
+    $("stacks").innerHTML = '<div class="st"></div>'.repeat(ns);
+  }
+  BIZ.forEach((B,i)=>{
+    const b = S.b[i], c = cards[i];
+    const prevOk = i===0 || S.b[i-1].lvl>0;
+    c.el.classList.toggle("locked", b.lvl<1 && !(S.cash >= B.c) && !prevOk);
+    c.lvl.textContent = b.lvl;
+    const n = buyCount(i), cost = costOf(i,n);
+    c.bl.textContent = (b.lvl? "Kaufen":"Eröffnen")+" x"+n;
+    c.bc.textContent = "💵 "+fmt(cost);
+    c.buy.disabled = S.cash < cost;
+    c.rate.textContent = b.lvl ? fmt(incomeOf(i))+" / "+fmtT(B.t) : "Preis "+fmt(B.c);
+    const nxt = MILES.find(m=>m>b.lvl);
+    const prv = [...MILES].reverse().find(m=>m<=b.lvl) || 0;
+    c.ms.style.width = nxt ? (100*(b.lvl-prv)/(nxt-prv))+"%" : "100%";
+    c.mgr.className = "mgr"+(b.mgr?" has":"");
+    c.mgr.textContent = b.mgr ? "👔 ✓" : "👔 "+fmt(B.m);
+    c.mgr.disabled = !b.mgr && (b.lvl<1 || S.cash < B.m);
+  });
+  const g = prestigeGold();
+  $("prText").innerHTML = S.gold
+    ? `Du hast <b>${fmt(S.gold)} 🪙</b> (+${Math.round(S.gold*GOLD_BONUS*100)} % Einkommen). Ein Neustart setzt Geschäfte und Geld zurück, bringt aber Gold.`
+    : `Setze Geschäfte und Geld zurück und erhalte dafür dauerhaft Gold (+${GOLD_BONUS*100} % Einkommen pro 🪙).`;
+  $("prBtn").textContent = g>0 ? `Neustart – +${fmt(g)} 🪙` : `Noch zu wenig verdient (${fmt(S.run)} / ${fmt(PRESTIGE_DIV)})`;
+  $("prBtn").disabled = g<1;
+  $("boostBtn").disabled = !boosted() && S.gems < BOOST_COST;
+  $("boostBtn").textContent = boosted() ? "Läuft … noch "+fmtT((S.boostUntil-Date.now())/1000)
+                                         : "Starten – "+BOOST_COST+" 💎";
+  $("boostbar").style.width = boosted() ? (100*(S.boostUntil-Date.now())/BOOST_MS)+"%" : "0";
+}
+
+function paint(){
+  S.b.forEach((b,i)=>{
+    const c = cards[i];
+    const fast = BIZ[i].t < 0.5 || (b.mgr && BIZ[i].t < 2);
+    c.fill.style.width = b.lvl<1 ? "0" : (fast ? "100%" : (b.run||b.mgr ? 100*b.prog : 0)+"%");
+    c.txt.textContent = b.lvl<1 ? "" : fast ? fmt(incomeOf(i)/BIZ[i].t)+"/s"
+                       : b.run||b.mgr ? fmt(incomeOf(i)) : "Antippen";
+  });
+}
+
+$("modes").addEventListener("click", e=>{
+  const m = e.target.dataset.m; if(m===undefined) return;
+  mode = +m;
+  [...$("modes").children].forEach(x=>x.classList.toggle("on", x.dataset.m===m));
+  render();
+});
+$("boostBtn").addEventListener("click", ()=>{
+  if(boosted() || S.gems<BOOST_COST) return;
+  S.gems -= BOOST_COST; S.boostUntil = Date.now()+BOOST_MS; save(true); render();
+});
+$("prBtn").addEventListener("click", ()=>{
+  const g = prestigeGold();
+  if(g<1 || !confirm("Neustart für +"+g+" Gold? Geschäfte, Manager und Geld werden zurückgesetzt.")) return;
+  const keep = {gems:S.gems, gold:S.gold+g, level:S.level, xp:S.xp, resets:S.resets+1, boostUntil:S.boostUntil};
+  S = Object.assign(fresh(), keep);
+  save(true); render(); toast("🪙 +"+g+" Gold – viel Erfolg beim neuen Anlauf!");
+});
+$("reset").addEventListener("click", e=>{
+  e.preventDefault();
+  if(confirm("Spielstand wirklich komplett löschen?")){
+    try{ localStorage.removeItem(KEY); }catch(_){}
+    S = fresh(); render();
+  }
+});
+
+/* ---------- Toast & Bonus-Koffer ---------- */
+let toastT;
+function toast(msg){
+  document.querySelectorAll(".toast").forEach(x=>x.remove());
+  const t = document.createElement("div"); t.className="toast"; t.textContent=msg;
+  document.body.appendChild(t); clearTimeout(toastT); toastT = setTimeout(()=>t.remove(), 3500);
+}
+function spawnCase(){
+  const el = document.createElement("button");
+  el.className = "case"; el.textContent = "💼";
+  el.style.left = (10+Math.random()*70)+"%";
+  el.style.top  = (25+Math.random()*50)+"%";
+  el.addEventListener("click", ()=>{
+    if(Math.random()<0.3){ S.gems += 2; toast("💼 Bonus: +2 💎"); }
+    else{
+      const v = Math.max(100, ips()*120);
+      earn(v); toast("💼 Bonus: +"+fmt(v)+" 💵");
+    }
+    el.remove(); render(); save(true);
+  });
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 12000);
+}
+function scheduleCase(){ setTimeout(()=>{ spawnCase(); scheduleCase(); }, 45000+Math.random()*45000); }
+
+/* ---------- Start ---------- */
+load();
+const away = Math.min((Date.now()-S.last)/1000, 8*3600);
+if(away > 30){
+  const gain = advance(away, true);
+  // Offline-Fortschritt vereinfachen: Fortschrittsbalken nicht verschieben
+  if(gain>0) setTimeout(()=>toast("😴 Während du weg warst: +"+fmt(gain)+" 💵"), 400);
+}
+render(); scheduleCase();
+
+let prev = performance.now(), acc = 0;
+function frame(now){
+  const dt = Math.min((now-prev)/1000, 1); prev = now; acc += dt;
+  advance(dt, false);
+  paint();
+  if(acc >= 0.25){ acc = 0; render(); save(); }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+document.addEventListener("visibilitychange", ()=>{
+  if(document.hidden) save(true);
+  else{
+    const gone = Math.min((Date.now()-S.last)/1000, 8*3600);
+    prev = performance.now();
+    if(gone>5){ const g = advance(gone, true); if(g>0) toast("😴 Zwischenzeitlich: +"+fmt(g)+" 💵"); }
+  }
+});
+</script>
+</body>
+</html>
