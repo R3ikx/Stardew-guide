@@ -284,6 +284,9 @@ const ISL=[
   {n:"Wolkenstadt", col:["#ffffff","#c9b8ff","#f0e9ff"], unlock:1e26, pos:["6%","12px"], biz:gen(2.5e17,[
     ["Wolkenbäcker","cloudbread"],["Regenbogenwerk","rainbow"],["Luftschiffwerft","airship"],["Sternwarte","observatory"],["Himmelsbank","skybank"],["Wolkenpalast","palace"]])},
 ];
+/* Wartezeiten kürzen: Einkommen pro Sekunde bleibt gleich, es kommt nur öfter in kleineren Portionen */
+const TCAP=[1,2,4,6,10,15,20,30,40,60];
+ISL.forEach(I=>I.biz.forEach((B,i)=>{ const t=Math.min(B.t,TCAP[i]); B.inc*=t/B.t; B.t=t; }));
 const MILES=[25,50,100,200,300,400,500,600,700,800,900,1000];
 const PRESTIGE_DIV=1e7, BOOST_COST=5, BOOST_MS=180000, PULL_COST=10, CARD_MAX=5;
 const WORKER_COSTS=[5,10,20,40,80], GIFT=[2,3,4,5,6,8,10], UP_MAX=5;
