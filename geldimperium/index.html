@@ -11,15 +11,21 @@
 :root{
   --bg:#14181f; --panel:#1f2530; --panel2:#2a3240; --text:#f2f5f9; --mute:#8d99ab;
   --green:#3ddc84; --green2:#1f9d57; --gold:#ffc83d; --gem:#4cc9ff; --blue:#3b82f6; --red:#ff5d5d;
+  --v1:#27406b; --v2:#1b2c4a; --vf:#243247; --door1:#c9d3e3; --door2:#7c8aa3; --rim:#ffc83d; --stack1:#58f09a; --stack2:#1f9d57;
 }
+[data-theme=neon]{--bg:#0d0b1a;--panel:#1a1633;--panel2:#272047;--green:#36f1cd;--green2:#0fa38a;--blue:#8b5cf6;--v1:#2a1a55;--v2:#170f38;--vf:#221a44;--door1:#c8c2ff;--door2:#6d5fd0;--rim:#36f1cd;--stack1:#7ffbe5;--stack2:#0fa38a}
+[data-theme=gold]{--bg:#1c150a;--panel:#2a2112;--panel2:#3a2e19;--green:#ffcf4a;--green2:#c99a14;--blue:#d97706;--v1:#5a3a0a;--v2:#3a2406;--vf:#4a3612;--door1:#fff0b0;--door2:#c99a14;--rim:#fff0b0;--stack1:#ffe27a;--stack2:#c99a14}
+[data-theme=rose]{--bg:#1f1418;--panel:#301e25;--panel2:#42293a;--green:#ff8fab;--green2:#d6336c;--blue:#7c5cff;--v1:#5a2a4a;--v2:#3a1a30;--vf:#4a2640;--door1:#ffd3e0;--door2:#c0638a;--rim:#ff8fab;--stack1:#ffb3c7;--stack2:#d6336c}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 [hidden]{display:none!important}
 html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.3 -apple-system,system-ui,"Segoe UI",Roboto,sans-serif}
 body{padding:env(safe-area-inset-top) 0 calc(84px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
 button{font:inherit;color:inherit;border:0;cursor:pointer}
+.ic{display:block;width:100%;height:100%}
+.mi{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.22em}
 
 /* Kopfzeile */
-.top{position:sticky;top:0;z-index:10;background:linear-gradient(#14181f 80%,#14181f00);padding:10px 12px 14px}
+.top{position:sticky;top:0;z-index:10;background:linear-gradient(var(--bg) 80%,transparent);padding:10px 12px 14px}
 .row{display:flex;align-items:center;gap:8px}
 .lvl{position:relative;display:flex;align-items:center;flex:1;min-width:0}
 .hex{width:42px;height:42px;background:var(--gold);color:#4a3000;font-weight:800;font-size:20px;display:grid;place-items:center;
@@ -29,32 +35,34 @@ button{font:inherit;color:inherit;border:0;cursor:pointer}
 .xp span{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:700;text-shadow:0 1px 2px #000}
 .cur{display:flex;gap:6px;margin-top:8px}
 .chip{flex:1;background:var(--panel);border-radius:12px;padding:6px 8px;display:flex;align-items:center;gap:6px;font-weight:700;min-width:0}
+.chip .mi{flex:none;width:22px;height:22px;vertical-align:0}
 .chip b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .chip.cash{flex:2;color:var(--green)}
 .chip.gold{color:var(--gold)} .chip.gem{color:var(--gem)}
 
 /* Tresor-Szene */
 .vault{margin:4px 12px 12px;height:150px;border-radius:18px;position:relative;overflow:hidden;
-  background:linear-gradient(#27406b,#1b2c4a 60%,#243247 60%);}
+  background:linear-gradient(var(--v1),var(--v2) 60%,var(--vf) 60%);}
 .vault::before{content:"";position:absolute;left:0;right:0;bottom:0;height:40%;
-  background:repeating-conic-gradient(#d9e2f0 0 25%,#bcc8da 0 50%) 0 0/28px 28px;opacity:.9;transform:perspective(200px) rotateX(35deg);transform-origin:bottom}
+  background:repeating-conic-gradient(#d9e2f0 0 25%,#bcc8da 0 50%) 0 0/28px 28px;opacity:.55;transform:perspective(200px) rotateX(35deg);transform-origin:bottom}
 .door{position:absolute;right:14px;top:16px;width:92px;height:92px;border-radius:50%;
-  background:radial-gradient(circle at 40% 35%,#c9d3e3,#7c8aa3 70%);border:8px solid var(--gold);box-shadow:0 4px 0 #8a6a10,inset 0 0 0 6px #5b6880}
-.door::after{content:"";position:absolute;inset:30%;border-radius:50%;background:var(--gold);box-shadow:0 0 0 5px #8a6a10}
+  background:radial-gradient(circle at 40% 35%,var(--door1),var(--door2) 70%);border:8px solid var(--rim);box-shadow:0 4px 0 #0006,inset 0 0 0 6px #0003}
+.door::after{content:"";position:absolute;inset:30%;border-radius:50%;background:var(--rim);box-shadow:0 0 0 5px #0004}
 .stacks{position:absolute;left:10px;bottom:10px;right:120px;display:flex;flex-wrap:wrap-reverse;gap:3px;align-content:flex-start;max-height:120px;overflow:hidden}
-.st{width:20px;height:14px;background:linear-gradient(#58f09a,#1f9d57);border-radius:3px;border-bottom:3px solid #146b3a;box-shadow:0 1px 0 #0b3d21;position:relative}
-.st::after{content:"$";position:absolute;inset:0;display:grid;place-items:center;font-size:9px;font-weight:800;color:#0d5a30}
+.st{width:20px;height:14px;background:linear-gradient(var(--stack1),var(--stack2));border-radius:3px;border-bottom:3px solid #0004;box-shadow:0 1px 0 #0006;position:relative}
+.st::after{content:"$";position:absolute;inset:0;display:grid;place-items:center;font-size:9px;font-weight:800;color:#0007}
 .vt{position:absolute;left:12px;top:8px;font-size:12px;color:#9fb4d8;font-weight:700;letter-spacing:.06em}
 .vps{position:absolute;right:14px;bottom:10px;font-size:13px;font-weight:800;color:var(--green);background:#0d1015aa;padding:3px 8px;border-radius:10px;z-index:2}
 .boostbar{position:absolute;left:0;top:0;height:4px;background:var(--gem);width:0;z-index:2}
 .workers{position:absolute;inset:0;pointer-events:none;z-index:1}
-.wk{position:absolute;font-size:22px;animation:walk 6s linear infinite alternate;white-space:nowrap}
-.wk i{font-style:normal;font-size:14px;margin-left:-4px}
+.wk{position:absolute;display:flex;align-items:flex-end;animation:walk 6s linear infinite alternate;white-space:nowrap}
+.wk .ic{width:28px;height:28px}.wk .ic+.ic{width:14px;height:14px;margin-left:-4px}
 @keyframes walk{from{left:42%}to{left:62%}}
 
 /* Kaufmodus & Inselwahl */
 .chips{display:flex;gap:6px;margin:0 12px 10px;overflow-x:auto}
-.chips button{background:var(--panel);padding:7px 12px;border-radius:999px;font-weight:700;white-space:nowrap;color:var(--mute)}
+.chips button{background:var(--panel);padding:6px 12px 6px 8px;border-radius:999px;font-weight:700;white-space:nowrap;color:var(--mute);display:flex;align-items:center;gap:6px}
+.chips button .ic{width:20px;height:20px}
 .chips button.on{background:var(--green2);color:#fff}
 .modes{display:flex;gap:6px;margin:0 12px 10px}
 .modes button{flex:1;background:var(--panel);padding:8px 0;border-radius:10px;font-weight:700;color:var(--mute)}
@@ -64,9 +72,11 @@ button{font:inherit;color:inherit;border:0;cursor:pointer}
 .list{padding:0 12px;display:flex;flex-direction:column;gap:10px}
 .biz{background:var(--panel);border-radius:16px;padding:10px;display:grid;grid-template-columns:56px 1fr;gap:10px;position:relative}
 .biz.locked{opacity:.45;filter:grayscale(.8)}
-.ico{width:56px;height:56px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;font-size:30px;position:relative;cursor:pointer}
+.ico{width:56px;height:56px;border-radius:14px;background:var(--panel2);display:grid;place-items:center;position:relative;cursor:pointer}
+.ico .ic{width:42px;height:42px}
 .ico small{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);background:var(--gold);color:#4a3000;font-weight:800;font-size:11px;padding:0 6px;border-radius:8px}
-.ico em{position:absolute;top:-6px;right:-6px;font-size:14px;font-style:normal}
+.ico em{position:absolute;top:-6px;right:-8px;font-size:10px;font-style:normal;font-weight:800;color:#4a3000;background:var(--gem);border-radius:8px;padding:0 4px}
+.ico em:empty{display:none}
 .bm{min-width:0}
 .bt{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
 .bt b{font-size:16px}
@@ -77,8 +87,9 @@ button{font:inherit;color:inherit;border:0;cursor:pointer}
 .ms{height:4px;background:#0d1015;border-radius:2px;overflow:hidden;margin-bottom:6px}
 .ms i{display:block;height:100%;background:var(--gold)}
 .acts{display:flex;gap:6px}
-.buy{flex:1;background:var(--blue);border-radius:10px;padding:7px 8px;font-weight:800;display:flex;justify-content:space-between;gap:6px;align-items:center}
-.buy small{font-weight:600;opacity:.85}
+.buy{flex:1;min-width:0;background:var(--blue);border-radius:10px;padding:7px 8px;font-size:14px;font-weight:800;display:flex;justify-content:space-between;gap:6px;align-items:center;white-space:nowrap}
+.buy small{font-size:12px;font-weight:600;opacity:.9}
+.mgr{font-size:14px}
 .buy:disabled{background:#3a4354;color:#7c879a}
 .mgr{background:var(--gold);color:#3a2800;border-radius:10px;padding:7px 10px;font-weight:800;white-space:nowrap}
 .mgr:disabled{background:#3a4354;color:#7c879a}
@@ -95,24 +106,42 @@ button{font:inherit;color:inherit;border:0;cursor:pointer}
 .small{padding:8px 12px;border-radius:10px;font-weight:800;background:var(--gold);color:#3a2800;white-space:nowrap}
 .small:disabled{background:#3a4354;color:#7c879a}
 .small.gem{background:var(--gem);color:#02283a}
+.small.gr{background:var(--green2);color:#fff}
 .page{padding-top:2px}
 .h1{margin:6px 14px 10px;font-size:22px;font-weight:800}
 
 /* Karte */
-.map{position:relative;height:490px;margin:0 12px;border-radius:20px;overflow:hidden;
+.mapinfo{margin:0 12px 8px;display:flex;gap:6px;flex-wrap:wrap}
+.mapinfo span{background:var(--panel);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;color:var(--mute)}
+.map{position:relative;height:800px;margin:0 12px;border-radius:20px;overflow:hidden;
   background:radial-gradient(circle at 30% 20%,#2a86c2,#164a78 75%)}
-.deco{position:absolute;font-size:22px;opacity:.75;animation:drift 8s ease-in-out infinite alternate}
+.deco{position:absolute;width:30px;height:30px;opacity:.7;animation:drift 8s ease-in-out infinite alternate;pointer-events:none}
 @keyframes drift{to{transform:translate(22px,-8px)}}
-.isl{position:absolute;width:44%;text-align:center;cursor:pointer}
-.blob{height:128px;border:8px solid #e8d48f;border-radius:48% 52% 45% 55%/55% 45% 55% 45%;
-  background:radial-gradient(circle at 40% 35%,#6fdc7a,#2f9d4e 80%);display:flex;align-items:center;justify-content:center;padding:6px;box-shadow:0 10px 18px #0007}
+.ship{position:absolute;width:38px;height:38px;animation:sail 28s linear infinite;pointer-events:none;z-index:3;filter:drop-shadow(0 3px 3px #0006)}
+@keyframes sail{from{left:-12%}to{left:106%}}
+.fx{position:absolute;inset:0;pointer-events:none;z-index:4}
+.night .fx.n{background:radial-gradient(circle at 50% 30%,#0a103000,#0a1030cc);}
+.fx.n i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;animation:tw 2.4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.2}}
+.fx.sun{background:radial-gradient(circle at 88% 6%,#fff6b055,transparent 40%)}
+.fx.rain{background:repeating-linear-gradient(105deg,transparent 0 14px,#cfe8ff44 14px 15px);background-size:40px 40px;animation:rain .5s linear infinite;opacity:.6}
+@keyframes rain{to{background-position:-12px 40px}}
+.cl{position:absolute;width:90px;height:90px;opacity:.55;animation:sail 60s linear infinite;pointer-events:none;z-index:4}
+.isl{position:absolute;width:44%;text-align:center;cursor:pointer;z-index:2}
+.blob{height:128px;border:8px solid var(--rim2,#e8d48f);border-radius:48% 52% 45% 55%/55% 45% 55% 45%;
+  background:radial-gradient(circle at 40% 35%,var(--b1,#6fdc7a),var(--b2,#2f9d4e) 80%);display:flex;align-items:center;justify-content:center;padding:6px;box-shadow:0 10px 18px #0007}
 .isl.lock .blob{filter:grayscale(1) brightness(.55)}
 .isl.sel .blob{outline:3px solid var(--gold);outline-offset:4px}
-.owned{display:flex;flex-wrap:wrap;gap:1px;justify-content:center;font-size:21px;line-height:1.1}
-.owned em{font-size:13px;opacity:.8}
-.isl .nm{font-weight:800;margin-top:7px;text-shadow:0 2px 3px #000}
+.owned{display:flex;flex-wrap:wrap;gap:0;justify-content:center;align-items:center}
+.owned .ic{width:26px;height:26px}
+.owned em{font-size:13px;opacity:.8;font-style:normal}
+.owned .lk{width:34px;height:34px;opacity:.9}
+.isl .nm{font-weight:800;margin-top:7px;text-shadow:0 2px 3px #000;display:flex;gap:6px;align-items:center;justify-content:center}
+.isl .nm .ic{width:20px;height:20px}
 .isl .sub{font-size:12px;font-weight:700;background:#000b;border-radius:10px;display:inline-block;padding:2px 8px;margin-top:2px}
 .sub.no{color:var(--red)} .sub.yes{color:var(--green)}
+.cf2{position:absolute;width:20px;height:20px;top:40px;pointer-events:none;animation:flo 3.4s ease-out infinite;opacity:0}
+@keyframes flo{0%{transform:translateY(20px) scale(.6);opacity:0}15%{opacity:1}100%{transform:translateY(-34px) scale(1);opacity:0}}
 
 /* Aufgaben / Erfolge */
 .task{padding:8px 0;border-top:1px solid #2d3646}
@@ -125,30 +154,44 @@ button{font:inherit;color:inherit;border:0;cursor:pointer}
 .task.ok .pb i{background:linear-gradient(var(--green),var(--green2))}
 .pb span{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;font-weight:800;text-shadow:0 1px 2px #000a}
 
-/* Shop / Mehr */
+/* Shop / Mehr / Sammlung */
 .line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid #2d3646}
 .line:first-of-type{border-top:0}
-.line div{min-width:0;font-size:14px}
+.line>div{min-width:0;font-size:14px}
 .line small{display:block;color:var(--mute)}
+.line>div>.ic{display:inline-block;width:26px;height:26px;vertical-align:middle;margin-right:4px}
+.big.gem .mi,.small.gem .mi{filter:brightness(.4) saturate(1.5)}
+.line .btns{display:flex;flex-direction:column;gap:4px;align-items:stretch}
+.pips{display:inline-flex;gap:3px;margin-left:6px;vertical-align:middle}
+.pips i{width:9px;height:9px;border-radius:50%;background:#0d1015;display:block}
+.pips i.on{background:var(--gold)}
 .stat{display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid #2d3646;font-size:14px}
 .stat:first-of-type{border-top:0}
 .stat b{color:var(--green)}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:8px 0 12px}
+.tile{background:var(--panel2);border-radius:14px;padding:6px 4px 8px;text-align:center;border:2px solid var(--rc,#8d99ab);min-width:0}
+.tile .ic{width:100%;height:auto;aspect-ratio:1}
+.tile b{display:block;font-size:11px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tile small{font-size:10px;color:var(--mute)}
+.tile.off{border-color:#3a4354;opacity:.4;filter:grayscale(1)}
+.sw{display:inline-flex;gap:4px;margin-right:6px;vertical-align:middle}
+.sw i{width:16px;height:16px;border-radius:50%;display:block;border:1px solid #fff3}
 
 /* Navigation */
 nav{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;justify-content:center;
-  padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:linear-gradient(#14181f00,#14181f 30%)}
-.navin{display:flex;gap:4px;width:100%;max-width:540px;background:#222a37;border-radius:22px;padding:5px;box-shadow:0 4px 20px #000a}
-.navin button{flex:1;background:none;border-radius:16px;padding:6px 0 4px;font-size:11px;font-weight:700;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:1px}
-.navin button span{font-size:20px;line-height:1.1}
-.navin button.on{background:#334054;color:#fff}
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 30%)}
+.navin{display:flex;gap:2px;width:100%;max-width:540px;background:var(--panel);border-radius:22px;padding:5px;box-shadow:0 4px 20px #000a}
+.navin button{flex:1;min-width:0;background:none;border-radius:16px;padding:6px 0 4px;font-size:10px;font-weight:700;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px}
+.navin button .ic{width:24px;height:24px}
+.navin button.on{background:var(--panel2);color:#fff}
 
 /* Effekte */
-.case{position:fixed;z-index:20;font-size:44px;background:none;animation:bob 1s ease-in-out infinite;filter:drop-shadow(0 4px 6px #000a)}
+.case{position:fixed;z-index:20;width:56px;height:56px;padding:0;background:none;animation:bob 1s ease-in-out infinite;filter:drop-shadow(0 4px 6px #000a)}
 @keyframes bob{50%{transform:translateY(-8px) rotate(6deg)}}
 .pop{position:fixed;z-index:30;pointer-events:none;font-weight:800;color:var(--green);text-shadow:0 2px 3px #000;animation:up 1s ease-out forwards;transform:translateX(-50%)}
 @keyframes up{to{transform:translate(-50%,-56px);opacity:0}}
-.cf{position:fixed;z-index:50;pointer-events:none;font-size:22px;left:50%;top:38%;animation:cf 1.1s ease-out forwards}
-@keyframes cf{to{transform:translate(var(--dx),var(--dy)) rotate(360deg);opacity:0}}
+.cf{position:fixed;z-index:50;pointer-events:none;width:22px;height:22px;left:50%;top:38%;animation:cfa 1.1s ease-out forwards}
+@keyframes cfa{to{transform:translate(var(--dx),var(--dy)) rotate(360deg);opacity:0}}
 .toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#000e;padding:10px 16px;border-radius:14px;z-index:40;font-weight:700;max-width:90%;text-align:center}
 .foot{text-align:center;color:var(--mute);font-size:12px;margin:18px 12px}
 .foot a{color:var(--mute)}
@@ -161,9 +204,9 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;justify-conte
     <div class="lvl"><div class="hex" id="lvl">1</div><div class="xp"><i id="xpf"></i><span id="xpt"></span></div></div>
   </div>
   <div class="cur">
-    <div class="chip cash">💵 <b id="cash">0</b></div>
-    <div class="chip gold">🪙 <b id="gold">0</b></div>
-    <div class="chip gem">💎 <b id="gems">0</b></div>
+    <div class="chip cash"><i class="mi" id="ci1"></i><b id="cash">0</b></div>
+    <div class="chip gold"><i class="mi" id="ci2"></i><b id="gold">0</b></div>
+    <div class="chip gem"><i class="mi" id="ci3"></i><b id="gems">0</b></div>
   </div>
 </div>
 
@@ -186,7 +229,7 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;justify-conte
   </div>
   <div class="list" id="list"></div>
   <div class="card">
-    <h3>🔁 Neustart</h3>
+    <h3>Neustart</h3>
     <p id="prText"></p>
     <button class="big" id="prBtn" data-act="prestige">Neustart</button>
   </div>
@@ -194,80 +237,109 @@ nav{position:fixed;left:0;right:0;bottom:0;z-index:15;display:flex;justify-conte
 
 <section id="v-map" class="page" hidden></section>
 <section id="v-tasks" class="page" hidden></section>
+<section id="v-coll" class="page" hidden></section>
 <section id="v-shop" class="page" hidden></section>
 <section id="v-more" class="page" hidden></section>
 
-<nav><div class="navin" id="nav">
-  <button data-act="tab" data-t="biz" class="on"><span>🏪</span>Geschäfte</button>
-  <button data-act="tab" data-t="map"><span>🗺️</span>Karte</button>
-  <button data-act="tab" data-t="tasks"><span>📋</span>Aufgaben</button>
-  <button data-act="tab" data-t="shop"><span>🛍️</span>Shop</button>
-  <button data-act="tab" data-t="more"><span>⚙️</span>Mehr</button>
-</div></nav>
+<nav><div class="navin" id="nav"></div></nav>
 
+<script src="art.js"></script>
 <script>
 "use strict";
 /* ================= Daten ================= */
 const C6=[4,60,720,8640,103680,1244160], I6=[1,60,540,4320,51840,622080],
       T6=[1,3,6,12,24,96], K6=[1.07,1.15,1.14,1.13,1.12,1.11], M6=[1e3,15e3,1e5,5e5,1.2e6,1e7];
-const gen = (s, list) => list.map(([n,i],m)=>({n, i, c:C6[m]*s, k:K6[m], inc:I6[m]*s, t:T6[m], m:M6[m]*s}));
+const gen=(s,list)=>list.map(([n,a],m)=>({n,a,c:C6[m]*s,k:K6[m],inc:I6[m]*s,t:T6[m],m:M6[m]*s}));
 
-const ISL = [
-  {n:"Startinsel", i:"🏝️", unlock:0, pos:["4%","292px"], biz:[
-    {n:"Limonadenstand", i:"🍋", c:4,         k:1.07, inc:1,        t:1,    m:1e3},
-    {n:"Markt",          i:"🛒", c:60,        k:1.15, inc:60,       t:3,    m:15e3},
-    {n:"Bäckerei",       i:"🥐", c:720,       k:1.14, inc:540,      t:6,    m:1e5},
-    {n:"Autohaus",       i:"🚗", c:8640,      k:1.13, inc:4320,     t:12,   m:5e5},
-    {n:"Tech-Büro",      i:"💻", c:103680,    k:1.12, inc:51840,    t:24,   m:1.2e6},
-    {n:"Bank",           i:"🏦", c:1244160,   k:1.11, inc:622080,   t:96,   m:1e7},
-    {n:"Casino",         i:"🎰", c:14929920,  k:1.10, inc:7464960,  t:384,  m:1.1e8},
-    {n:"Raumfahrt",      i:"🚀", c:179159040, k:1.09, inc:89579520, t:1536, m:1.3e9},
-    {n:"Ölraffinerie",   i:"🛢️", c:2.15e9,    k:1.09, inc:1.07e9,   t:3072, m:1.5e10},
-    {n:"Mondbasis",      i:"🌙", c:2.58e10,   k:1.08, inc:1.29e10,  t:6144, m:2e11},
+const ISL=[
+  {n:"Startinsel", col:["#6fdc7a","#2f9d4e","#e8d48f"], unlock:0, pos:["4%","610px"], biz:[
+    {n:"Limonadenstand", a:"lemon",     c:4,         k:1.07, inc:1,        t:1,    m:1e3},
+    {n:"Markt",          a:"market",    c:60,        k:1.15, inc:60,       t:3,    m:15e3},
+    {n:"Bäckerei",       a:"croissant", c:720,       k:1.14, inc:540,      t:6,    m:1e5},
+    {n:"Autohaus",       a:"car",       c:8640,      k:1.13, inc:4320,     t:12,   m:5e5},
+    {n:"Tech-Büro",      a:"laptop",    c:103680,    k:1.12, inc:51840,    t:24,   m:1.2e6},
+    {n:"Bank",           a:"bank",      c:1244160,   k:1.11, inc:622080,   t:96,   m:1e7},
+    {n:"Casino",         a:"casino",    c:14929920,  k:1.10, inc:7464960,  t:384,  m:1.1e8},
+    {n:"Raumfahrt",      a:"rocket",    c:179159040, k:1.09, inc:89579520, t:1536, m:1.3e9},
+    {n:"Ölraffinerie",   a:"oil",       c:2.15e9,    k:1.09, inc:1.07e9,   t:3072, m:1.5e10},
+    {n:"Mondbasis",      a:"moon",      c:2.58e10,   k:1.08, inc:1.29e10,  t:6144, m:2e11},
   ]},
-  {n:"Palmenstrand", i:"🌴", unlock:1e10, pos:["50%","150px"], biz:gen(2.5e8,[
-    ["Kokosstand","🥥"],["Surfschule","🏄"],["Strandhotel","🏨"],["Yachthafen","⛵"],["Perlenfarm","🦪"],["Freizeitpark","🎢"]])},
-  {n:"Vulkaninsel", i:"🌋", unlock:1e15, pos:["6%","8px"], biz:gen(2.5e11,[
-    ["Obsidianmine","🪨"],["Lavaspa","♨️"],["Kristallhöhle","💎"],["Drachenzucht","🐉"],["Magmakraftwerk","⚡"],["Schatzkammer","👑"]])},
+  {n:"Palmenstrand", col:["#7fe3c4","#1fa889","#f3dfa0"], unlock:1e10, pos:["50%","470px"], biz:gen(2.5e8,[
+    ["Kokosstand","coconut"],["Surfschule","surf"],["Strandhotel","hotel"],["Yachthafen","yacht"],["Perlenfarm","pearl"],["Freizeitpark","park"]])},
+  {n:"Vulkaninsel", col:["#8a8f9c","#3d424f","#ff7a3d"], unlock:1e15, pos:["6%","310px"], biz:gen(2.5e11,[
+    ["Obsidianmine","obsidian"],["Lavaspa","lavaspa"],["Kristallhöhle","crystal"],["Drachenzucht","dragon"],["Magmakraftwerk","power"],["Schatzkammer","chest"]])},
+  {n:"Eisinsel", col:["#f2fbff","#a9d8f0","#cfe9f7"], unlock:1e20, pos:["50%","170px"], biz:gen(2.5e14,[
+    ["Eiscafé","icecream"],["Pinguinzoo","penguin"],["Skiresort","ski"],["Polarlabor","lab"],["Eisbrecher","icebreaker"],["Nordlichtshow","aurora"]])},
+  {n:"Wolkenstadt", col:["#ffffff","#c9b8ff","#f0e9ff"], unlock:1e26, pos:["6%","12px"], biz:gen(2.5e17,[
+    ["Wolkenbäcker","cloudbread"],["Regenbogenwerk","rainbow"],["Luftschiffwerft","airship"],["Sternwarte","observatory"],["Himmelsbank","skybank"],["Wolkenpalast","palace"]])},
 ];
 const MILES=[25,50,100,200,300,400,500,600,700,800,900,1000];
-const GOLD_BONUS=0.05, PRESTIGE_DIV=1e7, BOOST_COST=5, BOOST_MS=180000;
-const WORKER_COSTS=[5,10,20,40,80], GIFT=[2,3,4,5,6,8,10];
+const PRESTIGE_DIV=1e7, BOOST_COST=5, BOOST_MS=180000, PULL_COST=10, CARD_MAX=5;
+const WORKER_COSTS=[5,10,20,40,80], GIFT=[2,3,4,5,6,8,10], UP_MAX=5;
 const KEY="geldimperium.v2", OLDKEY="geldimperium.v1";
-
-const ACH=[
-  {t:"Verdiene insgesamt 1K 💵",   v:()=>S.st.earned, n:1e3,  r:2},
-  {t:"Verdiene insgesamt 1M 💵",   v:()=>S.st.earned, n:1e6,  r:3},
-  {t:"Verdiene insgesamt 1B 💵",   v:()=>S.st.earned, n:1e9,  r:5},
-  {t:"Verdiene insgesamt 1T 💵",   v:()=>S.st.earned, n:1e12, r:10},
-  {t:"Erreiche Spielerstufe 5",    v:()=>S.level, n:5,  r:3},
-  {t:"Erreiche Spielerstufe 10",   v:()=>S.level, n:10, r:5},
-  {t:"Erreiche Spielerstufe 25",   v:()=>S.level, n:25, r:10},
-  {t:"Stelle 1 Manager ein",       v:()=>S.st.mgrs, n:1,  r:2},
-  {t:"Stelle 5 Manager ein",       v:()=>S.st.mgrs, n:5,  r:3},
-  {t:"Stelle 15 Manager ein",      v:()=>S.st.mgrs, n:15, r:5},
-  {t:"Sammle 1 Koffer 💼",          v:()=>S.st.cases, n:1,  r:2},
-  {t:"Sammle 10 Koffer 💼",         v:()=>S.st.cases, n:10, r:3},
-  {t:"Sammle 50 Koffer 💼",         v:()=>S.st.cases, n:50, r:5},
-  {t:"Mache 1 Neustart",           v:()=>S.resets, n:1, r:5},
-  {t:"Mache 3 Neustarts",          v:()=>S.resets, n:3, r:8},
-  {t:"Schalte 2 Inseln frei",      v:()=>unlockedCount(), n:2, r:5},
-  {t:"Schalte alle 3 Inseln frei", v:()=>unlockedCount(), n:3, r:10},
-  {t:"Tippe 50 Mal",               v:()=>S.st.taps, n:50,  r:2},
-  {t:"Tippe 500 Mal",              v:()=>S.st.taps, n:500, r:5},
-  {t:"Kaufe 100 Stufen",           v:()=>S.st.buys, n:100,  r:3},
-  {t:"Kaufe 1000 Stufen",          v:()=>S.st.buys, n:1000, r:6},
+const START_CASH=[10,1e3,1e5,1e7,1e9,1e11];
+const TREE=[
+  {k:"start",n:"Startkapital",  d:"Nach jedem Neustart mit mehr Geld beginnen", cost:[5,15,40,100,250]},
+  {k:"mgr",  n:"Managerrabatt", d:"-10 % Managerkosten je Stufe",                cost:[10,25,60,150,400]},
+  {k:"cheap",n:"Großeinkauf",   d:"-5 % Kaufpreise je Stufe",                    cost:[8,20,50,120,300]},
+  {k:"offl", n:"Nachtschicht",  d:"+25 % Offline-Verdienst je Stufe",            cost:[6,15,35,90,220]},
+  {k:"goldp",n:"Goldrausch",    d:"Gold zählt mehr: +1 % je Gold und Stufe",     cost:[12,30,80,200,500]},
 ];
-const DT={taps:n=>`Tippe ${n}x auf einen Balken`, buys:n=>`Kaufe ${n} Stufen`, cases:n=>`Sammle ${n} Koffer 💼`, earn:n=>`Verdiene ${fmt(n)} 💵`};
+const THEMES=[
+  {id:"classic",n:"Klassik",    cost:0,  sw:["#14181f","#2a3240","#3ddc84","#3b82f6"]},
+  {id:"neon",   n:"Neon-Nacht", cost:15, sw:["#0d0b1a","#272047","#36f1cd","#8b5cf6"]},
+  {id:"gold",   n:"Goldrausch", cost:30, sw:["#1c150a","#3a2e19","#ffcf4a","#d97706"]},
+  {id:"rose",   n:"Rosé-Tresor",cost:50, sw:["#1f1418","#42293a","#ff8fab","#7c5cff"]},
+];
+const SEASON=[
+  {sp:100,gem:3},{sp:200,cash:1},{sp:300,gold:2},{sp:400,gem:8},{sp:500,pack:1},
+  {sp:600,gold:4},{sp:700,gem:12},{sp:800,cash:5},{sp:900,gold:8},{sp:1000,gem:25,gold:10},
+];
+const ACH=[
+  {t:"Verdiene insgesamt 1K",   v:()=>S.st.earned, n:1e3,  r:2},
+  {t:"Verdiene insgesamt 1M",   v:()=>S.st.earned, n:1e6,  r:3},
+  {t:"Verdiene insgesamt 1B",   v:()=>S.st.earned, n:1e9,  r:5},
+  {t:"Verdiene insgesamt 1T",   v:()=>S.st.earned, n:1e12, r:10},
+  {t:"Erreiche Spielerstufe 5", v:()=>S.level, n:5,  r:3},
+  {t:"Erreiche Spielerstufe 10",v:()=>S.level, n:10, r:5},
+  {t:"Erreiche Spielerstufe 25",v:()=>S.level, n:25, r:10},
+  {t:"Stelle 1 Manager ein",    v:()=>S.st.mgrs, n:1,  r:2},
+  {t:"Stelle 5 Manager ein",    v:()=>S.st.mgrs, n:5,  r:3},
+  {t:"Stelle 15 Manager ein",   v:()=>S.st.mgrs, n:15, r:5},
+  {t:"Sammle 1 Koffer",         v:()=>S.st.cases, n:1,  r:2},
+  {t:"Sammle 10 Koffer",        v:()=>S.st.cases, n:10, r:3},
+  {t:"Sammle 50 Koffer",        v:()=>S.st.cases, n:50, r:5},
+  {t:"Mache 1 Neustart",        v:()=>S.resets, n:1, r:5},
+  {t:"Mache 3 Neustarts",       v:()=>S.resets, n:3, r:8},
+  {t:"Schalte 2 Inseln frei",   v:()=>unlockedCount(), n:2, r:5},
+  {t:"Schalte 4 Inseln frei",   v:()=>unlockedCount(), n:4, r:8},
+  {t:"Schalte alle 5 Inseln frei",v:()=>unlockedCount(), n:5, r:12},
+  {t:"Tippe 50 Mal",            v:()=>S.st.taps, n:50,  r:2},
+  {t:"Tippe 500 Mal",           v:()=>S.st.taps, n:500, r:5},
+  {t:"Kaufe 100 Stufen",        v:()=>S.st.buys, n:100,  r:3},
+  {t:"Kaufe 1000 Stufen",       v:()=>S.st.buys, n:1000, r:6},
+  {t:"Besitze 4 Sammelfiguren", v:()=>ownedCards(), n:4, r:4},
+  {t:"Besitze alle 8 Sammelfiguren",v:()=>ownedCards(), n:8, r:10},
+  {t:"Baue ein Geschäft auf Stufe 5 aus",v:()=>maxTier(), n:5, r:8},
+  {t:"Schalte ein Farbdesign frei",v:()=>S.themes.length-1, n:1, r:4},
+];
+const DT={taps:n=>`Tippe ${n}x auf einen Balken`, buys:n=>`Kaufe ${n} Stufen`, cases:n=>`Sammle ${n} Koffer`, earn:n=>`Verdiene ${fmt(n)}`};
+
+/* kleine Symbole */
+const MI=k=>`<i class="mi">${ico(k)}</i>`;
+const $C=MI("cash"), $G=MI("gem"), $GO=MI("gold");
+const CLOUD='<svg class="ic" viewBox="0 0 48 48"><path d="M10 34a8 8 0 0 1 0-15 10 10 0 0 1 19-3 9 9 0 0 1 6 18z" fill="#fff"/></svg>';
 
 /* ================= Zustand ================= */
-const newBiz = I => I.biz.map(()=>({lvl:0,mgr:false,prog:0,run:false}));
-const fresh = () => ({
+const newBiz=I=>I.biz.map(()=>({lvl:0,mgr:false,prog:0,run:false}));
+const fresh=()=>({
   cash:10, gems:5, gold:0, level:1, xp:0, run:0, resets:0, boostUntil:0, last:Date.now(),
   cur:0, isl:ISL.map((I,k)=>({un:k===0, b:newBiz(I)})),
-  workers:0, turbo:{}, magnet:false, offl:false,
+  workers:0, turbo:{}, up:{}, magnet:false, offl:false,
+  tree:{start:0,mgr:0,cheap:0,offl:0,goldp:0}, cards:{}, theme:"classic", themes:["classic"],
   st:{earned:0,taps:0,cases:0,buys:0,mgrs:0,time:0},
-  ach:{}, daily:{day:"",t:[],bonus:false}, gift:{last:"",streak:0}, sound:true, vib:true,
+  ach:{}, daily:{day:"",t:[],bonus:false}, weekly:{wk:"",t:[]}, season:{m:"",sp:0,claimed:[]},
+  gift:{last:"",streak:0}, sound:true, vib:true, music:false, nf:"short",
 });
 let S=fresh(), mode=1, tab="biz";
 
@@ -277,40 +349,49 @@ function load(){
     if(!raw){ raw=localStorage.getItem(OLDKEY); old=!!raw; }
     if(!raw) return;
     const d=JSON.parse(raw), n=fresh();
-    Object.keys(n).forEach(x=>{ if(x!=="isl"&&x!=="st"&&d[x]!==undefined) n[x]=d[x]; });
-    n.st=Object.assign(n.st,d.st||{});
+    Object.keys(n).forEach(x=>{ if(!["isl","st","tree"].includes(x)&&d[x]!==undefined) n[x]=d[x]; });
+    n.st=Object.assign(n.st,d.st||{}); n.tree=Object.assign(n.tree,d.tree||{});
     if(old && Array.isArray(d.b)){
       d.b.forEach((b,i)=>{ if(n.isl[0].b[i]) Object.assign(n.isl[0].b[i],b); });
       n.st.earned=Math.max(n.st.earned,n.run);
     }else if(Array.isArray(d.isl)){
       d.isl.forEach((x,k)=>{
         if(!n.isl[k]) return;
-        n.isl[k].un = !!x.un || k===0;
+        n.isl[k].un=!!x.un||k===0;
         (x.b||[]).forEach((b,i)=>{ if(n.isl[k].b[i]) Object.assign(n.isl[k].b[i],b); });
       });
     }
-    if(!n.isl[n.cur] || !n.isl[n.cur].un) n.cur=0;
+    if(!n.isl[n.cur]||!n.isl[n.cur].un) n.cur=0;
+    if(!THEMES.some(t=>t.id===n.theme)||!n.themes.includes(n.theme)) n.theme="classic";
     S=n;
   }catch(e){}
 }
 let saveT=0;
 function save(force){
   const now=Date.now();
-  if(!force && now-saveT<3000) return;
+  if(!force&&now-saveT<3000) return;
   saveT=now; S.last=now;
   try{ localStorage.setItem(KEY,JSON.stringify(S)); }catch(e){}
+}
+function applyTheme(){
+  document.documentElement.dataset.theme=S.theme;
+  const m=document.querySelector('meta[name=theme-color]');
+  if(m) m.content=getComputedStyle(document.documentElement).getPropertyValue("--bg").trim()||"#14181f";
 }
 
 /* ================= Hilfsfunktionen ================= */
 const $=id=>document.getElementById(id);
 const SUF=["","K","M","B","T","Qa","Qi","Sx","Sp","Oc","No","Dc"];
+const SUFD=["","Tsd","Mio","Mrd","Bio","Brd","Trl","Trd","Qdr"];
 function fmt(n){
   if(!isFinite(n)) return "∞";
   if(n<1000) return n<10&&n%1 ? n.toFixed(2) : Math.floor(n).toString();
-  const i=Math.floor(Math.log10(n)/3);
-  if(i>=SUF.length) return n.toExponential(2).replace("+","");
-  const v=n/Math.pow(1000,i);
-  return v.toFixed(v<10?2:v<100?1:0)+SUF[i];
+  if(S.nf==="sci") return n.toExponential(2).replace("+","");
+  let i=Math.floor(Math.log10(n)/3), v=n/Math.pow(1000,i);
+  const list=S.nf==="de"?SUFD:SUF, dig=x=>x.toFixed(x<10?2:x<100?1:0);
+  if(parseFloat(dig(v))>=1000){ i++; v/=1000; }
+  if(i>=list.length) return n.toExponential(2).replace("+","");
+  return dig(v)+(S.nf==="de"?" ":"")+list[i];
 }
 function fmtT(s){
   if(s<60) return (s<10&&s%1 ? s.toFixed(1) : Math.round(s))+" s";
@@ -319,26 +400,43 @@ function fmtT(s){
 }
 const dayKey=(d=new Date())=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 const yesterdayKey=()=>dayKey(new Date(Date.now()-864e5));
+const weekKey=()=>{ const d=new Date(), off=(d.getDay()+6)%7; return dayKey(new Date(d.getFullYear(),d.getMonth(),d.getDate()-off)); };
+const monthKey=()=>dayKey().slice(0,7);
 function setHTML(el,h){ if(el._h!==h){ el._h=h; el.innerHTML=h; } }
 
-/* Ton & Vibration */
+/* Ton, Musik & Vibration */
 let AC;
+function actx(){ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==="suspended") AC.resume(); return AC; }
 function snd(kind){
   if(!S.sound) return;
   try{
-    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
-    if(AC.state==="suspended") AC.resume();
-    const t=AC.currentTime;
+    const a=actx(), t=a.currentTime;
     const seq={coin:[[880,0],[1320,.07]],buy:[[440,0],[660,.06]],lvl:[[523,0],[659,.1],[784,.2],[1047,.3]],ok:[[660,0],[880,.08]]}[kind]||[];
     seq.forEach(([f,d])=>{
-      const o=AC.createOscillator(), g=AC.createGain();
+      const o=a.createOscillator(), g=a.createGain();
       o.type="square"; o.frequency.value=f;
       g.gain.setValueAtTime(.04,t+d); g.gain.exponentialRampToValueAtTime(.0001,t+d+.12);
-      o.connect(g); g.connect(AC.destination); o.start(t+d); o.stop(t+d+.13);
+      o.connect(g); g.connect(a.destination); o.start(t+d); o.stop(t+d+.13);
     });
   }catch(e){}
 }
-function vib(n){ if(S.vib && navigator.vibrate){ try{navigator.vibrate(n)}catch(e){} } }
+let musicT=0, mStep=0;
+function musicSet(){
+  clearInterval(musicT); musicT=0;
+  if(!S.music) return;
+  const sc=[262,294,330,392,440,523,587,659], pat=[0,2,4,2,5,4,2,1,0,2,4,7,5,4,2,3];
+  musicT=setInterval(()=>{
+    if(document.hidden) return;
+    try{
+      const a=actx(), t=a.currentTime, f=sc[pat[mStep%pat.length]]*(mStep%32<16?1:1.125);
+      const o=a.createOscillator(), g=a.createGain();
+      o.type="triangle"; o.frequency.value=f;
+      g.gain.setValueAtTime(.05,t); g.gain.exponentialRampToValueAtTime(.0001,t+.34);
+      o.connect(g); g.connect(a.destination); o.start(t); o.stop(t+.36); mStep++;
+    }catch(e){}
+  },380);
+}
+function vib(n){ if(S.vib&&navigator.vibrate){ try{navigator.vibrate(n)}catch(e){} } }
 
 /* Effekte */
 function pop(x,y,text,color){
@@ -348,9 +446,9 @@ function pop(x,y,text,color){
   document.body.appendChild(el); setTimeout(()=>el.remove(),1000);
 }
 function confetti(){
-  const E=["🎉","✨","💵","⭐","🪙"];
+  const E=["cash","gold","gem","gold","cash"];
   for(let i=0;i<16;i++){
-    const el=document.createElement("div"); el.className="cf"; el.textContent=E[i%E.length];
+    const el=document.createElement("div"); el.className="cf"; el.innerHTML=ico(E[i%E.length]);
     const a=Math.random()*Math.PI*2, r=90+Math.random()*130;
     el.style.setProperty("--dx",Math.cos(a)*r+"px"); el.style.setProperty("--dy",Math.sin(a)*r-40+"px");
     document.body.appendChild(el); setTimeout(()=>el.remove(),1200);
@@ -367,13 +465,20 @@ function toast(msg){
 const boosted=()=>Date.now()<S.boostUntil;
 const unlockedCount=()=>S.isl.filter(x=>x.un).length;
 const islandBonus=()=>1+0.25*(unlockedCount()-1);
-const globalMult=()=>(1+GOLD_BONUS*S.gold)*(boosted()?2:1)*(1+0.1*S.workers)*islandBonus();
+const goldRate=()=>0.05+0.01*S.tree.goldp;
+const cardBonus=()=>MASC.reduce((a,m)=>a+(S.cards[m.id]||0)*RARITY[m.r].per,0);
+const ownedCards=()=>MASC.filter(m=>S.cards[m.id]).length;
+const maxTier=()=>Math.max(0,...Object.values(S.up));
+const globalMult=()=>(1+goldRate()*S.gold)*(boosted()?2:1)*(1+0.1*S.workers)*islandBonus()*(1+cardBonus());
 const mileCount=l=>MILES.filter(m=>l>=m).length;
 const bz=(k,i)=>ISL[k].biz[i], bs=(k,i)=>S.isl[k].b[i];
-const incomeOf=(k,i,lvl=bs(k,i).lvl)=>bz(k,i).inc*lvl*Math.pow(2,mileCount(lvl))*(S.turbo[k+"-"+i]?2:1)*globalMult();
-const costOf=(k,i,n)=>{ const B=bz(k,i), l=bs(k,i).lvl; return B.c*Math.pow(B.k,l)*(Math.pow(B.k,n)-1)/(B.k-1); };
+const tierOf=(k,i)=>S.up[k+"-"+i]||0;
+const incomeOf=(k,i,lvl=bs(k,i).lvl)=>bz(k,i).inc*lvl*Math.pow(2,mileCount(lvl))*(S.turbo[k+"-"+i]?2:1)*(1+0.5*tierOf(k,i))*globalMult();
+const costF=()=>1-0.05*S.tree.cheap;
+const mgrCost=(k,i)=>bz(k,i).m*(1-0.1*S.tree.mgr);
+const costOf=(k,i,n)=>{ const B=bz(k,i), l=bs(k,i).lvl; return costF()*B.c*Math.pow(B.k,l)*(Math.pow(B.k,n)-1)/(B.k-1); };
 function maxAffordable(k,i){
-  const B=bz(k,i), first=B.c*Math.pow(B.k,bs(k,i).lvl);
+  const B=bz(k,i), first=costF()*B.c*Math.pow(B.k,bs(k,i).lvl);
   if(S.cash<first) return 0;
   return Math.floor(Math.log(S.cash*(B.k-1)/first+1)/Math.log(B.k));
 }
@@ -382,40 +487,54 @@ const xpNeed=()=>8+S.level*3;
 const islIps=k=>S.isl[k].un ? S.isl[k].b.reduce((a,b,i)=>a+(b.lvl&&b.mgr ? incomeOf(k,i)/bz(k,i).t : 0),0) : 0;
 const ips=()=>ISL.reduce((a,_,k)=>a+islIps(k),0);
 const prestigeGold=()=>Math.floor(Math.sqrt(S.run/PRESTIGE_DIV));
+const upCost=t=>2+2*t;
 
-function earn(x){ S.cash+=x; S.run+=x; S.st.earned+=x; addDaily("earn",x); }
+function earn(x){ S.cash+=x; S.run+=x; S.st.earned+=x; addProg("earn",x); }
 function addXp(n){
-  S.xp+=n;
-  let up=false;
+  S.xp+=n; let up=false;
   while(S.xp>=xpNeed()){ S.xp-=xpNeed(); S.level++; S.gems+=3; up=true; }
-  if(up){ toast("⭐ Stufe "+S.level+"! +3 💎"); confetti(); snd("lvl"); vib(30); }
+  if(up){ toast("Stufe "+S.level+"! +3 Edelsteine"); confetti(); snd("lvl"); vib(30); }
 }
 
-/* Tagesaufgaben */
+/* Tages- und Wochenaufgaben, Saison */
 function ensureDaily(){
-  if(S.daily.day===dayKey()) return;
-  S.daily={day:dayKey(), bonus:false, t:[
-    {k:"taps",  need:30, got:0, done:false, r:2},
-    {k:"buys",  need:50, got:0, done:false, r:2},
-    {k:"cases", need:2,  got:0, done:false, r:3},
-    {k:"earn",  need:Math.max(1e4, ips()*900), got:0, done:false, r:3},
-  ]};
+  if(S.daily.day!==dayKey()){
+    S.daily={day:dayKey(), bonus:false, t:[
+      {k:"taps", need:30, got:0, done:false, r:2},
+      {k:"buys", need:50, got:0, done:false, r:2},
+      {k:"cases",need:2,  got:0, done:false, r:3},
+      {k:"earn", need:Math.max(1e4,ips()*900), got:0, done:false, r:3},
+    ]};
+  }
+  if(S.weekly.wk!==weekKey()){
+    S.weekly={wk:weekKey(), t:[
+      {k:"earn", need:Math.max(1e6,ips()*30000), got:0, done:false, r:8},
+      {k:"buys", need:600, got:0, done:false, r:6},
+      {k:"cases",need:12,  got:0, done:false, r:8},
+      {k:"taps", need:400, got:0, done:false, r:6},
+    ]};
+  }
+  if(S.season.m!==monthKey()) S.season={m:monthKey(), sp:0, claimed:[]};
 }
-function addDaily(k,n){
+function addSP(n){ S.season.sp+=n; }
+function addProg(k,n){
   if(!S.daily.t) return;
-  S.daily.t.forEach(t=>{
-    if(t.k!==k||t.done) return;
-    t.got+=n;
-    if(t.got>=t.need){ t.done=true; S.gems+=t.r; toast("📋 Aufgabe erledigt! +"+t.r+" 💎"); snd("ok"); }
+  [[S.daily.t,5,"Tagesaufgabe"],[S.weekly.t,25,"Wochenaufgabe"]].forEach(([list,sp,lab])=>{
+    list.forEach(t=>{
+      if(t.k!==k||t.done) return;
+      t.got+=n;
+      if(t.got>=t.need){ t.done=true; S.gems+=t.r; addSP(sp); toast(lab+" erledigt! +"+t.r+" Edelsteine, +"+sp+" Saisonpunkte"); snd("ok"); }
+    });
   });
-  if(!S.daily.bonus && S.daily.t.length && S.daily.t.every(t=>t.done)){
-    S.daily.bonus=true; S.gems+=5; setTimeout(()=>{ toast("🎊 Alle Tagesaufgaben! +5 💎 Bonus"); confetti(); },1500);
+  if(!S.daily.bonus&&S.daily.t.length&&S.daily.t.every(t=>t.done)){
+    S.daily.bonus=true; S.gems+=5; addSP(10);
+    setTimeout(()=>{ toast("Alle Tagesaufgaben! +5 Edelsteine und +10 Saisonpunkte"); confetti(); },1500);
   }
 }
 function checkAch(){
   ACH.forEach((a,idx)=>{
     if(S.ach[idx]||a.v()<a.n) return;
-    S.ach[idx]=1; S.gems+=a.r; toast("🏆 "+a.t+" – +"+a.r+" 💎"); snd("lvl"); confetti();
+    S.ach[idx]=1; S.gems+=a.r; toast("Erfolg: "+a.t+" – +"+a.r+" Edelsteine"); snd("lvl"); confetti();
   });
 }
 
@@ -425,34 +544,42 @@ function buy(k,i,ev){
   const c=costOf(k,i,n); if(S.cash<c) return;
   S.cash-=c;
   const b=bs(k,i), before=mileCount(b.lvl);
-  b.lvl+=n; S.st.buys+=n; addDaily("buys",n);
-  if(mileCount(b.lvl)>before){ toast("🎉 "+bz(k,i).n+": Einkommen x2!"); confetti(); snd("lvl"); }
-  else snd("buy");
+  b.lvl+=n; S.st.buys+=n; addProg("buys",n);
+  if(mileCount(b.lvl)>before){ toast(bz(k,i).n+": Einkommen x2!"); confetti(); snd("lvl"); } else snd("buy");
   vib(10);
   if(ev) pop(ev.clientX,ev.clientY-10,"+"+n+" Stufe","#4cc9ff");
   addXp(n); save(true); render(true);
 }
 function hire(k,i){
-  const b=bs(k,i);
-  if(b.mgr||b.lvl<1||S.cash<bz(k,i).m) return;
-  S.cash-=bz(k,i).m; b.mgr=true; b.run=true; S.st.mgrs++;
+  const b=bs(k,i), c=mgrCost(k,i);
+  if(b.mgr||b.lvl<1||S.cash<c) return;
+  S.cash-=c; b.mgr=true; b.run=true; S.st.mgrs++;
   snd("ok"); save(true); render(true);
 }
-function tapBiz(k,i,ev){
+function tapBiz(k,i){
   const b=bs(k,i);
   if(b.lvl<1) return;
-  S.st.taps++; addDaily("taps",1); vib(8);
-  if(!b.run){ b.run=true; }
+  S.st.taps++; addProg("taps",1); vib(8);
+  if(!b.run) b.run=true;
+}
+function pullCard(free){
+  if(!free){ if(S.gems<PULL_COST) return; S.gems-=PULL_COST; }
+  let r=Math.random()*MASC.reduce((a,m)=>a+m.w,0), c=MASC[0];
+  for(const m of MASC){ r-=m.w; if(r<0){ c=m; break; } }
+  const lv=S.cards[c.id]||0;
+  if(lv>=CARD_MAX){ S.gems+=3; toast(c.n+" ist schon auf Stufe 5 – 3 Edelsteine zurück"); }
+  else{ S.cards[c.id]=lv+1; toast(lv ? c.n+" ist jetzt Stufe "+(lv+1)+"!" : "Neue Figur: "+c.n+"!"); confetti(); snd("lvl"); }
+  save(true); render(true);
 }
 function startPrestige(){
   const g=prestigeGold();
-  if(g<1||!confirm("Neustart für +"+g+" Gold? Geschäfte, Manager und Geld werden zurückgesetzt. Inseln, Mitarbeiter und Upgrades bleiben.")) return;
+  if(g<1||!confirm("Neustart für +"+g+" Gold? Geschäfte, Manager und Geld werden zurückgesetzt. Inseln, Mitarbeiter, Upgrades, Figuren und Designs bleiben.")) return;
   const n=fresh();
-  ["gems","level","xp","workers","turbo","magnet","offl","st","ach","daily","gift","sound","vib","boostUntil"].forEach(x=>n[x]=S[x]);
-  n.gold=S.gold+g; n.resets=S.resets+1;
+  ["gems","level","xp","workers","turbo","up","magnet","offl","tree","cards","theme","themes","st","ach","daily","weekly","season","gift","sound","vib","music","nf","boostUntil"].forEach(x=>n[x]=S[x]);
+  n.gold=S.gold+g; n.resets=S.resets+1; n.cash=START_CASH[S.tree.start];
   n.isl.forEach((x,k)=>x.un=S.isl[k].un);
   S=n; buildCards(); save(true); render(true);
-  toast("🪙 +"+g+" Gold – viel Erfolg beim neuen Anlauf!"); confetti(); snd("lvl");
+  toast("+"+g+" Gold – viel Erfolg beim neuen Anlauf!"); confetti(); snd("lvl");
 }
 
 /* ================= Zeitschritt ================= */
@@ -486,60 +613,60 @@ function advance(dt,offline){
 /* ================= Geschäfte-Tab ================= */
 const listEl=$("list"); let cards=[];
 function buildCards(){
-  const k=S.cur; cards=[];
-  listEl.innerHTML="";
+  const k=S.cur; cards=[]; listEl.innerHTML="";
   ISL[k].biz.forEach((B,i)=>{
     const el=document.createElement("div"); el.className="biz";
     el.innerHTML=`
-      <div class="ico" data-act="tap" data-i="${i}">${B.i}<small>0</small><em></em></div>
+      <div class="ico" data-act="tap" data-i="${i}">${ico(B.a)}<small>0</small><em></em></div>
       <div class="bm">
         <div class="bt"><b>${B.n}</b><span class="rate"></span></div>
         <div class="bar" data-act="tap" data-i="${i}"><i></i><span></span></div>
         <div class="ms"><i></i></div>
         <div class="acts">
           <button class="buy" data-act="buy" data-i="${i}"><span class="bl"></span><small class="bc"></small></button>
-          <button class="mgr" data-act="hire" data-i="${i}">👔</button>
+          <button class="mgr" data-act="hire" data-i="${i}"></button>
         </div>
       </div>`;
     listEl.appendChild(el);
     const q=s=>el.querySelector(s);
-    cards.push({el,lvl:q(".ico small"),turbo:q(".ico em"),rate:q(".rate"),fill:q(".bar i"),txt:q(".bar span"),
+    cards.push({el,lvl:q(".ico small"),tier:q(".ico em"),rate:q(".rate"),fill:q(".bar i"),txt:q(".bar span"),
       ms:q(".ms i"),buy:q(".buy"),bl:q(".bl"),bc:q(".bc"),mgr:q(".mgr")});
   });
   $("isleBar")._h=null;
 }
-
 let lastStacks=-1;
 function renderBiz(){
   const k=S.cur;
   $("vps").textContent=fmt(ips())+" / Sek.";
   const ns=Math.min(40,Math.floor(Math.log10(S.cash+1)*4));
   if(ns!==lastStacks){ lastStacks=ns; $("stacks").innerHTML='<div class="st"></div>'.repeat(ns); }
-  let w=""; for(let n=0;n<S.workers;n++) w+=`<span class="wk" style="bottom:${10+n*9}px;animation-duration:${5+n*0.9}s;animation-delay:-${n*1.7}s">🧑‍💼<i>💵</i></span>`;
+  let w=""; for(let n=0;n<S.workers;n++) w+=`<span class="wk" style="bottom:${10+n*9}px;animation-duration:${5+n*0.9}s;animation-delay:-${n*1.7}s">${ico("worker")}${ico("cash")}</span>`;
   setHTML($("workers"),w);
-  setHTML($("isleBar"),ISL.map((I,j)=>S.isl[j].un?`<button data-act="isl" data-k="${j}" data-go="0" class="${j===k?"on":""}">${I.i} ${I.n}</button>`:"").join(""));
+  setHTML($("isleBar"),ISL.map((I,j)=>S.isl[j].un?`<button data-act="isl" data-k="${j}" data-go="0" class="${j===k?"on":""}">${ico(I.biz[0].a)}${I.n}</button>`:"").join(""));
   ISL[k].biz.forEach((B,i)=>{
     const b=bs(k,i), c=cards[i]; if(!c) return;
     const prevOk=i===0||bs(k,i-1).lvl>0;
     c.el.classList.toggle("locked",b.lvl<1&&!(S.cash>=B.c)&&!prevOk);
     c.lvl.textContent=b.lvl;
-    c.turbo.textContent=S.turbo[k+"-"+i]?"🔥":"";
+    const tr=tierOf(k,i), tu=S.turbo[k+"-"+i];
+    c.tier.textContent=(tu?"x2 ":"")+(tr?"★"+tr:"");
     const n=buyCount(k,i), cost=costOf(k,i,n);
     c.bl.textContent=(b.lvl?"Kaufen":"Eröffnen")+" x"+n;
-    c.bc.textContent="💵 "+fmt(cost);
+    c.bc.innerHTML=$C+" "+fmt(cost);
     c.buy.disabled=S.cash<cost;
     c.rate.textContent=b.lvl ? fmt(incomeOf(k,i))+" / "+fmtT(B.t) : "Preis "+fmt(B.c);
     const nxt=MILES.find(m=>m>b.lvl), prv=[...MILES].reverse().find(m=>m<=b.lvl)||0;
     c.ms.style.width=nxt ? (100*(b.lvl-prv)/(nxt-prv))+"%" : "100%";
     c.mgr.className="mgr"+(b.mgr?" has":"");
-    c.mgr.textContent=b.mgr ? "👔 ✓" : "👔 "+fmt(B.m);
-    c.mgr.disabled=!b.mgr&&(b.lvl<1||S.cash<B.m);
+    c.mgr.innerHTML=b.mgr ? "Manager ✓" : MI("worker")+" "+fmt(mgrCost(k,i));
+    c.mgr.disabled=!b.mgr&&(b.lvl<1||S.cash<mgrCost(k,i));
   });
   const g=prestigeGold();
-  $("prText").innerHTML=S.gold
-    ? `Du hast <b>${fmt(S.gold)} 🪙</b> (+${Math.round(S.gold*GOLD_BONUS*100)} % Einkommen). Ein Neustart setzt Geschäfte und Geld zurück, bringt aber Gold. Inseln, Mitarbeiter und Upgrades bleiben.`
-    : `Setze Geschäfte und Geld zurück und erhalte dafür dauerhaft Gold (+${GOLD_BONUS*100} % Einkommen pro 🪙).`;
-  $("prBtn").textContent=g>0 ? `Neustart – +${fmt(g)} 🪙` : `Noch zu wenig verdient (${fmt(S.run)} / ${fmt(PRESTIGE_DIV)})`;
+  $("prText").innerHTML=(S.gold
+    ? `Du hast <b>${fmt(S.gold)} ${$GO}</b> (+${Math.round(S.gold*goldRate()*100)} % Einkommen). `
+    : `Du bekommst dafür dauerhaft Gold (+${Math.round(goldRate()*100)} % Einkommen je ${$GO}). `)
+    +`Ein Neustart setzt Geschäfte und Geld zurück. Inseln, Mitarbeiter, Upgrades, Figuren und Designs bleiben.`;
+  $("prBtn").innerHTML=g>0 ? `Neustart – +${fmt(g)} ${$GO}` : `Noch zu wenig verdient (${fmt(S.run)} / ${fmt(PRESTIGE_DIV)})`;
   $("prBtn").disabled=g<1;
   $("boostbar").style.width=boosted() ? (100*(S.boostUntil-Date.now())/BOOST_MS)+"%" : "0";
 }
@@ -556,28 +683,45 @@ function paint(){
 }
 
 /* ================= Karte ================= */
+function env(){
+  const h=new Date().getHours();
+  const hash=[...dayKey()].reduce((a,c)=>a+c.charCodeAt(0),0);
+  return {night:h>=20||h<6, w:["sun","cloud","rain","sun"][hash%4]};
+}
 function renderMap(){
-  let h='<div class="h1">🗺️ Weltkarte</div><div class="map">';
-  [["🌊",8,20],["🐟",70,40],["⛵",30,55],["🐚",82,78],["🌊",60,92],["🐋",12,72],["⛵",78,8],["🌊",20,46]]
-    .forEach(([e,x,y],j)=>h+=`<span class="deco" style="left:${x}%;top:${y}%;animation-delay:-${j*1.3}s">${e}</span>`);
+  const e=env(), WN={sun:"Sonnig",cloud:"Bewölkt",rain:"Regen"};
+  let h=`<div class="h1">Weltkarte</div><div class="mapinfo"><span>${e.night?"Nacht":"Tag"}</span><span>${WN[e.w]}</span><span>${unlockedCount()} von ${ISL.length} Inseln</span></div>
+    <div class="map ${e.night?"night":""}">`;
+  [[8,6],[70,12],[30,34],[82,44],[60,60],[12,52],[78,82],[20,72],[48,92],[88,28]].forEach(([x,y],j)=>
+    h+=`<span class="deco" style="left:${x}%;top:${y}%;animation-delay:-${j*1.3}s">${ico(j%3===1?"fish":"wave")}</span>`);
+  h+=`<div class="ship" style="top:36%">${ico("yacht")}</div><div class="ship" style="top:78%;animation-duration:38s;animation-delay:-14s">${ico("icebreaker")}</div>`;
   ISL.forEach((I,k)=>{
     const st=S.isl[k];
-    const owned=st.un ? (I.biz.map((B,i)=>st.b[i].lvl>0?`<span>${B.i}</span>`:"").join("")||"<em>noch leer</em>") : "🔒";
-    const can=S.cash>=I.unlock;
-    const sub=st.un ? fmt(islIps(k))+" / Sek." : "Kaufen 💵 "+fmt(I.unlock);
-    h+=`<div class="isl ${st.un?"":"lock"} ${S.cur===k?"sel":""}" style="left:${I.pos[0]};top:${I.pos[1]}" data-act="${st.un?"isl":"unlock"}" data-k="${k}" data-go="1">
-      <div class="blob"><div class="owned">${owned}</div></div>
-      <div class="nm">${I.i} ${I.n}</div><div class="sub ${st.un?"":(can?"yes":"no")}">${sub}</div></div>`;
+    const owned=st.un ? (I.biz.map((B,i)=>st.b[i].lvl>0?ico(B.a):"").join("")||"<em>noch leer</em>") : ico("gold").replace('class="ic"','class="ic lk"');
+    const can=S.cash>=I.unlock, run=islIps(k)>0;
+    const sub=st.un ? fmt(islIps(k))+" / Sek." : "Kaufen "+fmt(I.unlock);
+    const coins=run ? [10,40,70].map((x,j)=>`<i class="cf2" style="left:${x}%;animation-delay:-${j*1.1}s">${ico("cash")}</i>`).join("") : "";
+    h+=`<div class="isl ${st.un?"":"lock"} ${S.cur===k?"sel":""}" style="left:${I.pos[0]};top:${I.pos[1]};--b1:${I.col[0]};--b2:${I.col[1]};--rim2:${I.col[2]}" data-act="${st.un?"isl":"unlock"}" data-k="${k}" data-go="1">
+      ${coins}<div class="blob"><div class="owned">${owned}</div></div>
+      <div class="nm">${ico(I.biz[0].a)}${I.n}</div><div class="sub ${st.un?"":(can?"yes":"no")}">${sub}</div></div>`;
   });
-  h+=`</div><div class="card"><h3>🏝️ Inselbonus</h3><p>Jede freigeschaltete Insel gibt +25 % Einkommen auf alles. Aktuell: <b>+${Math.round((islandBonus()-1)*100)} %</b>. Tippe auf eine Insel, um dort zu spielen. Auf der Karte siehst du deine Geschäfte als Gebäude.</p></div>`;
+  if(e.w==="cloud"||e.w==="rain") h+=`<div class="cl" style="top:8%">${CLOUD}</div><div class="cl" style="top:44%;animation-duration:80s;animation-delay:-30s">${CLOUD}</div>`;
+  if(e.w==="rain") h+=`<div class="fx rain"></div>`;
+  if(e.w==="sun"&&!e.night) h+=`<div class="fx sun"></div>`;
+  if(e.night) h+=`<div class="fx n">`+[[8,6],[22,14],[38,5],[56,10],[72,4],[88,12],[14,26],[46,22],[80,30],[30,40],[64,36],[92,48]].map(([x,y],j)=>`<i style="left:${x}%;top:${y}%;animation-delay:-${j*.4}s"></i>`).join("")+`</div>`;
+  h+=`</div><div class="card"><h3>Inselbonus</h3><p>Jede freigeschaltete Insel gibt +25 % Einkommen auf alles. Aktuell: <b>+${Math.round((islandBonus()-1)*100)} %</b>. Tippe auf eine Insel, um dort zu spielen. Deine Geschäfte erscheinen als Gebäude auf der Insel, die Münzen steigen auf, wenn ein Manager arbeitet.</p></div>`;
   setHTML($("v-map"),h);
 }
 
 /* ================= Aufgaben ================= */
 function prog(text,got,need,r,done){
   const pct=Math.min(100,100*got/need);
-  return `<div class="task ${done?"ok":""}"><div class="tt"><span>${done?"✓ ":""}${text}</span><b>+${r} 💎</b></div>
+  return `<div class="task ${done?"ok":""}"><div class="tt"><span>${done?"✓ ":""}${text}</span><b>+${r} ${$G}</b></div>
     <div class="pb"><i style="width:${pct}%"></i><span>${fmt(Math.min(got,need))} / ${fmt(need)}</span></div></div>`;
+}
+function seasonText(r){
+  const p=[]; if(r.gem) p.push(r.gem+" Edelsteine"); if(r.gold) p.push(r.gold+" Gold");
+  if(r.cash) p.push("Geld (x"+r.cash+")"); if(r.pack) p.push("1 Figur gratis"); return p.join(" + ");
 }
 function renderTasks(){
   ensureDaily();
@@ -585,58 +729,102 @@ function renderTasks(){
   const streakNow=(S.gift.last===today||S.gift.last===yesterdayKey()) ? S.gift.streak : 0;
   const nextStreak=S.gift.last===yesterdayKey() ? S.gift.streak+1 : 1;
   const gem=GIFT[Math.min(nextStreak-1,GIFT.length-1)];
-  let h=`<div class="h1">📋 Aufgaben</div>
-  <div class="card"><h3>🎁 Tägliches Geschenk</h3>
-    <p>Serie: ${streakNow} Tag${streakNow===1?"":"e"}. ${can?`Heute: <b>${gem} 💎</b> und etwas Geld.`:"Heute schon abgeholt – komm morgen wieder!"}</p>
+  let h=`<div class="h1">Aufgaben</div>
+  <div class="card"><h3>Tägliches Geschenk</h3>
+    <p>Serie: ${streakNow} Tag${streakNow===1?"":"e"}. ${can?`Heute: <b>${gem} ${$G}</b> und etwas Geld.`:"Heute schon abgeholt – komm morgen wieder!"}</p>
     <button class="big gr" data-act="gift" ${can?"":"disabled"}>${can?"Abholen":"Abgeholt ✓"}</button></div>`;
-  h+=`<div class="card"><h3>📅 Tagesaufgaben</h3>`+S.daily.t.map(t=>prog(DT[t.k](t.need),t.got,t.need,t.r,t.done)).join("")
-     +`<p style="margin:8px 0 0">${S.daily.bonus?"✓ Bonus abgeholt (+5 💎)":"Alle vier erledigt: +5 💎 Bonus."}</p></div>`;
+  h+=`<div class="card"><h3>Tagesaufgaben</h3>`+S.daily.t.map(t=>prog(DT[t.k](t.need),t.got,t.need,t.r,t.done)).join("")
+     +`<p style="margin:8px 0 0">${S.daily.bonus?"✓ Bonus abgeholt (+5 "+$G+")":"Alle vier erledigt: +5 "+$G+" Bonus."} Jede Aufgabe gibt 5 Saisonpunkte.</p></div>`;
+  h+=`<div class="card"><h3>Wochenaufgaben</h3>`+S.weekly.t.map(t=>prog(DT[t.k](t.need),t.got,t.need,t.r,t.done)).join("")
+     +`<p style="margin:8px 0 0">Neue Aufgaben jeden Montag. Jede gibt 25 Saisonpunkte.</p></div>`;
+  const sp=S.season.sp, lvl=SEASON.filter(r=>sp>=r.sp).length;
+  h+=`<div class="card"><h3>Saison ${S.season.m}</h3><p>Sammle Saisonpunkte mit Aufgaben. Die Saison startet jeden Monat neu.</p>
+    <div class="pb" style="margin-bottom:8px"><i style="width:${Math.min(100,sp/10)}%"></i><span>${sp} / ${SEASON[SEASON.length-1].sp} Punkte · Stufe ${lvl}/${SEASON.length}</span></div>`
+    +SEASON.map((r,i)=>{
+      const got=S.season.claimed.includes(i), ok=sp>=r.sp;
+      return `<div class="line"><div><b>Stufe ${i+1}</b> · ${r.sp} Punkte<small>${seasonText(r)}</small></div>
+        <button class="small ${got?"":"gr"}" data-act="sclaim" data-i="${i}" ${(!ok||got)?"disabled":""}>${got?"✓":ok?"Abholen":"Gesperrt"}</button></div>`;
+    }).join("")+`</div>`;
   const done=Object.keys(S.ach).length;
-  h+=`<div class="card"><h3>🏆 Erfolge (${done}/${ACH.length})</h3>`+ACH.map((a,idx)=>prog(a.t,a.v(),a.n,a.r,!!S.ach[idx])).join("")+`</div>`;
+  h+=`<div class="card"><h3>Erfolge (${done}/${ACH.length})</h3>`+ACH.map((a,idx)=>prog(a.t,a.v(),a.n,a.r,!!S.ach[idx])).join("")+`</div>`;
   setHTML($("v-tasks"),h);
+}
+
+/* ================= Sammlung ================= */
+function renderColl(){
+  let h=`<div class="h1">Sammlung</div><div class="card"><h3>Sammelfiguren (${ownedCards()}/${MASC.length})</h3>
+    <p>Jede Figur gibt dauerhaft Einkommen. Doppelte erhöhen ihre Stufe (bis ${CARD_MAX}). Gesamtbonus: <b>+${(cardBonus()*100).toFixed(0)} %</b></p><div class="grid4">`;
+  MASC.forEach(m=>{
+    const lv=S.cards[m.id]||0, R=RARITY[m.r];
+    h+=`<div class="tile ${lv?"":"off"}" style="--rc:${R.col}">${mascot(m)}<b>${lv?m.n:"???"}</b><small>${lv?"Stufe "+lv+"/"+CARD_MAX:R.n}</small></div>`;
+  });
+  h+=`</div><button class="big gem" data-act="pull" ${S.gems<PULL_COST?"disabled":""}>Figur ziehen – ${PULL_COST} ${$G}</button></div>`;
+  h+=`<div class="card"><h3>Farbdesigns</h3><p>Ein Design färbt das ganze Spiel und den Tresorraum. Du schaltest es einmal mit Gold frei.</p>`;
+  THEMES.forEach(t=>{
+    const own=S.themes.includes(t.id), cur=S.theme===t.id;
+    h+=`<div class="line"><div><span class="sw">${t.sw.map(c=>`<i style="background:${c}"></i>`).join("")}</span><b>${t.n}</b></div>
+      <button class="small ${own?"gr":""}" data-act="theme" data-id="${t.id}" ${cur||(!own&&S.gold<t.cost)?"disabled":""}>${cur?"Aktiv ✓":own?"Wählen":$GO+" "+t.cost}</button></div>`;
+  });
+  setHTML($("v-coll"),h+`</div>`);
 }
 
 /* ================= Shop ================= */
 function renderShop(){
   const k=S.cur, I=ISL[k];
-  let h=`<div class="h1">🛍️ Shop</div>
-  <div class="card"><h3>⚡ Boost</h3><p>Doppeltes Einkommen für 3 Minuten.</p>
-    <button class="big gem" data-act="boost" ${(!boosted()&&S.gems<BOOST_COST)?"disabled":""}>${boosted()?'Läuft … noch <span id="boostLeft"></span>':"Starten – "+BOOST_COST+" 💎"}</button></div>`;
+  let h=`<div class="h1">Shop</div>
+  <div class="card"><h3>Boost</h3><p>Doppeltes Einkommen für 3 Minuten.</p>
+    <button class="big gem" data-act="boost" ${(!boosted()&&S.gems<BOOST_COST)?"disabled":""}>${boosted()?'Läuft … noch <span id="boostLeft"></span>':"Starten – "+BOOST_COST+" "+$G}</button></div>`;
   const wc=WORKER_COSTS[S.workers];
-  h+=`<div class="card"><h3>🧑‍💼 Mitarbeiter (${S.workers}/${WORKER_COSTS.length})</h3>
+  h+=`<div class="card"><h3>Mitarbeiter (${S.workers}/${WORKER_COSTS.length})</h3>
     <p>Jeder Mitarbeiter trägt Geld in den Tresor und bringt dauerhaft <b>+10 % Einkommen</b>. Du siehst sie im Tresorraum laufen.</p>
-    <button class="big gem" data-act="workers" ${wc===undefined||S.gems<wc?"disabled":""}>${wc===undefined?"Alle angeheuert ✓":"Anheuern – "+wc+" 💎"}</button></div>`;
-  h+=`<div class="card"><h3>🪙 Dauer-Upgrades</h3><p>Bleiben auch nach einem Neustart. Du hast <b>${fmt(S.gold)} 🪙</b>.</p>`;
-  I.biz.forEach((B,i)=>{
-    const key=k+"-"+i, cost=3*(i+1)*(k+1), has=S.turbo[key];
-    h+=`<div class="line"><div>${B.i} <b>${B.n}</b>: Turbo<small>Einkommen x2 (${I.n})</small></div>
-      <button class="small" data-act="turbo" data-k="${k}" data-i="${i}" ${has||S.gold<cost?"disabled":""}>${has?"Aktiv ✓":"🪙 "+cost}</button></div>`;
+    <button class="big gem" data-act="workers" ${wc===undefined||S.gems<wc?"disabled":""}>${wc===undefined?"Alle angeheuert ✓":"Anheuern – "+wc+" "+$G}</button></div>`;
+  h+=`<div class="card"><h3>Fähigkeiten</h3><p>Mit Gold bleibend verbessern. Du hast <b>${fmt(S.gold)} ${$GO}</b>.</p>`;
+  TREE.forEach(T=>{
+    const lv=S.tree[T.k], c=T.cost[lv];
+    h+=`<div class="line"><div><b>${T.n}</b><span class="pips">${T.cost.map((_,j)=>`<i class="${j<lv?"on":""}"></i>`).join("")}</span><small>${T.d}</small></div>
+      <button class="small" data-act="tree" data-id="${T.k}" ${c===undefined||S.gold<c?"disabled":""}>${c===undefined?"Max ✓":$GO+" "+c}</button></div>`;
   });
-  h+=`<div class="line"><div>🧲 <b>Koffer-Magnet</b><small>Bonus-Koffer erscheinen doppelt so oft</small></div>
-      <button class="small" data-act="magnet" ${S.magnet||S.gold<15?"disabled":""}>${S.magnet?"Aktiv ✓":"🪙 15"}</button></div>
-    <div class="line"><div>😴 <b>Langer Schlaf</b><small>Offline-Verdienst bis 12 statt 8 Stunden</small></div>
-      <button class="small" data-act="offl" ${S.offl||S.gold<25?"disabled":""}>${S.offl?"Aktiv ✓":"🪙 25"}</button></div></div>`;
+  h+=`</div><div class="card"><h3>Geschäfte verbessern (${I.n})</h3><p>Turbo mit Gold: Einkommen x2. Aufwerten mit Edelsteinen: +50 % je Stufe (bis ${UP_MAX}).</p>`;
+  I.biz.forEach((B,i)=>{
+    const key=k+"-"+i, tc=3*(i+1)*(k+1), has=S.turbo[key], t=tierOf(k,i), uc=upCost(t);
+    h+=`<div class="line"><div>${ico(B.a)}<b>${B.n}</b><span class="pips">${Array.from({length:UP_MAX},(_,j)=>`<i class="${j<t?"on":""}"></i>`).join("")}</span></div>
+      <div class="btns"><button class="small" data-act="turbo" data-k="${k}" data-i="${i}" ${has||S.gold<tc?"disabled":""}>${has?"Turbo ✓":"Turbo "+$GO+" "+tc}</button>
+      <button class="small gem" data-act="upg" data-k="${k}" data-i="${i}" ${t>=UP_MAX||S.gems<uc?"disabled":""}>${t>=UP_MAX?"Max ✓":"Aufwerten "+$G+" "+uc}</button></div></div>`;
+  });
+  h+=`</div><div class="card"><h3>Dauer-Upgrades</h3>
+    <div class="line"><div><b>Koffer-Magnet</b><small>Bonus-Koffer erscheinen doppelt so oft</small></div>
+      <button class="small" data-act="magnet" ${S.magnet||S.gold<15?"disabled":""}>${S.magnet?"Aktiv ✓":$GO+" 15"}</button></div>
+    <div class="line"><div><b>Langer Schlaf</b><small>Offline-Verdienst bis 12 statt 8 Stunden</small></div>
+      <button class="small" data-act="offl" ${S.offl||S.gold<25?"disabled":""}>${S.offl?"Aktiv ✓":$GO+" 25"}</button></div></div>`;
   setHTML($("v-shop"),h);
   const bl=$("boostLeft"); if(bl) bl.textContent=fmtT(Math.max(0,(S.boostUntil-Date.now())/1000));
 }
 
 /* ================= Mehr ================= */
+const NFN={short:"Kurz (1,2M)",de:"Deutsch (1,2 Mio)",sci:"Wissenschaftlich"};
 function renderMore(){
   const st=S.st;
-  const rows=[["Gesamt verdient","💵 "+fmt(st.earned)],["Dieser Durchlauf","💵 "+fmt(S.run)],["Einkommen pro Sekunde","💵 "+fmt(ips())],
+  const rows=[["Gesamt verdient",fmt(st.earned)],["Dieser Durchlauf",fmt(S.run)],["Einkommen pro Sekunde",fmt(ips())],
     ["Gesamtmultiplikator","x"+globalMult().toFixed(2)],["Spielzeit",fmtT(st.time)],["Getippt",fmt(st.taps)],["Stufen gekauft",fmt(st.buys)],
-    ["Manager eingestellt",fmt(st.mgrs)],["Koffer gesammelt",fmt(st.cases)],["Neustarts",fmt(S.resets)],["Inseln",unlockedCount()+" / "+ISL.length]];
-  let h=`<div class="h1">⚙️ Mehr</div><div class="card"><h3>📊 Statistik</h3>`+rows.map(r=>`<div class="stat"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")+`</div>
-  <div class="card"><h3>🔊 Einstellungen</h3>
-    <div class="line"><div>Ton</div><button class="small" data-act="sound">${S.sound?"An ✓":"Aus"}</button></div>
-    <div class="line"><div>Vibration<small>Nicht auf allen iPhones verfügbar</small></div><button class="small" data-act="vib">${S.vib?"An ✓":"Aus"}</button></div></div>
-  <div class="card"><h3>❓ So geht's</h3><p>Tippe auf den Balken eines Geschäfts, um Geld zu verdienen. Mit einem Manager 👔 läuft es von allein. Kaufe Stufen für mehr Einkommen – bei Stufe 25, 50, 100 … verdoppelt es sich. Neue Inseln schaltest du auf der Karte frei. Mit dem Neustart bekommst du Gold 🪙 für dauerhaft mehr Einkommen.</p></div>
+    ["Manager eingestellt",fmt(st.mgrs)],["Koffer gesammelt",fmt(st.cases)],["Neustarts",fmt(S.resets)],["Inseln",unlockedCount()+" / "+ISL.length],
+    ["Sammelfiguren",ownedCards()+" / "+MASC.length]];
+  const h=`<div class="h1">Mehr</div><div class="card"><h3>Statistik</h3>`+rows.map(r=>`<div class="stat"><span>${r[0]}</span><b>${r[1]}</b></div>`).join("")+`</div>
+  <div class="card"><h3>Einstellungen</h3>
+    <div class="line"><div>Ton</div><button class="small ${S.sound?"gr":""}" data-act="sound">${S.sound?"An ✓":"Aus"}</button></div>
+    <div class="line"><div>Hintergrundmusik<small>Leise und schlicht</small></div><button class="small ${S.music?"gr":""}" data-act="music">${S.music?"An ✓":"Aus"}</button></div>
+    <div class="line"><div>Vibration<small>Nicht auf allen iPhones verfügbar</small></div><button class="small ${S.vib?"gr":""}" data-act="vib">${S.vib?"An ✓":"Aus"}</button></div>
+    <div class="line"><div>Zahlenformat<small>${NFN[S.nf]}</small></div><button class="small" data-act="nf">Wechseln</button></div></div>
+  <div class="card"><h3>Spielstand sichern</h3><p>Exportiere deinen Spielstand als Text, zum Beispiel für ein anderes Gerät, und füge ihn dort wieder ein.</p>
+    <div class="line"><div>Exportieren<small>Kopiert den Code in die Zwischenablage</small></div><button class="small gr" data-act="export">Kopieren</button></div>
+    <div class="line"><div>Importieren<small>Ersetzt den aktuellen Spielstand</small></div><button class="small" data-act="import">Einfügen</button></div></div>
+  <div class="card"><h3>So geht's</h3><p>Tippe auf den Balken eines Geschäfts, um Geld zu verdienen. Mit einem Manager läuft es von allein. Kaufe Stufen für mehr Einkommen – bei Stufe 25, 50, 100 … verdoppelt es sich. Neue Inseln schaltest du auf der Karte frei. Mit dem Neustart bekommst du Gold für dauerhaft mehr Einkommen und Fähigkeiten.</p></div>
   <div class="foot"><a href="#" data-act="wipe">Spielstand löschen</a></div>`;
   setHTML($("v-more"),h);
 }
 
 /* ================= Rendern ================= */
-function render(force){
+const TABS=[["biz","nStore","Geschäfte"],["map","nMap","Karte"],["tasks","nTasks","Aufgaben"],["coll","nCards","Sammlung"],["shop","nShop","Shop"],["more","nGear","Mehr"]];
+function render(){
   $("lvl").textContent=S.level;
   $("xpf").style.width=(100*S.xp/xpNeed())+"%";
   $("xpt").textContent=S.xp+"/"+xpNeed();
@@ -644,16 +832,33 @@ function render(force){
   $("gold").textContent=fmt(S.gold);
   $("gems").textContent=fmt(S.gems);
   ensureDaily(); checkAch();
-  ({biz:renderBiz,map:renderMap,tasks:renderTasks,shop:renderShop,more:renderMore})[tab]();
+  ({biz:renderBiz,map:renderMap,tasks:renderTasks,coll:renderColl,shop:renderShop,more:renderMore})[tab]();
 }
 function showTab(t){
   tab=t;
-  ["biz","map","tasks","shop","more"].forEach(x=>$("v-"+x).hidden=x!==t);
+  TABS.forEach(x=>$("v-"+x[0]).hidden=x[0]!==t);
   document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
-  scrollTo(0,0); render(true);
+  scrollTo(0,0); render();
 }
 
 /* ================= Eingaben ================= */
+function exportSave(){
+  const s=btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(s).then(()=>toast("Spielstand-Code kopiert. Bewahre ihn sicher auf."),()=>prompt("Spielstand-Code (kopieren):",s));
+  }else prompt("Spielstand-Code (kopieren):",s);
+}
+function importSave(){
+  const t=prompt("Spielstand-Code hier einfügen (ersetzt den aktuellen Spielstand):");
+  if(!t) return;
+  try{
+    const d=JSON.parse(decodeURIComponent(escape(atob(t.trim()))));
+    if(!Array.isArray(d.isl)||typeof d.cash!=="number") throw 0;
+    localStorage.setItem(KEY,JSON.stringify(d));
+    load(); applyTheme(); buildCards(); musicSet(); render(); toast("Spielstand importiert.");
+  }catch(e){ toast("Der Code ist ungültig."); }
+}
+
 document.addEventListener("click",ev=>{
   const el=ev.target.closest("[data-act]"); if(!el) return;
   const a=el.dataset.act, k=el.dataset.k!==undefined ? +el.dataset.k : S.cur, i=+el.dataset.i;
@@ -661,48 +866,76 @@ document.addEventListener("click",ev=>{
   if(a==="mode"){
     mode=+el.dataset.m;
     document.querySelectorAll("#modes button").forEach(x=>x.classList.toggle("on",+x.dataset.m===mode));
-    render(true); return;
+    render(); return;
   }
-  if(a==="tap") tapBiz(S.cur,i,ev);
+  if(a==="tap") tapBiz(S.cur,i);
   else if(a==="buy") buy(S.cur,i,ev);
   else if(a==="hire") hire(S.cur,i);
-  else if(a==="isl"){ S.cur=k; buildCards(); if(el.dataset.go==="1") showTab("biz"); else render(true); }
+  else if(a==="isl"){ S.cur=k; buildCards(); if(el.dataset.go==="1") showTab("biz"); else render(); }
   else if(a==="unlock"){
     const I=ISL[k];
-    if(S.cash<I.unlock){ toast("Dir fehlen noch 💵 "+fmt(I.unlock-S.cash)); return; }
+    if(S.cash<I.unlock){ toast("Dir fehlen noch "+fmt(I.unlock-S.cash)+" Geld"); return; }
     S.cash-=I.unlock; S.isl[k].un=true; S.cur=k; buildCards();
-    toast("🏝️ "+I.n+" freigeschaltet! +25 % Einkommen"); confetti(); snd("lvl"); save(true); render(true);
+    toast(I.n+" freigeschaltet! +25 % Einkommen"); confetti(); snd("lvl"); save(true); render();
   }
   else if(a==="prestige") startPrestige();
   else if(a==="boost"){
     if(boosted()||S.gems<BOOST_COST) return;
-    S.gems-=BOOST_COST; S.boostUntil=Date.now()+BOOST_MS; snd("ok"); save(true); render(true);
+    S.gems-=BOOST_COST; S.boostUntil=Date.now()+BOOST_MS; snd("ok"); save(true); render();
   }
   else if(a==="workers"){
     const c=WORKER_COSTS[S.workers]; if(c===undefined||S.gems<c) return;
-    S.gems-=c; S.workers++; snd("ok"); toast("🧑‍💼 Neuer Mitarbeiter! +10 % Einkommen"); save(true); render(true);
+    S.gems-=c; S.workers++; snd("ok"); toast("Neuer Mitarbeiter! +10 % Einkommen"); save(true); render();
+  }
+  else if(a==="tree"){
+    const T=TREE.find(x=>x.k===el.dataset.id), c=T.cost[S.tree[T.k]];
+    if(c===undefined||S.gold<c) return;
+    S.gold-=c; S.tree[T.k]++; snd("ok"); toast(T.n+" auf Stufe "+S.tree[T.k]); save(true); render();
   }
   else if(a==="turbo"){
     const cost=3*(i+1)*(k+1), key=k+"-"+i;
     if(S.turbo[key]||S.gold<cost) return;
-    S.gold-=cost; S.turbo[key]=true; snd("ok"); toast("🔥 Turbo aktiviert: "+bz(k,i).n); save(true); render(true);
+    S.gold-=cost; S.turbo[key]=true; snd("ok"); toast("Turbo aktiviert: "+bz(k,i).n); save(true); render();
   }
-  else if(a==="magnet"){ if(S.magnet||S.gold<15) return; S.gold-=15; S.magnet=true; snd("ok"); save(true); render(true); }
-  else if(a==="offl"){ if(S.offl||S.gold<25) return; S.gold-=25; S.offl=true; snd("ok"); save(true); render(true); }
+  else if(a==="upg"){
+    const t=tierOf(k,i), c=upCost(t);
+    if(t>=UP_MAX||S.gems<c) return;
+    S.gems-=c; S.up[k+"-"+i]=t+1; snd("ok"); toast(bz(k,i).n+" aufgewertet: Stufe "+(t+1)); save(true); render();
+  }
+  else if(a==="magnet"){ if(S.magnet||S.gold<15) return; S.gold-=15; S.magnet=true; snd("ok"); save(true); render(); }
+  else if(a==="offl"){ if(S.offl||S.gold<25) return; S.gold-=25; S.offl=true; snd("ok"); save(true); render(); }
+  else if(a==="pull") pullCard(false);
+  else if(a==="theme"){
+    const t=THEMES.find(x=>x.id===el.dataset.id); if(!t) return;
+    if(!S.themes.includes(t.id)){ if(S.gold<t.cost) return; S.gold-=t.cost; S.themes.push(t.id); toast(t.n+" freigeschaltet!"); confetti(); }
+    S.theme=t.id; applyTheme(); snd("ok"); save(true); render();
+  }
+  else if(a==="sclaim"){
+    const r=SEASON[i]; if(!r||S.season.sp<r.sp||S.season.claimed.includes(i)) return;
+    S.season.claimed.push(i);
+    if(r.gem) S.gems+=r.gem; if(r.gold) S.gold+=r.gold;
+    if(r.cash) earn(Math.max(1000,ips()*600*r.cash));
+    if(r.pack){ pullCard(true); }
+    toast("Saisonbelohnung: "+seasonText(r)); confetti(); snd("lvl"); save(true); render();
+  }
   else if(a==="gift"){
     const today=dayKey(); if(S.gift.last===today) return;
     const streak=S.gift.last===yesterdayKey() ? S.gift.streak+1 : 1;
     const gem=GIFT[Math.min(streak-1,GIFT.length-1)], cash=Math.max(500,ips()*300)*streak;
     S.gift={last:today,streak}; S.gems+=gem; earn(cash);
-    toast("🎁 +"+gem+" 💎 und +"+fmt(cash)+" 💵"); confetti(); snd("lvl"); save(true); render(true);
+    toast("Geschenk: +"+gem+" Edelsteine und +"+fmt(cash)+" Geld"); confetti(); snd("lvl"); save(true); render();
   }
-  else if(a==="sound"){ S.sound=!S.sound; snd("ok"); render(true); }
-  else if(a==="vib"){ S.vib=!S.vib; vib(30); render(true); }
+  else if(a==="sound"){ S.sound=!S.sound; snd("ok"); render(); }
+  else if(a==="music"){ S.music=!S.music; musicSet(); render(); }
+  else if(a==="vib"){ S.vib=!S.vib; vib(30); render(); }
+  else if(a==="nf"){ S.nf={short:"de",de:"sci",sci:"short"}[S.nf]||"short"; render(); }
+  else if(a==="export") exportSave();
+  else if(a==="import") importSave();
   else if(a==="wipe"){
     ev.preventDefault();
     if(confirm("Spielstand wirklich komplett löschen?")){
       try{ localStorage.removeItem(KEY); localStorage.removeItem(OLDKEY); }catch(_){}
-      S=fresh(); buildCards(); render(true);
+      S=fresh(); applyTheme(); buildCards(); musicSet(); render();
     }
   }
 });
@@ -710,13 +943,13 @@ document.addEventListener("click",ev=>{
 /* ================= Bonus-Koffer ================= */
 function spawnCase(){
   const el=document.createElement("button");
-  el.className="case"; el.textContent="💼";
+  el.className="case"; el.innerHTML=ico("case");
   el.style.left=(10+Math.random()*70)+"%"; el.style.top=(25+Math.random()*45)+"%";
   el.addEventListener("click",()=>{
-    S.st.cases++; addDaily("cases",1);
-    if(Math.random()<0.3){ S.gems+=2; toast("💼 Bonus: +2 💎"); }
-    else{ const v=Math.max(100,ips()*120); earn(v); toast("💼 Bonus: +"+fmt(v)+" 💵"); }
-    snd("ok"); vib(20); el.remove(); render(true); save(true);
+    S.st.cases++; addProg("cases",1);
+    if(Math.random()<0.3){ S.gems+=2; toast("Bonus: +2 Edelsteine"); }
+    else{ const v=Math.max(100,ips()*120); earn(v); toast("Bonus: +"+fmt(v)+" Geld"); }
+    snd("ok"); vib(20); el.remove(); render(); save(true);
   });
   document.body.appendChild(el);
   setTimeout(()=>el.remove(),12000);
@@ -727,15 +960,20 @@ function scheduleCase(){
 }
 
 /* ================= Start ================= */
-load(); ensureDaily(); buildCards();
+load(); applyTheme(); ensureDaily();
+$("ci1").innerHTML=ico("cash"); $("ci2").innerHTML=ico("gold"); $("ci3").innerHTML=ico("gem");
+$("nav").innerHTML=TABS.map((x,j)=>`<button data-act="tab" data-t="${x[0]}" class="${j===0?"on":""}">${ico(x[1])}${x[2]}</button>`).join("");
+buildCards();
 const limit=(S.offl?12:8)*3600;
 const away=Math.min((Date.now()-S.last)/1000,limit);
 if(away>30){
-  const gain=advance(away,true);
-  if(gain>0) setTimeout(()=>toast("😴 Während du weg warst: +"+fmt(gain)+" 💵"),400);
+  const gain=advance(away*(1+0.25*S.tree.offl),true);
+  if(gain>0) setTimeout(()=>toast("Während du weg warst: +"+fmt(gain)+" Geld"),400);
 }
-if(S.gift.last!==dayKey()) setTimeout(()=>toast("🎁 Dein tägliches Geschenk wartet (Aufgaben)"),2200);
-render(true); scheduleCase();
+if(S.gift.last!==dayKey()) setTimeout(()=>toast("Dein tägliches Geschenk wartet (Reiter Aufgaben)"),2200);
+render(); scheduleCase();
+/* Musik darf erst nach der ersten Berührung starten */
+if(S.music) document.addEventListener("pointerdown",()=>musicSet(),{once:true});
 
 let prev=performance.now(), acc=0;
 function frame(now){
@@ -750,7 +988,7 @@ document.addEventListener("visibilitychange",()=>{
   else{
     const gone=Math.min((Date.now()-S.last)/1000,limit);
     prev=performance.now();
-    if(gone>5){ const g=advance(gone,true); if(g>0) toast("😴 Zwischenzeitlich: +"+fmt(g)+" 💵"); }
+    if(gone>5){ const g=advance(gone*(1+0.25*S.tree.offl),true); if(g>0) toast("Zwischenzeitlich: +"+fmt(g)+" Geld"); }
   }
 });
 </script>
